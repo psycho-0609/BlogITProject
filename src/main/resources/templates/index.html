@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="page-content-wrapper">
+    <h1 id="home" class="text-center font-bold mt-1">Integrate
+        ckfinder into ckeditor in spring boot project</h1>
+
+    <!-- Section: Create Page -->
+    <section class="section mt-5 container-fluid">
+        <!-- First row -->
+        <div class="row">
+            <!-- First col -->
+            <div class="col-lg-6">
+
+                <div class="card mb-r">
+                    <form id="formSubmit" enctype="multipart/form-data">
+                        <input type="hidden" id="id" name="id" th:value="${article.id}">
+                        <input type="file" name="file" id="file">
+                        <input type="text" name="title" id="title" th:value="${article.title}">
+                        <textarea name="content" id="content">[[${article.content}]]</textarea>
+                        <button type="submit">Submit</button>
+                    </form>
+
+                </div>
+                <!-- /.Second card -->
+            </div>
+            <!-- /.First col -->
+<!--            <div class="col-lg-6">-->
+<!--                <h3>B. Ckfinder Button</h3>-->
+<!--                <div class="avatar">-->
+<!--                    <img id="imgpreview"-->
+<!--                         src="https://yt3.ggpht.com/-f6NCDKG2Ukw/AAAAAAAAAAI/AAAAAAAAAAA/MqMm3rgmqCY/s48-c-k-no-mo-rj-c0xffffff/photo.jpg"-->
+<!--                         class="img-fluid" style="max-width: 300px; max-height: 300px;" />-->
+<!--                </div>-->
+<!--                <div class="file-field">-->
+<!--                    <p>-->
+<!--                        <strong id="xImagePath">Selected Image URL</strong><br /> <input-->
+<!--                            class="btn btn-primary btn-sm waves-effect waves-light"-->
+<!--                            type="button" value="Browse Image"-->
+<!--                            onclick="BrowseServer( 'Images:/', 'xImagePath' );" />-->
+<!--                    </p>-->
+<!--                </div>-->
+
+<!--                <p>Note: You should select square image !</p>-->
+<!--            </div>-->
+
+        </div>
+        <!-- /.First row -->
+        <button id="submit">ok</button>
+
+        <div id="div-content"></div>
+    </section>
+
+
+</div>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/ckeditor/ckeditor.js}"></script>
+<script th:src="@{/ckfinder/ckfinder.js}"></script>
+<script>
+
+        var editor = CKEDITOR
+            .replace(
+                'content',
+                {
+                    filebrowserBrowseUrl : '/ckfinder/ckfinder.html',
+                    filebrowserImageBrowseUrl : '/ckfinder/ckfinder.html?type=Images',
+                    filebrowserFlashBrowseUrl : '/ckfinder/ckfinder.html?type=Flash',
+                    filebrowserUploadUrl : '/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files',
+                    filebrowserImageUploadUrl : '/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images',
+                    filebrowserFlashUploadUrl : '/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash'
+                });
+        /*Avatar start*/
+        document.getElementById("submit").addEventListener('click',function (){
+            console.log(editor.getData());
+
+            editor.setData(data)
+
+
+        })
+
+
+    // function BrowseServer(startupPath, functionData) {
+    //     // You can use the "CKFinder" class to render CKFinder in a page:
+    //     var finder = new CKFinder();
+    //
+    //     // The path for the installation of CKFinder (default = "/ckfinder/").
+    //     finder.basePath = '../';
+    //
+    //     //Startup path in a form: "Type:/path/to/directory/"
+    //     finder.startupPath = startupPath;
+    //     console.log(startupPath);
+    //
+    //     // Name of a function which is called when a file is selected in CKFinder.
+    //     finder.selectActionFunction = SetFileField;
+    //
+    //     // Additional data to be passed to the selectActionFunction in a second argument.
+    //     // We'll use this feature to pass the Id of a field that will be updated.
+    //     finder.selectActionData = functionData;
+    //
+    //     // Name of a function which is called when a thumbnail is selected in CKFinder. Preview img
+    //     // finder.selectThumbnailActionFunction = ShowThumbnails;
+    //
+    //     // Launch CKFinder
+    //     finder.popup();
+    // }
+
+    // This is a sample function which is called when a file is selected in CKFinder.
+    // function SetFileField(fileUrl, data) {
+    //     document.getElementById(data["selectActionData"]).innerHTML = this
+    //         .getSelectedFile().name;
+    //     document.getElementById("imgpreview").src = fileUrl;
+    // }
+    /*Avatar end*/
+
+
+    $("#formSubmit").on('submit',function (e){
+        e.preventDefault();
+        let data={};
+        let id = $("#id").val();
+        console.log(id);
+
+        let formData = $("#formSubmit").serializeArray();
+        console.log(formData);
+        $.each(formData, function (i, v) {
+            data[""+v.name+""] = v.value;
+        });
+        let file = $("#file")[0].files[0];
+        data["base64"] = "";
+        data["file"]="";
+        data["content"] = editor.getData();
+        if(file !== undefined){
+            let reader = new FileReader();
+            reader.onload = function (e){
+                data["base64"] = e.target.result;
+                data["file"] = file.name;
+
+
+                processData(data)
+            };
+            reader.readAsDataURL(file);
+        }else{
+            processData(data);
+        }
+
+
+    })
+    function processData(data){
+        if(data.id != ""){
+            updateArticle(data);
+        }else{
+            uploadArticle(data);
+        }
+    }
+    function uploadArticle(data){
+        console.log(data);
+        $.ajax({
+            url:"/article/add",
+            type:"post",
+            contentType:"application/json",
+            data:JSON.stringify(data),
+            dataType:'json'
+
+        }).done(function (response){
+            console.log(response);
+        }).fail(function (e){
+            console.log("fail");
+        })
+    }
+    function updateArticle(data){
+        $.ajax({
+            url:"/article/update",
+            type:"put",
+            contentType:"application/json",
+            data:JSON.stringify(data),
+            dataType:'json'
+
+        }).done(function (response){
+            console.log(response);
+        }).fail(function (e){
+            console.log("fail");
+        })
+
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Action</th>
+        <th>Public</th>
+    </tr>
+    <tbody id="dataBody">
+    <tr th:each="article:${articles}">
+        <td th:text="${article.title}"></td>
+        <td><a th:href="@{'/article/'+${article.id}}">view</a></td>
+        <td><input type="checkbox" class="checkbox-public" th:value="${article.id}" th:checked="${article.isPublic}">
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script th:src="@{/js/jquery.js}"></script>
+<script>
+
+
+    function changePublic(data) {
+        $.ajax({
+            url: "/article/publicStatus",
+            method: "put",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            dataType: 'json'
+        }).done(function (res) {
+            console.log(res);
+            fetchData();
+        }).fail(function (er) {
+            console.log(er);
+        })
+    }
+
+    function fetchData() {
+        $.ajax({
+            url:"/article/allArticle",
+            method: "get",
+            dataType: 'json'
+        }).done(function (res){
+            appendData(res);
+        }).fail()
+
+    }
+
+    function appendData(data){
+        let body = $("#dataBody");
+        // let dataBody = "";
+        body.html('');
+
+        data.forEach(el => {
+            let string = "<tr>";
+            string += "<td>" + el.title + "</td>"
+            string += "<td> <a href='/article/" + el.id + "'>view</a></td>"
+            string += "<td><input type='checkbox' class='checkbox-public' value='" + el.id + "'" + (el.isPublic == true ? "checked" : "") + "/></td>"
+            string+="</tr>"
+            body.append(string);
+        })
+        even();
+    }
+    function even(){
+        $(".checkbox-public").on("change", function (e) {
+            console.log($(this));
+            let id = $(this).val();
+            let checked = e.currentTarget.checked;
+            let data = {};
+            data["id"] = id;
+            data["isPublic"] = checked;
+            changePublic(data);
+        })
+    }
+    even();
+
+</script>
+</body>
+</html>
