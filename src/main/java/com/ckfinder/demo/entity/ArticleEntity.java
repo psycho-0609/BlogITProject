@@ -35,7 +35,7 @@ public class ArticleEntity {
     @Column
     private Boolean isNew;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_account_id")
     private UserAccountEntity userAccount;
 

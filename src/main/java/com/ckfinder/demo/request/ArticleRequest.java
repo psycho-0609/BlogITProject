@@ -1,4 +1,4 @@
-package com.ckfinder.demo.dto;
+package com.ckfinder.demo.request;
 
 
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Data
 @Setter
 @Getter
-public class ArticleDTO extends AbstractClass{
+public class ArticleRequest extends AbstractClass{
     private String content;
     private String title;
     private String shortDescription;

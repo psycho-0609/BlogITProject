@@ -6,20 +6,21 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "favorite_article")
+@Table(name = "readlater_article")
 @Getter
 @Setter
-public class FavoriteArticleEntity {
+public class ReadLaterArticleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "later_id")
+    private ReadLaterEntity readLaterEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private ArticleEntity articleEntity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "favorite_id")
-    private FavoriteEntity favoriteEntity;
 }

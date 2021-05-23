@@ -8,22 +8,20 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "history")
+@Table(name = "favorite")
 @Data
 @Getter
 @Setter
-public class HistoryEntity {
+public class FavoriteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(mappedBy = "favoriteEntity",fetch = FetchType.LAZY)
+    private List<FavoriteArticleEntity> favouriteArticleEntities;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private UserAccountEntity userAccount;
-
-    @OneToMany(mappedBy = "historyEntity",fetch = FetchType.LAZY)
-    private List<HistoryArticleEntity> historyArticleEntities;
-
-
 }

@@ -1,11 +1,11 @@
 package com.ckfinder.demo.service.imp;
 
-import com.ckfinder.demo.dto.ArticleDTO;
-import com.ckfinder.demo.entity.ArticleEntity;
 import com.ckfinder.demo.entity.UserAccountEntity;
+import com.ckfinder.demo.request.ArticleRequest;
+import com.ckfinder.demo.entity.ArticleEntity;
 import com.ckfinder.demo.repository.ArticleRepository;
 import com.ckfinder.demo.repository.UserAccountRepository;
-import com.ckfinder.demo.service.IArticleService;
+import com.ckfinder.demo.service.inter.IArticleService;
 import com.ckfinder.demo.untils.UploadFileUtils;
 import com.ckfinder.demo.user.UserInfor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ArticleServiceImp implements IArticleService {
+public class ArticleService implements IArticleService {
 
     @Autowired
     private  ArticleRepository articleRepository;
@@ -33,15 +33,16 @@ public class ArticleServiceImp implements IArticleService {
     }
 
     @Override
-    public ArticleEntity insertArticle(ArticleDTO articleEntity) {
+    public ArticleEntity insertArticle(ArticleRequest articleEntity) {
         ArticleEntity entity = new ArticleEntity();
         entity.setContent(articleEntity.getContent());
         entity.setTitle(articleEntity.getTitle());
         entity.setImage(articleEntity.getFile());
         entity.setIsNew(true);
         entity.setIsPublic(false);
-//        UserAccountEntity userAccountEntity = accountRepository.findByEmail(UserInfor.getPrincipal().getUsername());
-//        entity.setUserAccount(userAccountEntity);
+        entity.setCountView(0L);
+        UserAccountEntity userAccountEntity = accountRepository.findByEmail(UserInfor.getPrincipal().getUsername());
+        entity.setUserAccount(userAccountEntity);
         ArticleEntity articleSaved = articleRepository.save(entity);
         if(!articleEntity.getBase64().equals("")){
             byte[] decodeBase64 = Base64.getDecoder().decode(articleEntity.getBase64().getBytes());
@@ -64,17 +65,17 @@ public class ArticleServiceImp implements IArticleService {
     }
 
     @Override
-    public ArticleEntity update(ArticleDTO articleDTO) {
-        Optional<ArticleEntity> entity = articleRepository.findById(articleDTO.getId());
+    public ArticleEntity update(ArticleRequest articleRequest) {
+        Optional<ArticleEntity> entity = articleRepository.findById(articleRequest.getId());
         if(!entity.isPresent()){
 
         }
         ArticleEntity currentEntity = entity.get();
-        currentEntity.setTitle(articleDTO.getTitle());
-        currentEntity.setContent(articleDTO.getContent());
-        if(!articleDTO.getFile().equals("")){
-            currentEntity.setImage(articleDTO.getFile());
-            byte[] decodeBase64 = Base64.getDecoder().decode(articleDTO.getBase64().getBytes());
+        currentEntity.setTitle(articleRequest.getTitle());
+        currentEntity.setContent(articleRequest.getContent());
+        if(!articleRequest.getFile().equals("")){
+            currentEntity.setImage(articleRequest.getFile());
+            byte[] decodeBase64 = Base64.getDecoder().decode(articleRequest.getBase64().getBytes());
             try {
                 fileUtils.writeOrUpdate(currentEntity.getId(),decodeBase64,currentEntity.getImage());
             }catch (IOException e){
@@ -98,11 +99,17 @@ public class ArticleServiceImp implements IArticleService {
     }
 
     @Override
-    public ArticleEntity changeStatus(ArticleDTO dto){
+    public ArticleEntity changeStatus(ArticleRequest dto){
         ArticleEntity entity = articleRepository.findById(dto.getId()).get();
         entity.setIsPublic(dto.getIsPublic());
         entity.setIsNew(false);
         return articleRepository.save(entity);
+    }
+
+    @Override
+    public void plusCountView(ArticleEntity entity) {
+        entity.setCountView(entity.getCountView()+1);
+        articleRepository.save(entity);
     }
 
 

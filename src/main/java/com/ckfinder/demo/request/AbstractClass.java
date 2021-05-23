@@ -1,4 +1,4 @@
-package com.ckfinder.demo.dto;
+package com.ckfinder.demo.request;
 
 import lombok.Data;
 import lombok.Getter;

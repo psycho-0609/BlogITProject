@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
-@Table(name = "favorite_article")
+@Table(name = "history_article")
 @Getter
 @Setter
-public class FavoriteArticleEntity {
+public class HistoryArticleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,10 @@ public class FavoriteArticleEntity {
     private ArticleEntity articleEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "favorite_id")
-    private FavoriteEntity favoriteEntity;
+    @JoinColumn(name = "history_id")
+    private HistoryEntity historyEntity;
+
+    @Column
+    @Temporal(TemporalType.DATE)
+    private Date cratedDate;
 }

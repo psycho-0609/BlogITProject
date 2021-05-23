@@ -9,8 +9,14 @@ import java.util.List;
 public class UserInfor {
 
     public static CustomUserDetail getPrincipal(){
-        CustomUserDetail userDetail = (CustomUserDetail) (SecurityContextHolder.getContext()).getAuthentication().getPrincipal();
-        return  userDetail;
+        System.out.println((SecurityContextHolder.getContext()).getAuthentication().getPrincipal());
+        try {
+            CustomUserDetail userDetail = (CustomUserDetail) (SecurityContextHolder.getContext()).getAuthentication().getPrincipal();
+            return  userDetail;
+        }catch (Exception e){
+            return null;
+        }
+
     }
     public static List<String> getAuthorities(){
         List<String> result  = new ArrayList<>();

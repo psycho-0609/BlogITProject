@@ -33,15 +33,15 @@ public class UserAccountEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "userAccount")
+    @OneToMany(mappedBy = "userAccount",fetch = FetchType.LAZY)
     private List<ArticleEntity> articles;
 
-    @OneToOne(mappedBy = "userAccount")
+    @OneToOne(mappedBy = "userAccount",fetch = FetchType.LAZY)
     private HistoryEntity history;
 
-    @OneToOne(mappedBy = "userAccount")
-    private FavoriteArticleEntity favoriteArticle;
+    @OneToOne(mappedBy = "userAccount",fetch = FetchType.LAZY)
+    private FavoriteEntity favoriteArticle;
 
-    @OneToOne(mappedBy = "userAccount")
+    @OneToOne(mappedBy = "userAccount",fetch = FetchType.LAZY)
     private ReadLaterEntity readLater;
 }

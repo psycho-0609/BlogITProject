@@ -1,8 +1,10 @@
 package com.ckfinder.demo.controller.api;
 
-import com.ckfinder.demo.dto.ArticleDTO;
+import com.ckfinder.demo.request.ArticleRequest;
 import com.ckfinder.demo.entity.ArticleEntity;
-import com.ckfinder.demo.service.IArticleService;
+import com.ckfinder.demo.service.inter.IArticleService;
+import com.ckfinder.demo.user.CustomUserDetail;
+import com.ckfinder.demo.user.UserInfor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @RequestMapping("/article")
 public class ArticleAPI {
 
+
     @Autowired
     private IArticleService articleService;
 
@@ -25,13 +28,13 @@ public class ArticleAPI {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ArticleEntity> insertArticle(@RequestBody ArticleDTO entity){
+    public ResponseEntity<ArticleEntity> insertArticle(@RequestBody ArticleRequest entity){
         System.out.println("insert data");
         return new ResponseEntity<>(articleService.insertArticle(entity), HttpStatus.OK);
     }
     @PutMapping("/update")
-    public ArticleEntity updateArticle(@RequestBody ArticleDTO articleDTO){
-        ArticleEntity articleEntity = articleService.update(articleDTO);
+    public ArticleEntity updateArticle(@RequestBody ArticleRequest articleRequest){
+        ArticleEntity articleEntity = articleService.update(articleRequest);
         return articleEntity;
     }
     @DeleteMapping("/delete/{id}")
@@ -44,8 +47,13 @@ public class ArticleAPI {
     }
 
     @PutMapping("/publicStatus")
-    public ArticleEntity changeStatusPublic(@RequestBody ArticleDTO articleDTO){
-        return articleService.changeStatus(articleDTO);
+    public ArticleEntity changeStatusPublic(@RequestBody ArticleRequest articleRequest){
+        return articleService.changeStatus(articleRequest);
+    }
+
+    @GetMapping("/getUser")
+    public CustomUserDetail customUserDetail(){
+        return UserInfor.getPrincipal();
     }
 
     @GetMapping("/ckfinder")

@@ -22,7 +22,9 @@ public class UserDetailService implements UserDetailsService {
     private UserAccountRepository accountRepository;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println(email);
         UserAccountEntity entity = accountRepository.findByEmail(email);
+        System.out.println(entity.getPassword());
         if(entity == null){
             throw  new UsernameNotFoundException(email);
         }
@@ -30,6 +32,12 @@ public class UserDetailService implements UserDetailsService {
         for(RoleEntity roleEntity:entity.getRoles()){
             authorities.add(new SimpleGrantedAuthority(roleEntity.getName()));
         }
-        return new CustomUserDetail(entity.getEmail(),entity.getPassword(),true,true,true,true,authorities);
+        CustomUserDetail customUserDetail = new CustomUserDetail(entity.getEmail(),entity.getPassword(),true,true,true,true,authorities);
+        customUserDetail.setHistoryId(entity.getHistory().getId());
+        customUserDetail.setFavoriteId(entity.getFavoriteArticle().getId());
+        customUserDetail.setReadLaterId(entity.getReadLater().getId());
+        customUserDetail.setUserDetail(entity.getUserDetailEntity().getId());
+        return customUserDetail;
+
     }
 }
