@@ -10,5 +10,6 @@ public interface HistoryArticleRepository extends JpaRepository<HistoryArticleEn
     HistoryArticleEntity findByArticleEntity_IdAndHistoryEntity_Id(Long articleId, Long historyId);
     void deleteAllByHistoryEntity_Id(Long id);
     Optional<HistoryArticleEntity> findByHistoryEntity_IdAndArticleEntity_IdAndCratedDate(Long hisId, Long articleId, Date date);
+    Long countAllByHistoryEntityId(Long id);
 
 }

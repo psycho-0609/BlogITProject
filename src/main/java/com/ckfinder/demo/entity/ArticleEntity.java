@@ -1,16 +1,13 @@
 package com.ckfinder.demo.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "article")
 @Data
-@Getter
-@Setter
 public class ArticleEntity {
 
     @Id
@@ -27,6 +24,9 @@ public class ArticleEntity {
     private String videoFile;
 
     @Column
+    private String shortDescription;
+
+    @Column
     private String image;
 
     @Column(name = "status")
@@ -34,6 +34,13 @@ public class ArticleEntity {
 
     @Column
     private Boolean isNew;
+
+    @OneToMany(mappedBy = "articleEntity")
+    private List<ArticleReportEntity> articleReportEntities;
+
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private TopicEntity topic;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_account_id")

@@ -1,7 +1,6 @@
 package com.ckfinder.demo.service.imp;
 
 import com.ckfinder.demo.entity.FavoriteArticleEntity;
-import com.ckfinder.demo.entity.FavoriteEntity;
 import com.ckfinder.demo.repository.ArticleRepository;
 import com.ckfinder.demo.repository.FavoriteRepository;
 import com.ckfinder.demo.repository.FavouriteArticleRepository;
@@ -34,5 +33,15 @@ public class FavoriteArticleService implements IFavoriteArticleService {
     @Override
     public Optional<FavoriteArticleEntity> findByFavIdAndArticleId(Long favId, Long articleId) {
         return favouriteArticleRepository.findByFavoriteEntity_IdAndArticleEntity_Id(favId,articleId);
+    }
+
+    @Override
+    public Optional<FavoriteArticleEntity> findById(Long id) {
+        return favouriteArticleRepository.findById(id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        favouriteArticleRepository.deleteById(id);
     }
 }

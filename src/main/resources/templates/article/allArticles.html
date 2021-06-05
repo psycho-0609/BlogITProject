@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+    <link rel="stylesheet" th:href="@{/css/web/originalCate.css}">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+<main class="main-content">
+    <div class="container">
+        <section>
+            <div class="row">
+                <div class=" col-lg-9 col-md-12 col-sm-12">
+                    <div class="card-box-item">
+                        <div class="card card-content" th:each="article:${articles}">
+                            <div class="row no-gutters">
+                                <div class="col-md-5">
+                                    <a th:href="@{'/article/'+${article.id}}"><img th:src="${article.imagePath}" alt="..."></a>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card-body card-original">
+                                        <p class="card-original-cate"><a href="">[[${article.topic.name}]]</a></p>
+                                        <h5 class="card-title card-original-title"><a th:href="@{'/article/'+${article.id}}">[[${article.title}]]</a></h5>
+                                        <div class="card-original-author">
+                                            <span><i class="fas fa-calendar-day"></i> 21/01/2021</span>
+                                            <a href=""><span class=""><i class="fas fa-user"></i></span>
+                                                Minh
+                                                Nguyễn</a>
+                                        </div>
+                                        <p class="card-original-short">[[${article.shortDescription}]]
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-12 col-sm-12 position-relative mb-4">
+                    <div class="" id="cateBox">
+                        <div class="title-box mb-4" style="">
+                            <h3 style="">CATEGORY</h3>
+                        </div>
+                        <div class="blog-category-filter">
+                            <ul class="list-category">
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
+                                </li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Dã Ngoại</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Tết</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
+                                </li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Dã Ngoại</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Tết</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/cate.js}"></script>
+</body>
+</html>

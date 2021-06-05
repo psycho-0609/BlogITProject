@@ -1,0 +1,22 @@
+.footer{
+    background-color: rgb(44, 44, 44);
+    width: 100%;
+    color: #fff;
+    padding: 1.5rem 0 0 0;
+}
+.title-footer{
+    /* text-align: center; */
+}
+.follow-icon span{
+    font-size: 1.8rem;
+}
+.follow-icon a{
+    margin-right: 0.5rem;
+}
+.footer p{
+    color: rgb(162, 162, 162);
+    margin-bottom: .3rem;
+}
+.footer-item{
+    margin-bottom: 1rem;
+}

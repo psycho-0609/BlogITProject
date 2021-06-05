@@ -12,6 +12,13 @@ import java.nio.file.Paths;
 @Component
 public class UploadFileUtils {
 
+    public void createFile(Long id) throws IOException {
+        String uploadDir = "./imageArticle/" + id;
+        Path uploadPath = Paths.get(uploadDir);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+    }
 
     public void writeOrUpdate(Long id, byte[] bytes, String name) throws IOException {
         String uploadDir ="./video/"+id;

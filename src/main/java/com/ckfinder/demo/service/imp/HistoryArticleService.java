@@ -1,8 +1,6 @@
 package com.ckfinder.demo.service.imp;
 
-import com.ckfinder.demo.entity.ArticleEntity;
 import com.ckfinder.demo.entity.HistoryArticleEntity;
-import com.ckfinder.demo.entity.HistoryEntity;
 import com.ckfinder.demo.repository.ArticleRepository;
 import com.ckfinder.demo.repository.HistoryArticleRepository;
 import com.ckfinder.demo.repository.HistoryRepository;
@@ -30,15 +28,16 @@ public class HistoryArticleService implements IHistoryArticleService {
     @Override
     public void insert(Long hisId, Long articleId) {
         Optional<HistoryArticleEntity> historyArticleOp = historyArticleRepository.findByHistoryEntity_IdAndArticleEntity_IdAndCratedDate(hisId,articleId,new Date());
+        HistoryArticleEntity historyArticleEntity;
         if(historyArticleOp.isPresent()){
-            historyArticleOp.get().setCratedDate(new Date());
+            historyArticleEntity = historyArticleOp.get();
         }else{
-            HistoryArticleEntity historyArticleEntity =  new HistoryArticleEntity();
+            historyArticleEntity =  new HistoryArticleEntity();
             historyArticleEntity.setArticleEntity(articleRepository.findById(articleId).get());
             historyArticleEntity.setHistoryEntity(historyRepository.findById(hisId).get());
-            historyArticleEntity.setCratedDate(new Date());
-            historyArticleRepository.save(historyArticleEntity);
         }
+        historyArticleEntity.setCratedDate(new Date());
+        historyArticleRepository.save(historyArticleEntity);
 
     }
 
@@ -50,9 +49,14 @@ public class HistoryArticleService implements IHistoryArticleService {
     }
 
     @Override
-    public void deleteAllByHistoryId() {
+    public void deleteAll() {
         CustomUserDetail customUserDetail = UserInfor.getPrincipal();
         historyArticleRepository.deleteAllByHistoryEntity_Id(customUserDetail.getHistoryId());
+    }
+
+    @Override
+    public Long countAllByHistoryId(Long id) {
+        return historyArticleRepository.countAllByHistoryEntityId(id);
     }
 
 

@@ -9,7 +9,6 @@ import java.util.List;
 public class UserInfor {
 
     public static CustomUserDetail getPrincipal(){
-        System.out.println((SecurityContextHolder.getContext()).getAuthentication().getPrincipal());
         try {
             CustomUserDetail userDetail = (CustomUserDetail) (SecurityContextHolder.getContext()).getAuthentication().getPrincipal();
             return  userDetail;

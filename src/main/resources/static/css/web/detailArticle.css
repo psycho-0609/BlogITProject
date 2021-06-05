@@ -1,0 +1,94 @@
+.article-author{
+    display: flex;
+}
+.article-infor{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+.article-name-author{
+    /* display: flex;
+    align-items: center; */
+}
+.article-img-author{
+    margin-right: .7rem;
+}
+.article-img-author img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+.article-published{
+    margin: 0;
+    font-size: .8rem;
+    color: gray;
+}
+.article-infor-icon{
+    display: flex;
+    align-items: center;
+}
+.article-infor-icon span{
+    margin-right: 1rem;
+}
+.article-infor-icon span i{
+    margin-right: .4rem;
+    font-size: 1rem;
+    color: gray;
+}
+.btn-drop i{
+    color: gray;
+}
+.title-article{
+    margin-bottom: 1rem;
+}
+/* Comment */
+.article-comment{
+    display: flex;
+}
+.infor-reader{
+    display: flex;
+    margin-bottom: .5rem;
+}
+.detail-reader a{
+    display: block;
+}
+.detail-reader span{
+    font-size: .9rem;
+    color: gray;
+}
+.btn-reply{
+    padding: 0;
+    margin: 0;
+    font-size:  .9rem;
+    color: gray;
+    outline: none !important;
+}
+.comment{
+    margin-bottom: 2rem;
+}
+
+
+/* report */
+.radio-box input{
+
+}
+
+/* title */
+.title-box{
+    border-bottom: 2px solid #3971eb;
+    /* margin: .5rem; */
+    width: 100%;
+    margin: 0;
+
+}
+.title-box h1{
+    display: inline-block;
+    background-color: #3971eb;
+    padding: 0.7rem;
+    font-size: 1.2rem;
+    color: #fff;
+    margin: 0;
+    margin-bottom: -1px;
+    font-family: "Shippori Mincho",serif;
+    font-weight: bold;
+}

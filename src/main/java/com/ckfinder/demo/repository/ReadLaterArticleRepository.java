@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface ReadLaterArticleRepository extends JpaRepository<ReadLaterArticleEntity,Long> {
 
     Optional<ReadLaterArticleEntity> findByReadLaterEntity_IdAndArticleEntity_Id(Long readLaterId, Long articleId);
+    Long countAllByReadLaterEntityId(Long id);
 }

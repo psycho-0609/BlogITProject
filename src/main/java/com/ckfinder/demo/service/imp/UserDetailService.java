@@ -1,5 +1,6 @@
 package com.ckfinder.demo.service.imp;
 
+import com.ckfinder.demo.constant.Constant;
 import com.ckfinder.demo.entity.RoleEntity;
 import com.ckfinder.demo.entity.UserAccountEntity;
 import com.ckfinder.demo.repository.UserAccountRepository;
@@ -20,11 +21,11 @@ public class UserDetailService implements UserDetailsService {
 
     @Autowired
     private UserAccountRepository accountRepository;
+
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println(email);
         UserAccountEntity entity = accountRepository.findByEmail(email);
-        System.out.println(entity.getPassword());
         if(entity == null){
             throw  new UsernameNotFoundException(email);
         }
@@ -37,6 +38,14 @@ public class UserDetailService implements UserDetailsService {
         customUserDetail.setFavoriteId(entity.getFavoriteArticle().getId());
         customUserDetail.setReadLaterId(entity.getReadLater().getId());
         customUserDetail.setUserDetail(entity.getUserDetailEntity().getId());
+        customUserDetail.setId(entity.getId());
+//        System.out.println(entity.getRoles().get(0).getName());
+        if(entity.getRoles().get(0).getName().equals("ADMIN")){
+            customUserDetail.setRoleType(Constant.ADMIN_TYPE);
+        }else if(entity.getRoles().get(0).getName().equals("USER")){
+            customUserDetail.setRoleType(Constant.USER_TYPE);
+        }
+        System.out.println(customUserDetail.getRoleType());
         return customUserDetail;
 
     }

@@ -9,4 +9,6 @@ public interface IFavoriteArticleService {
     FavoriteArticleEntity create(Long favId, Long articleId);
 
     Optional<FavoriteArticleEntity> findByFavIdAndArticleId(Long favId, Long articleId);
+    Optional<FavoriteArticleEntity> findById(Long id);
+    void deleteById(Long id);
 }

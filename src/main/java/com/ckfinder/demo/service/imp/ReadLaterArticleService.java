@@ -35,4 +35,24 @@ public class ReadLaterArticleService implements IReadLaterArticleService{
     public Optional<ReadLaterArticleEntity> findByReadLaterIdAndArticleId(Long readLaterId, Long articleId) {
         return readLaterArticleRepository.findByReadLaterEntity_IdAndArticleEntity_Id(readLaterId,articleId);
     }
+
+    @Override
+    public Optional<ReadLaterArticleEntity> findById(Long id) {
+        return readLaterArticleRepository.findById(id);
+    }
+
+    @Override
+    public void delete(Long id) {
+        readLaterArticleRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAll() {
+        readLaterArticleRepository.deleteAll();
+    }
+
+    @Override
+    public Long countItemByReadLaterId(Long id) {
+        return readLaterArticleRepository.countAllByReadLaterEntityId(id);
+    }
 }

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/common/navbar.css}">
+</head>
+<body>
+<div th:fragment="navbar">
+
+
+
+    <header>
+        <div id="hideContent" class=""></div>
+        <section class="navbar-left-box">
+            <!--    <div id="hideContent" class=""></div>-->
+            <div id="navbar-active" class="navbar-left">
+                <div class="visual">
+                    <a id="btn-login" type="button" href="#" data-toggle="modal" data-target="#exampleModal">
+                        <div class="avatar-box">
+                            <div class="avatar-icon"><span><i class="fas fa-user-circle"></i></span></div>
+                            <div class="avatar-content">
+                                <div>Login</div>
+                                <div class="avatar-content-adver">To use more function</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="navbar-left-content">
+                    <div class="navbar-left-item">
+
+                        <a href="index.html" class="active-nav"><span><i class="fas fa-home"></i></span>Home</a>
+                    </div>
+                    <div class="navbar-left-item">
+
+                        <a href="blog.html"><span><i class="far fa-newspaper"></i></span>Posts</a>
+                    </div>
+                    <div>
+                        <div class="navbar-left-item">
+
+                            <a type="button" class="" href="#" id="btnDropdownMenuProduct">
+                                <span><i class="fas fa-list"></i></span>
+                                Category
+
+                                <span class="btn-dropdown"><i class="fas fa-angle-down"></i></span>
+                            </a>
+                        </div>
+                        <div id="dropdownMenuProduct" class="dropdown-menu-product">
+                            <a href="shirt.html">Ao</a>
+                            <a href="pant.html">Quần</a>
+                            <a href="shoes.html">Giày</a>
+                            <a href="accessories.html">Phụ Kiện</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <div class="header-wellcome">
+
+            <div class="text-header">
+                <p>Wellcome to Blog !</p>
+            </div>
+
+        </div>
+        <div class="" id="navbarFixed">
+            <nav class="navbar navbar-expand-lg navbar-light container">
+                <button id="btn-active-nav" class="navbar-toggler" type="button" data-toggle="collapse" data-target=""
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand" href="index.html"><img style="width: 70px;" th:src="@{/img/logo.jpg}"
+                                                               alt=""></a>
+                <div class="header-nav-card">
+                    <button class="btn-search" id="btnSearchNav" type="button" style="outline: none"><span><i
+                            class="fa fa-search" aria-hidden="true"></i></span></button>
+
+
+                </div>
+                <div class="nav-search-box" id="navSearchBox">
+                    <div class="nav-icon-search"><span><i class="fa fa-search" aria-hidden="true"></i></span></div>
+                    <form action="">
+                        <input type="text" name="name" class="w-100 form-control" placeholder="Search">
+                    </form>
+                </div>
+                <div class="collapse navbar-collapse main-menu" id="navbarNav">
+                    <div class="navbar-nav navbar-menu">
+                        <div class="nav-item"><a href="index.html">Home</a></div>
+                        <div class="nav-item"><a href="index.html">Posts</a></div>
+                        <div class="nav-item dropdown ">
+                            <a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Category
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="shirt.html">Ao</a>
+                                <a class="dropdown-item" href="pant.html">Quan</a>
+                                <a class="dropdown-item" href="shoes.html">Giay</a>
+                                <a class="dropdown-item" href="accessories.html">Phu Kien</a>
+                            </div>
+                        </div>
+
+
+                        <div class="nav-item">
+                            <form action="">
+                                <input type="text" class="form-control search-input" placeholder="Search">
+                            </form>
+                        </div>
+                    </div>
+                    <ul class="navbar-nav navbar-icon ml-auto">
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" type="button" id="btnSearch"><span><i class="fas fa-pencil-alt"></i></span></a>
+                        </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" type="button" href="#" data-toggle="modal"
+                               data-target="#exampleModal"><span><i class="fas fa-sign-in-alt"></i> Sign In/Sign
+                                    up</span></a>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+</div>
+
+<script th:src="@{/js/jquery.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script th:src="@{/js/common/navbar.js}"></script>
+
+</body>
+</html>

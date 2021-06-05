@@ -3,6 +3,7 @@ package com.ckfinder.demo.config;
 import com.ckfinder.connector.configuration.Configuration;
 import com.ckfinder.connector.configuration.Events;
 import com.ckfinder.connector.utils.PathUtils;
+import com.ckfinder.demo.user.UserInfor;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.w3c.dom.Document;
@@ -23,6 +24,7 @@ public class CKFinderConfig extends Configuration {
 
     @Override
     public void init() throws Exception {
+
         DefaultResourceLoader loader = new DefaultResourceLoader();
         Resource resource = loader.getResource(this.xmlFilePath);
         Class<?> clazz = getClass().getSuperclass();
@@ -50,6 +52,7 @@ public class CKFinderConfig extends Configuration {
                         this.baseDir = childNode.getTextContent().trim(); //lay the ben ckfinder.xml, khi do phai thiet lap ben ckfinder.xml
                     } else { //nguoc lai lay ben application.prop
                         this.baseDir = servletConf.getInitParameter("baseDir");
+
                     }
                     this.baseDir = PathUtils.escape(this.baseDir);
                     this.baseDir = PathUtils.addSlashToEnd(this.baseDir);
@@ -59,6 +62,7 @@ public class CKFinderConfig extends Configuration {
                         this.baseURL = childNode.getTextContent().trim();
                     } else {
                         this.baseURL=servletConf.getInitParameter("baseURL")+"/public/image/";
+//                        this.baseURL=servletConf.getInitParameter("baseURL")+"/public/image/"+ UserInfor.getPrincipal().getId() +"/";
                     }
                     this.baseURL = PathUtils.escape(this.baseURL);
                     this.baseURL = PathUtils.addSlashToEnd(this.baseURL);

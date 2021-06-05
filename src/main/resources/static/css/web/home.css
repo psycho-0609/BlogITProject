@@ -1,0 +1,148 @@
+/* top */
+*{
+    box-sizing: border-box;
+}
+.card-news{
+    padding: 1rem 0;
+}
+
+.card-large-category{
+    margin-bottom: .5rem;
+    color: red;
+}
+.infor-news span:first-child{
+    margin-right: 1rem;
+    font-size: .7rem;
+    color: rgb(155, 155, 155);
+}
+.infor-news a{
+    font-size: .7rem;
+    padding: 0;
+    margin: 0;
+}
+.infor-news a .span-user{
+    margin: 0;
+}
+.card-large-title{
+    margin: 0;
+}
+.card-large-title a{
+    color: black;
+}
+.card-large-title a:hover{
+    text-decoration: none;
+}
+.card-content{
+    border: none;
+    margin-bottom: 1.5rem;
+}
+img{
+    width: 100%;
+}
+.card-sm-header{
+    padding: 0;
+    padding-left: .7rem;
+}
+.card-sm-title{
+    font-size: 1rem;
+    margin: 0;
+}
+.card-sm-title a{
+    color: black;
+}
+.card-sm-title a:hover{
+    text-decoration: none;
+}
+.card-sm-cate{
+    padding: 0;
+    margin: 0;
+    font-size: .8rem;
+    color: red;
+    margin-bottom: .3rem;
+}
+.card-sm-cate a{
+    color: red;
+}
+.card-sm-author span{
+    font-size: .7rem;
+    margin-right: .5rem;
+
+}
+.card-sm-author a{
+    font-size: .7rem;
+}
+.card-sm-author a span{
+    margin: 0;
+}
+.card-body{
+    padding-bottom: 0;
+}
+.card-body span{
+    color: rgb(133, 133, 133);
+}
+.line{
+    background: black;
+    height: .1rem;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.title-box{
+    border-bottom: 2px solid #3971eb;
+    /* margin: .5rem; */
+    width: 100%;
+    margin: 0;
+
+}
+.title-box h1{
+    display: inline-block;
+    background-color: #3971eb;
+    padding: 0.7rem;
+    font-size: 1.2rem;
+    color: #fff;
+    margin: 0;
+    margin-bottom: -1px;
+    font-family: "Shippori Mincho",serif;
+    font-weight: bold;
+}
+
+.blog-category-filter .list-category li {
+    list-style: none;
+    margin-bottom: 0.5rem;
+}
+.blog-category-filter .list-category li a {
+    font-size: .9rem;
+    font-family: "Roboto", sans-serif;
+    display: inline-block;
+    color: #000000;
+    transform: translateX(0);
+    transition: 0.5s all;
+}
+.blog-category-filter .list-category li a span {
+    margin-right: 0.3rem;
+}
+.blog-category-filter .list-category li a:hover {
+    transform: translateX(15px);
+    color: #3971eb;
+    transition: 0.5s all;
+    text-decoration: none;
+}
+.blog-category-filter{
+    max-height: 50vh;
+    overflow: auto;
+
+}
+.card-sm-short{
+    display: none;
+}
+@media screen and (max-width:767px) {
+
+    .card-sm-short{
+        display: block;
+    }
+    .card-sm-header{
+        padding: 0;
+    }
+
+
+}

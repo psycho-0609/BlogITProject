@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${article.title}]]</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+    <link rel="stylesheet" th:href="@{/css/web/originalCate.css}">
+    <link rel="stylesheet" th:href="@{/css/web/detailArticle.css}">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+
+<section id="ModelReport">
+
+
+    <!-- Modal Report -->
+    <div class="modal fade" id="modalReport" tabindex="-1" aria-labelledby="modalReport" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="mb-4">Report</h5>
+                    <div>
+                        <p class="mb-2">Reason for reporting this content</p>
+                        <form action="">
+                            <div class="radio-box mb-2">
+                                <div>
+                                    <input type="radio" aria-label="Radio button for following text input">
+                                    Lorem ipsum dolor sit amet.
+                                </div>
+                                <div>
+                                    <input type="radio" aria-label="Radio button for following text input">
+                                    Lorem ipsum dolor sit amet.
+                                </div>
+                                <div>
+                                    <input type="radio" aria-label="Radio button for following text input">
+                                    Lorem ipsum dolor sit amet.
+                                </div>
+                            </div>
+                            <textarea name="" id="" class="form-control mb-4" rows="3"
+                                      placeholder="Comment"></textarea>
+                            <div class="text-right"><button type="submit" class="btn btn-danger">Report</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="main-content">
+    <div class="container">
+        <section>
+            <div class="row">
+                <div class=" col-lg-9 col-md-12 col-sm-12">
+                    <div class="article-infor">
+
+                        <div class="article-author">
+                            <a href="" class="article-img-author">
+                                <img src="/iStock_519731334.jpg" alt="">
+                            </a>
+                            <div class="article-name-author">
+                                <a href="">Hung Luu</a>
+                                <p class="article-published">Published 5/6/2021</p>
+                            </div>
+                        </div>
+                        <div class="article-infor-icon">
+                            <span><i class="fas fa-eye"></i>30</span>
+                            <span><i class="far fa-comment-dots"></i>32</span>
+                            <span><i class="fas fa-heart"></i>32</span>
+                            <div class="dropdown dropleft">
+                                <a class="btn-drop" href="#" role="button" id="dropdownMenuLink"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item" href="#">Favoriate</a>
+                                    <a class="dropdown-item" href="#">Read later</a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalReport"
+                                       type="button">Report</a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="content-article">
+
+                        <div class="text-center mb-4">
+                            <img th:src="${article.imagePath}" alt=""/>
+                        </div>
+                        <h6 style="color: red;">Technology</h6>
+                        <h1 class="title-article">[[${article.title}]]</h1>
+                        <div class="article-main-content" id="content">
+                            [[${article.content}]]
+                        </div>
+                    </div>
+                    <h5 class="mb-4">Comment</h5>
+                    <div class="article-comment">
+                        <a href="" class="article-img-author">
+                            <img src="/iStock_519731334.jpg" alt="">
+                        </a>
+                        <form action="" class="w-100">
+                            <textarea name="" id="" class="form-control mb-3" rows="5"></textarea>
+                            <div class="text-right">
+                                <button class="btn btn-primary">Post Comment</button>
+                            </div>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="comment">
+                        <div class="comment-reader">
+                            <div class="infor-reader">
+                                <a href="" class="article-img-author">
+                                    <img src="/iStock_519731334.jpg" alt="">
+                                </a>
+                                <div class="detail-reader">
+                                    <a href="">Hung Luu</a>
+                                    <span>date</span>
+                                </div>
+                            </div>
+                            <p class="mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus eum autem repellat
+                                recusandae incidunt similique aliquid expedita voluptatibus obcaecati doloribus
+                                architecto suscipit, nesciunt quibusdam molestias corporis ab. Voluptates, veritatis
+                                dolore!</p>
+                            <button class="btn btn-reply">Reply</button>
+                        </div>
+                    </div>
+
+
+                    <div class="Release">
+                        <div class="title-box mb-4">
+                            <h1>RELEASE</h1>
+                        </div>
+                        <div>
+                            <div class="card card-content">
+                                <div class="row no-gutters">
+                                    <div class="col-md-5">
+                                        <a href=""><img src="/imgblog2.jpg" alt="..."></a>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="card-body card-original">
+                                            <p class="card-original-cate"><a href="">Technology</a></p>
+                                            <h5 class="card-title card-original-title"><a href="">The world’s first fitness
+                                                influencer
+                                                was a
+                                                Victorian
+                                                strongman</a></h5>
+                                            <div class="card-original-author">
+                                                <span><i class="fas fa-calendar-day"></i> 21/01/2021</span>
+                                                <a href=""><span class=""><i class="fas fa-user"></i></span>
+                                                    Minh
+                                                    Nguyễn</a>
+                                            </div>
+                                            <p class="card-original-short">Lorem ipsum dolor sit amet consectetur
+                                                adipisicing elit. Quam quod
+                                                molestias
+                                                voluptatem cupiditate magnam ipsam error? Labore blanditiis ex repellat.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12 col-sm-12 position-relative">
+                    <div class="" id="cateBox">
+                        <div class="title-box mb-4" style="">
+                            <h3 style="">CATEGORY</h3>
+                        </div>
+                        <div class="blog-category-filter">
+                            <ul class="list-category">
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
+                                </li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Dã Ngoại</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Tết</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
+                                </li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Dã Ngoại</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Tết</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
+                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/cate.js}"></script>
+
+<script>
+    $("#content").html($("#content").text());
+</script>
+</body>
+</html>

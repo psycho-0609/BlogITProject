@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 footer-item">
+                <h5 class="title-footer">About Daily Blog</h5>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil nostrum dolor reprehenderit
+                    mollitia ex excepturi voluptate soluta debitis perferendis harum blanditiis eligendi.
+            </div>
+            <div class="col-md-4 footer-item">
+                <div class="footer-infor-title">
+                    <h5>Follow Us</h5>
+                    <div class="follow-icon">
+                        <a href=""><span style="color: #0659ff;"><i class="fab fa-facebook-square"></i></span></a>
+                        <a href=""><span style="color: #42C8F4;"><i class="fab fa-twitter-square"></i></span></a>
+                        <a href=""><span style="color: #F8BC2E;"><i class="fab fa-skype"></i></span></a>
+                        <a href=""><span style="color: #CE3633;"><i
+                                class="fab fa-google-plus-square"></i></span></a>
+                        <a href=""><span style="color: #2dc2c2;"><i class="fab fa-behance-square"></i>
+                                </span></a>
+                        <a href=""><span style="color: red;"><i class="fab fa-pinterest-square"></i>
+                                </span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 footer-item">
+                <h5 class="title-footer">Contact Us</h5>
+                <p><b>Email</b>: hungln@vnext.com.vn</p>
+                <p><b>Tel</b>: +84 966 247 911</p>
+                <p><b>Add</b>: 219 Trung Kinh, Trung Hoa, Cau Giay, Ha Noi</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<th:block th:fragment="footer">
+    <script th:src="@{/js/jquery.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/common/navbar.js}"></script>
+
+</th:block>
+</body>
+</html>

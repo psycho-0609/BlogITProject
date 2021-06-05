@@ -3,62 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/createpost.css}">
+
 </head>
 <body>
+<div th:replace="common/navbar :: header"/>
 
-<div id="page-content-wrapper">
-    <h1 id="home" class="text-center font-bold mt-1">Integrate
-        ckfinder into ckeditor in spring boot project</h1>
+<div class="container">
+    <form id="formSubmit" enctype="multipart/form-data">
+        <input type="hidden" id="id" name="id" th:value="${article.id}">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Title" name="title" id="title" th:value="${article.title}">
+        </div>
 
-    <!-- Section: Create Page -->
-    <section class="section mt-5 container-fluid">
-        <!-- First row -->
-        <div class="row">
-            <!-- First col -->
-            <div class="col-lg-6">
-
-                <div class="card mb-r">
-                    <form id="formSubmit" enctype="multipart/form-data">
-                        <input type="hidden" id="id" name="id" th:value="${article.id}">
-                        <input type="file" name="file" id="file">
-                        <input type="text" name="title" id="title" th:value="${article.title}">
-                        <textarea name="content" id="content">[[${article.content}]]</textarea>
-                        <button type="submit">Submit</button>
-                    </form>
-
-                </div>
-                <!-- /.Second card -->
+        <div class="row form-group">
+            <div class="col">
+                <input type="file" id="file" class="input-image" placeholder="Chose Image">
             </div>
-            <!-- /.First col -->
-<!--            <div class="col-lg-6">-->
-<!--                <h3>B. Ckfinder Button</h3>-->
-<!--                <div class="avatar">-->
-<!--                    <img id="imgpreview"-->
-<!--                         src="https://yt3.ggpht.com/-f6NCDKG2Ukw/AAAAAAAAAAI/AAAAAAAAAAA/MqMm3rgmqCY/s48-c-k-no-mo-rj-c0xffffff/photo.jpg"-->
-<!--                         class="img-fluid" style="max-width: 300px; max-height: 300px;" />-->
-<!--                </div>-->
-<!--                <div class="file-field">-->
-<!--                    <p>-->
-<!--                        <strong id="xImagePath">Selected Image URL</strong><br /> <input-->
-<!--                            class="btn btn-primary btn-sm waves-effect waves-light"-->
-<!--                            type="button" value="Browse Image"-->
-<!--                            onclick="BrowseServer( 'Images:/', 'xImagePath' );" />-->
-<!--                    </p>-->
-<!--                </div>-->
-
-<!--                <p>Note: You should select square image !</p>-->
-<!--            </div>-->
+            <div class="col">
+                <select name="topicId" id="topicId" class="custom-select">
+                    <option id="defaultValueSelect">---Select topic---</option>
+                    <th:block th:each="topic:${topics}">
+                        <th:block th:if="${article.topic != null && article.topic.id == topic.id}">
+                            <option th:value="${topic.id}"
+                                    th:text="${topic.name}" selected/>
+                        </th:block>
+                        <th:block th:if="${article.topic == null || article.topic.id != topic.id}">
+                            <option th:value="${topic.id}"
+                                    th:text="${topic.name}"/>
+                        </th:block>
+                    </th:block>
+                </select>
+            </div>
 
         </div>
-        <!-- /.First row -->
-        <button id="submit">ok</button>
+        <div class="form-group">
+            <textarea name="shortDescription" id="shortDescription" cols="30" rows="4" class="form-control" placeholder="Short Description">[[${article.shortDescription}]]</textarea>
+        </div>
+        <div class="form-group">
+            <textarea name="content" id="content" cols="30" rows="18" class="form-control" placeholder="Content"> [[${article.content}]]</textarea>
+        </div>
+        <button class="btn btn-primary" id="submit" type="submit">Submit</button>
+    </form>
+</div>
 
-        <div id="div-content"></div>
-    </section>
+
 
 
 </div>
-<script th:src="@{/js/jquery.js}"></script>
+<div th:replace="common/footer :: footer"/>
+
 <script th:src="@{/ckeditor/ckeditor.js}"></script>
 <script th:src="@{/ckfinder/ckfinder.js}"></script>
 <script>
@@ -67,6 +62,8 @@
             .replace(
                 'content',
                 {
+                    height:'28rem',
+                    placeholder:'Write the content of your article here :))',
                     filebrowserBrowseUrl : '/ckfinder/ckfinder.html',
                     filebrowserImageBrowseUrl : '/ckfinder/ckfinder.html?type=Images',
                     filebrowserFlashBrowseUrl : '/ckfinder/ckfinder.html?type=Flash',
@@ -74,11 +71,13 @@
                     filebrowserImageUploadUrl : '/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images',
                     filebrowserFlashUploadUrl : '/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash'
                 });
+
+
         /*Avatar start*/
         document.getElementById("submit").addEventListener('click',function (){
             console.log(editor.getData());
 
-            editor.setData(data)
+            // editor.setData(data)
 
 
         })
@@ -116,6 +115,7 @@
     //     document.getElementById("imgpreview").src = fileUrl;
     // }
     /*Avatar end*/
+        // console.log($("#formSubmit"))
 
 
     $("#formSubmit").on('submit',function (e){
@@ -150,7 +150,7 @@
 
     })
     function processData(data){
-        if(data.id != ""){
+        if(data.id !== ""){
             updateArticle(data);
         }else{
             uploadArticle(data);
@@ -159,7 +159,7 @@
     function uploadArticle(data){
         console.log(data);
         $.ajax({
-            url:"/article/add",
+            url:"/api/article/add",
             type:"post",
             contentType:"application/json",
             data:JSON.stringify(data),
@@ -167,13 +167,18 @@
 
         }).done(function (response){
             console.log(response);
+            $("#title").val("");
+            $("#file").val("");
+            $("#shortDescription").val("");
+            editor.setData("");
+            $("#defaultValueSelect").attr("selected","selected");
         }).fail(function (e){
             console.log("fail");
         })
     }
     function updateArticle(data){
         $.ajax({
-            url:"/article/update",
+            url:"/api/article/update",
             type:"put",
             contentType:"application/json",
             data:JSON.stringify(data),

@@ -1,0 +1,55 @@
+.card-original{
+    padding: 0;
+    padding-left: 1rem;
+}
+.card-original-cate{
+    margin: 0;
+    margin-bottom: .3rem;
+}
+.card-original-cate a{
+    color: red;
+}
+.card-original-title{
+    font-size: 1.1rem;
+    margin: 0;
+}
+.card-original-title a{
+    color: black;
+}
+.card-original-title a:hover{
+    text-decoration: none;
+}
+.card-original-author span{
+    color: rgb(164, 164, 164);
+    font-size: .7rem;
+    margin-right: 1rem;
+}
+.card-original-author a{
+    font-size: .7rem;
+}
+.card-original-author a span{
+    margin: 0;
+}
+.card-original-short{
+    font-size: .9rem;
+}
+
+@media screen and (max-width:1198px) {
+    .card-original-short{
+        display: none;
+    }
+
+}
+@media screen and (max-width:767px) {
+    .card-original{
+        padding: 0;
+    }
+    .card-original-short{
+        display: block;
+    }
+
+}
+.card-content{
+    border: none;
+    margin-bottom: 1.5rem;
+}

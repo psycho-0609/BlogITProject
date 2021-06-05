@@ -32,7 +32,7 @@ public class UserDetailEntity {
     @Column
     private String thumbnail;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
     private UserAccountEntity userAccount;
 }

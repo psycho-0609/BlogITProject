@@ -6,12 +6,15 @@ import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 
+
 public class CustomUserDetail extends User {
 
+    private Long id;
     private Long historyId;
     private Long favoriteId;
     private Long readLaterId;
     private Long userDetail;
+    private Integer roleType;
     public CustomUserDetail(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
     }
@@ -46,5 +49,21 @@ public class CustomUserDetail extends User {
 
     public void setUserDetail(Long userDetail) {
         this.userDetail = userDetail;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(Integer roleType) {
+        this.roleType = roleType;
     }
 }

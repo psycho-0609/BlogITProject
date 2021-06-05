@@ -27,21 +27,21 @@ public class UserAccountEntity {
     @OneToOne(mappedBy = "userAccount", cascade = CascadeType.ALL)
     private UserDetailEntity userDetailEntity;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "account_role",
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "userAccount",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "userAccount",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ArticleEntity> articles;
 
-    @OneToOne(mappedBy = "userAccount",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "userAccount",cascade = CascadeType.ALL)
     private HistoryEntity history;
 
-    @OneToOne(mappedBy = "userAccount",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "userAccount",cascade = CascadeType.ALL)
     private FavoriteEntity favoriteArticle;
 
-    @OneToOne(mappedBy = "userAccount",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "userAccount",cascade = CascadeType.ALL)
     private ReadLaterEntity readLater;
 }
