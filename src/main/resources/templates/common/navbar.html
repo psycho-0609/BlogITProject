@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -11,23 +12,36 @@
 <div th:fragment="navbar">
 
 
-
     <header>
         <div id="hideContent" class=""></div>
         <section class="navbar-left-box">
             <!--    <div id="hideContent" class=""></div>-->
             <div id="navbar-active" class="navbar-left">
-                <div class="visual">
-                    <a id="btn-login" type="button" href="#" data-toggle="modal" data-target="#exampleModal">
-                        <div class="avatar-box">
-                            <div class="avatar-icon"><span><i class="fas fa-user-circle"></i></span></div>
-                            <div class="avatar-content">
-                                <div>Login</div>
-                                <div class="avatar-content-adver">To use more function</div>
+                <th:block sec:authorize="!isAuthenticated()">
+                    <div class="visual">
+                        <a id="btn-login" type="button" th:href="@{/login}">
+                            <div class="avatar-box">
+                                <div class="avatar-icon"><span><i class="fas fa-user-circle"></i></span></div>
+                                <div class="avatar-content">
+                                    <div>Login</div>
+                                    <div class="avatar-content-adver">To use more function</div>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                </th:block>
+                <th:block sec:authorize="isAuthenticated()">
+                    <div class="visual">
+                        <a id="btn-login" type="button" th:href="@{/user/profile}">
+                            <div class="avatar-box">
+                                <div class="avatar-user"><img th:src="${session.user.userDetail.thumbnail}" alt=""></div>
+                                <div class="d-flex align-items-center text-white">
+                                    <div>[[${session.user.userDetail.firstName}]] [[${session.user.userDetail.lastName}]]</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </th:block>
                 <div class="navbar-left-content">
                     <div class="navbar-left-item">
 
@@ -48,12 +62,30 @@
                             </a>
                         </div>
                         <div id="dropdownMenuProduct" class="dropdown-menu-product">
-                            <a href="shirt.html">Ao</a>
-                            <a href="pant.html">Quần</a>
-                            <a href="shoes.html">Giày</a>
-                            <a href="accessories.html">Phụ Kiện</a>
+
+                            <a th:each="topic:${topics}" href="shirt.html">[[${topic.name}]]</a>
+
                         </div>
                     </div>
+
+                    <th:block sec:authorize="isAuthenticated()">
+                        <div class="navbar-left-item">
+                            <a href=""><span><i class="fas fa-pencil-alt"></i></span> Create Post</a>
+                        </div>
+                        <div class="navbar-left-item">
+                            <a th:href="@{/user/profile}"><span><i class="fas fa-id-card"></i></span> Profile</a>
+                        </div>
+                        <div class="navbar-left-item">
+                            <a th:href="@{/user/posts/public}"><span><i class="fas fa-file-alt"></i></span> My Content</a>
+                        </div>
+                            <hr>
+                        <div class="navbar-left-item">
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit"><span><i class="fas fa-sign-out-alt"></i></span> Logout</button>
+                            </form>
+                        </div>
+                    </th:block>
+
 
                 </div>
             </div>
@@ -95,10 +127,9 @@
                                 Category
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="shirt.html">Ao</a>
-                                <a class="dropdown-item" href="pant.html">Quan</a>
-                                <a class="dropdown-item" href="shoes.html">Giay</a>
-                                <a class="dropdown-item" href="accessories.html">Phu Kien</a>
+                                <a th:each="topic:${topics}" class="dropdown-item"
+                                   href="shirt.html">[[${topic.name}]]</a>
+
                             </div>
                         </div>
 
@@ -109,22 +140,60 @@
                             </form>
                         </div>
                     </div>
-                    <ul class="navbar-nav navbar-icon ml-auto">
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" type="button" id="btnSearch"><span><i class="fas fa-pencil-alt"></i></span></a>
-                        </li> -->
-                        <li class="nav-item">
-                            <a class="nav-link" type="button" href="#" data-toggle="modal"
-                               data-target="#exampleModal"><span><i class="fas fa-sign-in-alt"></i> Sign In/Sign
-                                    up</span></a>
-                        </li>
+                    <ul class="navbar-nav navbar-icon m-auto">
+                        <th:block sec:authorize="isAuthenticated()">
+                            <li class="nav-item">
+                                <a class="nav-link" style="cursor: pointer"><span><i class="fas fa-pencil-alt" style="font-size: 1.3rem"></i></span></a>
+                            </li>
+
+                            <li class="nav-item user-infor-box">
+                                <div class="dropdown">
+                                    <a class="user"  role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                       aria-haspopup="true" aria-expanded="false">
+                                        <img th:src="${session.user.userDetail.thumbnail}" alt="">
+                                    </a>
+                                    <div class="dropdown-menu user-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item nav-link-user" th:href="@{/user/profile}"><span class="icon-nav-left"><i class="fas fa-id-card"></i></span>Profile</a>
+                                        <a class="dropdown-item nav-link-user" th:href="@{/user/posts/public}"><span class="icon-nav-left"><i class="fas fa-file-alt"></i></span>My Content</a>
+                                        <div class="line-user-nav"></div>
+                                        <form th:action="@{/logout}" method="post">
+                                            <button class="dropdown-item btn-logout" style="outline: none" type="submit"><span class="icon-nav-left"><i class="fas fa-sign-out-alt"></i></span> Logout</button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </li>
+
+                        </th:block>
+                        <th:block sec:authorize="!isAuthenticated()">
+                            <li class="nav-item">
+                                <a class="nav-link" type="button" th:href="@{/login}"><span><i class="fas fa-sign-in-alt"></i> Sign In/Sign
+                                   up</span></a>
+                            </li>
+                        </th:block>
+
 
                     </ul>
                 </div>
             </nav>
         </div>
+        <section>
+            <div class="loading" id="processing">
+                <div class="lds-hourglass"></div>
+            </div>
+        </section>
+
+        <section>
+            <div class="message">
+                <div id="success" class="message-success"></div>
+                <div id="fail" class="message-fail"></div>
+            </div>
+        </section>
     </header>
+
 </div>
+
+
 
 <script th:src="@{/js/jquery.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>

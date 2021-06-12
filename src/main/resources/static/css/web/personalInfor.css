@@ -1,0 +1,21 @@
+.image-infor-user img{
+    width: 128px;
+    border-radius: 50%;
+    height: 128px;
+    margin-bottom: 1rem;
+
+}
+.image-infor-user{
+    text-align: center;
+}
+.btn-change-image{
+    font-size: .8rem;
+}
+.img-body {
+    width: 200px;
+    height: 200px;
+    border: none;
+}
+.img-body img{
+    height: 200px;
+}

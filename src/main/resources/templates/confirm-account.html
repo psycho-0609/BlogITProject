@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Password</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
+    <link rel="shortcut icon" th:href="@{/img/logo.jpg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/confirm-account.css}">
+</head>
+<body>
+<div class="login-box" id="loginForm">
+    <div class="icon-success">
+        <span><i class="fas fa-check-circle"></i></span>
+        <h3 class="title">Great!</h3>
+        <p class="text-success">You have successfully registered an account.</p>
+    </div>
+    <div class="login-now-box">
+        <hr>
+        <a th:href="@{/login}" id="btnLoginNow">Login Now</a>
+        <hr>
+    </div>
+</div>
+</body>
+</html>

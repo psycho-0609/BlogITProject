@@ -7,3 +7,21 @@ body{
 .input-image{
 
 }
+.form-post{
+    padding: 2rem 0;
+}
+
+@media screen and (max-width: 768px) {
+    .button-group div{
+        margin-bottom: 1rem;
+    }
+    .button-group div:last-child{
+        margin-bottom: 0rem;
+    }
+}
+
+@media screen and (min-width: 769px){
+    .button-group div{
+        margin-bottom: 0;
+    }
+}

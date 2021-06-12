@@ -1,0 +1,71 @@
+body{
+    background-image: url('../img/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+}
+.login-box {
+    width: 25rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 2px 12px 0px rgb(144, 144, 144);
+    padding: 2rem;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.logo {
+    display: flex;
+    justify-content: center;
+    width: 6rem;
+    margin: 0;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.logo img {
+    width: 6rem;
+}
+
+img {
+    width: 100%;
+}
+
+@media screen and (max-width: 998px) {
+    .login-box {
+        width: 22rem;
+    }
+}
+
+@media screen and (max-width: 448px) {
+    .login-box {
+        width: 20rem;
+    }
+}
+.icon-success{
+    text-align: center;
+}
+.icon-success span i{
+    color: rgb(12, 218, 43);
+    font-size: 3rem;
+
+}
+.title{
+    color: rgb(12, 218, 43);
+}
+.login-now-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.login-now-box hr{
+    flex: 1 1 auto!important;
+    margin: 0!important;
+}
+.login-now-box a{
+    margin: 0 .75rem 0 .75rem ;
+    font-size: .9rem;
+}
+.login-now-box a:hover{
+    text-decoration: none;
+}

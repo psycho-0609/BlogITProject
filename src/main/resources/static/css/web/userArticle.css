@@ -1,0 +1,24 @@
+.inputSearch:focus{
+    box-shadow: none;
+}
+.btn-input-search{
+    background-color: rgb(238, 238, 238);
+}
+.card-edit{
+    align-items: center;
+    display: flex;
+}
+.btn-edit{
+    border: none;
+    padding: 1px;
+    background: none;
+    margin-bottom: 5px;
+}
+.btn-edit i{
+    display: block;
+    color: gray;
+}
+.card-edit .dropmenu-edit a{
+    font-size: .8rem;
+}
+

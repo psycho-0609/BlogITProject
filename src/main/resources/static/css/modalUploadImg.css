@@ -1,0 +1,83 @@
+img {
+    width: 100%;
+}
+
+.img-body {
+
+    margin: auto;
+    min-height: 150px;
+    border: 1px solid rgb(194, 194, 194);
+    margin-bottom: 1rem;
+}
+
+.style-modal {
+    width: 22rem;
+    margin: auto;
+}
+
+.style-input-file {
+    height: 0;
+    overflow: hidden;
+    width: 0;
+}
+
+.style-input-file+label {
+    /* border: none; */
+    /* border-radius: 5px; */
+    color: rgb(144, 144, 144);
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Rubik', sans-serif;
+    font-size: inherit;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    outline: none;
+    padding: 6px 12px;
+    position: relative;
+    transition: all 0.3s;
+    vertical-align: middle;
+}
+
+
+.btn-3 {
+    /* background-color: #c7c7c7; */
+    border-radius: 0;
+    overflow: hidden;
+    border: 1px solid rgb(194, 194, 194);
+}
+
+.title-btn {
+    display: inline-block;
+    height: 100%;
+    font-size: .8rem;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+.btn-3::before {
+    color: #fff;
+    /* content: "\f382"; */
+    font-family: "Font Awesome 5 Pro";
+    font-size: 130%;
+    height: 100%;
+    left: 0;
+    line-height: 2.6;
+    position: absolute;
+    top: -180%;
+    transition: all 0.3s;
+    width: 100%;
+}
+
+
+
+.btn-3::before {
+    top: 0;
+}
+
+.input-file-box {
+    width: 100%;
+    text-align: center;
+}
+.modal-position{
+    margin-top: 15rem;
+}

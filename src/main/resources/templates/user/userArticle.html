@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${title}]]</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/userArticle.css}">
+    <link rel="stylesheet" th:href="@{/css/web/userPage.css}">
+    <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+<main class="pt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-12 menu-left" id="menuBox">
+                <ul class="submenu">
+                    <li class="el-submenu-title">
+                        <a type="button" id="btnOpenMenuSm" class="el-link">
+                            <i class="fas fa-pencil-alt"></i>
+                            <span>Posts</span>
+                            <i class="fas fa-angle-down btn-drop"></i>
+                        </a>
+                        <div class="sm-menu-box" id="menuSm">
+                            <ul class="sm-menu">
+                                <li class="el-smmenu-title">
+                                    <a th:href="@{/user/posts/public}" class="el-sm-menu">
+                                        <i class="fas fa-globe-asia"></i>
+                                        Public
+                                    </a>
+                                    <a th:href="@{/user/posts/private}" class="el-sm-menu">
+                                        <i class="fas fa-lock"></i>
+                                        Private
+                                    </a>
+                                    <a th:href="@{/user/posts/unapproved}" class="el-sm-menu">
+                                        <i class="fas fa-hourglass-half"></i>
+                                        Unapproved
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a href="" class="el-link">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a href="" class="el-link">
+                            <i class="fas fa-heart"></i>
+                            <span>Favoriate</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a href="" class="el-link">
+                            <i class="fas fa-clock"></i>
+                            <span>Read Later</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/profile}" class="el-link">
+                            <i class="fas fa-id-card"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/changePassword}" class="el-link">
+                            <i class="fas fa-key"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-9 col-md-12 col-sm-12 main-content">
+                <div class="header-content-post">
+                    <button id="btnActiveMenu" type="button" style="outline: none;" class="btn-active-menu"><i
+                            class="fas fa-indent"></i></button>
+                    <h2 class="header-content-title">[[${title}]]</h2>
+                    <hr class="header-line">
+                </div>
+                <div>
+                    <form action="">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control inputSearch" id="searchPosts" placeholder="Search">
+                            <input type="hidden" name="status" id="status" th:value="${status}">
+                            <div class="input-group-append">
+                                <button class="input-group-text btn-input-search" style="outline: none;"
+                                        type="submit" id="basic-addon2"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="main-content" id="mainContentPosts">
+                    <div th:if="${articles.size() > 0}" th:each="article:${articles}"  class="card card-content mb-0">
+                        <div class="card-body p-0 card-original">
+                            <p class="card-original-cate" style="color: red">[[${article.topic.name}]]</p>
+                            <h5 class="card-title card-original-title"><a th:href="@{'/posts/'+ ${article.id}}">[[${article.title}]]</a></h5>
+
+                            <div th:if="${article.published.value == 1}" class="card-original-author card-edit">
+                                <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
+                            </div>
+                            <div class="d-flex mt-3">
+                                <th:block th:if="${article.modifiedDate != null}">
+                                    <p style="color: gray; margin-right: 1rem;margin-bottom: 0">Last edit: [[${#temporals.format(article.modifiedDate,'yyyy-MM-dd HH:mm')}]]</p>
+                                </th:block>
+                                <th:block th:if="${article.modifiedDate == null}">
+                                    <p style="color:grey; margin-right: 1rem;margin-bottom: 0">Last edit: [[${#temporals.format(article.createdDate,'yyyy-MM-dd HH:mm')}]]</p>
+                                </th:block>
+                                <div class="dropdown">
+                                    <button class="btn-edit" style="outline: none;" type="button"
+                                            id="" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropmenu-edit"
+                                         aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" th:href="@{'/posts/edit/'+${article.id}}">Edit</a>
+                                        <a class="dropdown-item btnDeletePosts" type="button" th:id="${'delete_'+article.id}">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr>
+                    </div>
+                    <div th:if="${articles.size() <=0 }" class="mt-4">
+                        <p style="color: grey; font-weight: bold; text-align: center">There is nothing here!</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/menuUserPage.js}"></script>
+<script th:src="@{/js/web/user/userPost.js}"></script>
+</body>
+</html>

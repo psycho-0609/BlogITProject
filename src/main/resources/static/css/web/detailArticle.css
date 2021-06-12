@@ -92,3 +92,13 @@
     font-family: "Shippori Mincho",serif;
     font-weight: bold;
 }
+.btn-favorite{
+    background: none;
+    border: none;
+    outline: none;
+    margin-right: .3rem;
+    color: gray;
+}
+#btnSaveReadLater:hover{
+    color: white;
+}

@@ -1,14 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
+    <link rel="shortcut icon" th:href="@{/img/logo.jpg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/loading.css}">
+
 </head>
 <body>
-<form action="/handlerLogin" method="post">
-    <input type="text" name="username" id="username">
-    <input type="password" name="password" id="password">
-    <button type="submit">login</button>
-</form>
+
+<section>
+    <div class="loading" id="processing">
+        <div class="lds-hourglass"></div>
+    </div>
+</section>
+
+<div class="message">
+    <div id="success" class="message-success"><i class="fas fa-check"></i> Register successfully !</div>
+    <div id="fail" class="message-fail"></div>
+</div>
+<section>
+    <div class="modal fade" id="forgotPassword" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <h5>Forgot Your Password</h5>
+                    <p>You forgot your password? Don't worry! Give us the email which is used to register your Daily
+                        Blog account. We'll mail you a link to reset your password.</p>
+                    <div class="box-alert-success">
+                        <div class="alert alert-success message-send-mail">
+                            <div class="icon-success-box"><i class="fas fa-check-circle"></i></div>
+                            <p id="emailSent" class="send-mail-success"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <form action="" id="formReset">
+                            <div class="form-group">
+                                <input type="text" name="emailReset" id="emailReset" class="form-control"
+                                       placeholder="Your email">
+                                <span class="errorInput" id="emailResetError"></span>
+                            </div>
+
+                            <div class="text-right">
+                                <button class="btn btn-primary position-relative" id="btnSendMail">Send me email
+                                    <span class="countdown" id="timeCount"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="login-box" id="loginForm">
+    <div class="logo">
+        <img th:src="@{/img/logo.jpg}" alt="">
+    </div>
+    <h5 class="title">Login to Daily Blog</h5>
+    <th:block th:if="${param.error}">
+        <div class="alert alert-danger d-none">
+            <p id="errorLogin">Username or Password incorrect</p>
+        </div>
+    </th:block>
+    <div class="form-login">
+        <form th:action="@{/handlerLogin}" method="post">
+            <div class="form-group">
+                <input type="text" name="username" id="username" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" id="password" class="form-control">
+            </div>
+            <button class="btn-login btn btn-primary" type="submit">Login</button>
+        </form>
+    </div>
+    <div class="btn-group-help">
+        <a href="#" type="button" data-toggle="modal" data-target="#forgotPassword">Forgot password?</a>
+        <a href="#" type="button" id="btnRigister">Create account</a>
+    </div>
+</div>
+<div class="login-box" id="register" style="display: none;">
+    <div class="logo">
+        <img th:src="@{/img/logo.jpg}" alt="">
+    </div>
+    <h5 class="title">Register account for Daily Blog</h5>
+    <div class="box-alert-success" id="alertRegisSuccess">
+        <div class="alert alert-success message-send-mail">
+            <div class="icon-success-box"><i class="fas fa-check-circle"></i></div>
+            <p id="messConfirmAccount" class="send-mail-success"></p>
+        </div>
+    </div>
+    <div class="form-login">
+        <form action="" id="formRegister">
+            <div class="form-group">
+                <input type="text" name="firstName" id="firstName" placeholder="First Name" class="form-control">
+                <span class="errorInput" id="errorFirstNameRegister"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" name="lastName" id="lastName" placeholder="Last Name" class="form-control">
+                <span class="errorInput" id="errorLastNameRegister"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" name="email" id="emailRegister" placeholder="Email" class="form-control">
+                <span class="errorInput" id="errorEmailRegister"></span>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Password" id="passwordRegister"
+                       class="form-control">
+                <span class="errorInput" id="errorPasswordRegister"></span>
+            </div>
+            <div class="form-group">
+                <input type="password" name="confirmPass" placeholder="Confirm password" id="confirmPass"
+                       class="form-control">
+                <span class="errorInput" id="errorConfirmPassRegister"></span>
+            </div>
+            <button class="btn-login btn btn-primary" type="submit">Sign Up</button>
+        </form>
+    </div>
+    <div class="login-now-box">
+        <hr>
+        <a href="#" id="btnLoginNow">Login</a>
+        <hr>
+    </div>
+</div>
+
+
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/login.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+
+</script>
 </body>
 </html>

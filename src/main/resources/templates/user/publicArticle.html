@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:replace="common/navbar :: header"/>
+    <link rel="stylesheet" th:href="@{/css/web/userPage.css}">
+    <link rel="stylesheet" th:href="@{/css/modalUploadImg.css}">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+
+
+
+    <main class="pt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 menu-left" id="menuBox">
+                    <ul class="submenu">
+                        <li class="el-submenu-title">
+                            <a type="button" id="btnOpenMenuSm" class="el-link">
+                                <i class="fas fa-pencil-alt"></i>
+                                <span>Posts</span>
+                                <i class="fas fa-angle-down btn-drop"></i>
+                            </a>
+                            <div class="sm-menu-box" id="menuSm">
+                                <ul class="sm-menu">
+                                    <li class="el-smmenu-title">
+                                        <a href="" class="el-sm-menu">
+                                            <i class="fas fa-globe-asia"></i>
+                                            Public
+                                        </a>
+                                        <a href="" class="el-sm-menu">
+                                            <i class="fas fa-lock"></i>
+                                            Private
+                                        </a>
+                                        <a href="" class="el-sm-menu">
+                                            <i class="fas fa-hourglass-half"></i>
+                                            Unapproved
+                                        </a>
+                                    </li>
+                                </ul>
+
+
+                            </div>
+                        </li>
+                        <li class="el-submenu-title">
+                            <a href="" class="el-link">
+                                <i class="fas fa-history"></i>
+                                <span>History</span>
+                            </a>
+                        </li>
+                        <li class="el-submenu-title">
+                            <a href="" class="el-link">
+                                <i class="fas fa-heart"></i>
+                                <span>Favorite</span>
+                            </a>
+                        </li>
+                        <li class="el-submenu-title">
+                            <a href="" class="el-link">
+                                <i class="fas fa-clock"></i>
+                                <span>Read Later</span>
+                            </a>
+                        </li>
+                        <li class="el-submenu-title">
+                            <a href="" class="el-link">
+                                <i class="fas fa-id-card"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li class="el-submenu-title">
+                            <a href="" class="el-link">
+                                <i class="fas fa-key"></i>
+                                <span>Change Password</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-9 col-md-12 col-sm-12 main-content">
+                    <div class="header-content-post">
+                        <button id="btnActiveMenu" type="button" style="outline: none;" class="btn-active-menu"><i
+                                class="fas fa-indent"></i></button>
+                        <h2 class="header-content-title">Public Posts</h2>
+                        <hr class="header-line">
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/menuUserPage.js}"></script>
+</body>
+</html>

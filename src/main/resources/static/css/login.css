@@ -1,0 +1,147 @@
+body{
+    background-image: url('../img/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+}
+.login-box {
+    width: 25rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 2px 12px 0px rgb(144, 144, 144);
+    padding: 2rem;
+    border-radius: 5px;
+    background-color: #fff;
+}
+.logo {
+    display: flex;
+    justify-content: center;
+    width: 6rem;
+    margin: 0;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.logo img {
+    width: 6rem;
+}
+
+img {
+    width: 100%;
+}
+.title {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+.btn-login {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.btn-group-help {
+    display: flex;
+    justify-content: space-between;
+}
+.btn-group-help a {
+    font-size: 0.8rem;
+}
+.btn-group-help a:hover {
+    text-decoration: none;
+}
+.login-now-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.login-now-box hr{
+    flex: 1 1 auto!important;
+    margin: 0!important;
+}
+.login-now-box a{
+    margin: 0 .75rem 0 .75rem ;
+    font-size: .8rem;
+}
+.login-now-box a:hover{
+    text-decoration: none;
+}
+.errorInput{
+    color: red;
+    font-size: .8rem;
+}
+
+
+
+@media screen and (max-width: 998px) {
+    .login-box {
+        width: 22rem;
+    }
+}
+
+@media screen and (max-width: 448px) {
+    .login-box {
+        width: 20rem;
+    }
+}
+.message-success{
+    padding: .3rem .5rem;
+    background-color: rgb(9, 218, 9);
+    text-align: center;
+    position: fixed;
+    left: 50%;
+    top: 15%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    color: #fff;
+    display:none;
+}
+.message-fail{
+    padding: .3rem .5rem;
+    background-color: rgb(231, 31, 31);
+    text-align: center;
+    position: fixed;
+    left: 50%;
+    top: 15%;
+    transform: translate(-50%,-50%);
+    border-radius: 10px;
+    color: #fff;
+    display:none;
+}
+.countdown{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 300;
+    width: 100%;
+    height: 100%;
+    padding: .375rem .75rem;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+}
+#btnSendMail{
+    z-index: 200;
+}
+.box-alert-success{
+    display: none;
+}
+
+.message-send-mail{
+    display: flex !important;
+    width: 100%;
+    padding: .4rem .6rem;
+}
+
+.icon-success-box{
+    margin-right: .7rem;
+    display: flex;
+    align-items: center;
+}
+.icon-success-box i{
+    color: #10ec10;
+    font-size: 1.5rem;
+}
+.send-mail-success{
+    font-size: .8rem;
+    margin: 0;
+}
+

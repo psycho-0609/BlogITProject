@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>[[${article.title}]]</title>
@@ -12,8 +13,6 @@
 <div th:replace="common/navbar :: header"/>
 
 <section id="ModelReport">
-
-
     <!-- Modal Report -->
     <div class="modal fade" id="modalReport" tabindex="-1" aria-labelledby="modalReport" aria-hidden="true">
         <div class="modal-dialog">
@@ -24,22 +23,17 @@
                         <p class="mb-2">Reason for reporting this content</p>
                         <form action="">
                             <div class="radio-box mb-2">
-                                <div>
-                                    <input type="radio" aria-label="Radio button for following text input">
-                                    Lorem ipsum dolor sit amet.
+                                <div th:each="report : ${reports}">
+                                    <input type="radio" th:value="${report.id}"
+                                           aria-label="Radio button for following text input" name="report">
+                                    [[${report.name}]]
                                 </div>
-                                <div>
-                                    <input type="radio" aria-label="Radio button for following text input">
-                                    Lorem ipsum dolor sit amet.
-                                </div>
-                                <div>
-                                    <input type="radio" aria-label="Radio button for following text input">
-                                    Lorem ipsum dolor sit amet.
-                                </div>
+
                             </div>
                             <textarea name="" id="" class="form-control mb-4" rows="3"
                                       placeholder="Comment"></textarea>
-                            <div class="text-right"><button type="submit" class="btn btn-danger">Report</button>
+                            <div class="text-right">
+                                <button type="submit" class="btn btn-danger">Report</button>
                             </div>
                         </form>
                     </div>
@@ -58,58 +52,122 @@
 
                         <div class="article-author">
                             <a href="" class="article-img-author">
-                                <img src="/iStock_519731334.jpg" alt="">
+                                <img th:src="${article.userAccount.userDetailEntity.getImagePath()}" alt="">
                             </a>
                             <div class="article-name-author">
-                                <a href="">Hung Luu</a>
+                                <a href="">[[${article.userAccount.userDetailEntity.firstName}]]
+                                    [[${article.userAccount.userDetailEntity.lastName}]]</a>
                                 <p class="article-published">Published 5/6/2021</p>
                             </div>
                         </div>
                         <div class="article-infor-icon">
-                            <span><i class="fas fa-eye"></i>30</span>
+                            <span><i class="fas fa-eye"></i>[[${article.countView}]]</span>
                             <span><i class="far fa-comment-dots"></i>32</span>
-                            <span><i class="fas fa-heart"></i>32</span>
-                            <div class="dropdown dropleft">
+                            <th:block sec:authorize="isAuthenticated()">
+                                <th:block th:if="${favStatus == null}">
+                                    <button class="btn-favorite" style="outline: none" id="0"><i
+                                            class="fas fa-heart"></i></button>
+                                    <span id="favCount">[[${article.favoriteArticle.size()}]]</span>
+                                </th:block>
+                                <th:block th:if="${favStatus != null}">
+                                    <button class="btn-favorite" th:id="${favStatus.id}"
+                                            style="color: deeppink; outline: none"><i class="fas fa-heart"></i></button>
+                                    <span id="favCount">[[${article.favoriteArticle.size()}]]</span>
+                                </th:block>
+                            </th:block>
+                            <th:block sec:authorize="!isAuthenticated()">
+                                <span><i class="fas fa-heart"></i> [[${article.favoriteArticle.size()}]]</span>
+                            </th:block>
+
+                            <div sec:authorize="!isAuthenticated()" th:if="${article.published.value == 1 && article.status.value == 1}"
+                                 class="dropdown dropleft">
                                 <a class="btn-drop" href="#" role="button" id="dropdownMenuLink"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <a class="dropdown-item" href="#">Favoriate</a>
-                                    <a class="dropdown-item" href="#">Read later</a>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalReport"
                                        type="button">Report</a>
                                 </div>
                             </div>
-                        </div>
 
+                            <div sec:authorize="isAuthenticated()" th:if="${article.published.value == 1 && article.status.value == 1 && article.userAccount.id != session.user.id}"
+                                 class="dropdown dropleft">
+                                <a class="btn-drop" href="#" role="button" id="dropdownMenuLink"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <th:block sec:authorize="isAuthenticated()">
+                                        <a class="dropdown-item" type="button" id="btnSaveReadLater"
+                                           th:data="${article.id}">Save to Read Later</a>
+                                    </th:block>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalReport"
+                                       type="button">Report</a>
+                                </div>
+                            </div>
+
+                            <th:block sec:authorize="isAuthenticated()"
+                                      th:if="${article.userAccount.id == session.user.id}">
+                                <div class="dropdown dropleft">
+                                    <a class="btn-drop" href="#" role="button" id="dropdownMenuLink"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <th:block th:if="${article.status.value == 1 && article.published.value == 1}">
+                                            <a class="dropdown-item" type="button" id="btnSaveReadLater"
+                                               th:data="${article.id}">Save to Read Later</a>
+                                            <a class="dropdown-item" href="#" data-toggle="modal"
+                                               data-target="#modalReport"
+                                               type="button">Report</a>
+                                        </th:block>
+                                        <a class="dropdown-item" th:href="@{'/posts/edit/'+ ${article.id}}">Edit</a>
+                                        <a class="dropdown-item" href="#"
+                                           type="button">Delete</a>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                        </div>
 
                     </div>
 
                     <div class="content-article">
-
-                        <div class="text-center mb-4">
-                            <img th:src="${article.imagePath}" alt=""/>
-                        </div>
-                        <h6 style="color: red;">Technology</h6>
+                        <th:block th:if="${article.image != null && !article.image.equals('')}">
+                            <div class="text-center mb-4">
+                                <img th:src="${article.imagePath}" alt=""/>
+                            </div>
+                        </th:block>
+                        <h6 style="color: red;">[[${article.topic.name}]]</h6>
                         <h1 class="title-article">[[${article.title}]]</h1>
+                        <div>[[${article.shortDescription}]]</div>
                         <div class="article-main-content" id="content">
                             [[${article.content}]]
                         </div>
                     </div>
                     <h5 class="mb-4">Comment</h5>
-                    <div class="article-comment">
-                        <a href="" class="article-img-author">
-                            <img src="/iStock_519731334.jpg" alt="">
-                        </a>
-                        <form action="" class="w-100">
-                            <textarea name="" id="" class="form-control mb-3" rows="5"></textarea>
-                            <div class="text-right">
-                                <button class="btn btn-primary">Post Comment</button>
-                            </div>
-                        </form>
-                    </div>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <div class="article-comment">
+                            <a href="" class="article-img-author">
+                                <img th:src="${session.user.userDetail.thumbnail}" alt="">
+                            </a>
+                            <form action="" class="w-100">
+                                <input type="hidden" name="articleId" id="articleId" th:value="${article.id}">
+                                <textarea name="content" id="contentComment" class="form-control mb-3"
+                                          rows="5"></textarea>
+                                <div class="text-right">
+                                    <button class="btn btn-primary" type="submit">Post Comment</button>
+                                </div>
+                            </form>
+                        </div>
+                    </th:block>
+                    <th:block sec:authorize="!isAuthenticated()">
+                        <p class="text-center">Login to comment this article</p>
+                    </th:block>
                     <hr>
                     <div class="comment">
                         <div class="comment-reader">
@@ -122,7 +180,8 @@
                                     <span>date</span>
                                 </div>
                             </div>
-                            <p class="mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus eum autem repellat
+                            <p class="mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus eum autem
+                                repellat
                                 recusandae incidunt similique aliquid expedita voluptatibus obcaecati doloribus
                                 architecto suscipit, nesciunt quibusdam molestias corporis ab. Voluptates, veritatis
                                 dolore!</p>
@@ -144,7 +203,8 @@
                                     <div class="col-md-7">
                                         <div class="card-body card-original">
                                             <p class="card-original-cate"><a href="">Technology</a></p>
-                                            <h5 class="card-title card-original-title"><a href="">The world’s first fitness
+                                            <h5 class="card-title card-original-title"><a href="">The world’s first
+                                                fitness
                                                 influencer
                                                 was a
                                                 Victorian
@@ -174,19 +234,8 @@
                         </div>
                         <div class="blog-category-filter">
                             <ul class="list-category">
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
-                                </li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Dã Ngoại</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Tết</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
-                                </li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Dã Ngoại</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Tết</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
-                                </li>
+                                <li th:each="topic:${topics}"><a href=""><span><i class="fas fa-angle-right"></i></span>
+                                    [[${topic.name}]]</a></li>
 
                             </ul>
                         </div>
@@ -196,11 +245,14 @@
         </section>
     </div>
 </main>
+<input type="hidden" id="articleOfArticle" th:value="${article.id}">
 <div th:replace="common/footer :: footer"/>
 <script th:src="@{/js/web/cate.js}"></script>
-
+<script th:src="@{/js/web/detailArticle.js}"></script>
 <script>
     $("#content").html($("#content").text());
+    let x = [[${article.id}]]
+    console.log(x);
 </script>
 </body>
 </html>
