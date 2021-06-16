@@ -78,5 +78,8 @@ public class CustomArticleDTO {
 
     }
 
-
+    public String getImagePath() {
+        if(imagePath == null|| id == null) return null;
+        return "/imgBackArticle/" + id + "/" + imagePath;
+    }
 }

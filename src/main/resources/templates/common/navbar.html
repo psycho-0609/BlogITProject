@@ -45,19 +45,18 @@
                 <div class="navbar-left-content">
                     <div class="navbar-left-item">
 
-                        <a href="index.html" class="active-nav"><span><i class="fas fa-home"></i></span>Home</a>
+                        <a href="index.html" class="active-nav"><span><i class="fas fa-home nav-left-icon"></i></span>Home</a>
                     </div>
                     <div class="navbar-left-item">
 
-                        <a href="blog.html"><span><i class="far fa-newspaper"></i></span>Posts</a>
+                        <a href="blog.html"><span><i class="far fa-newspaper nav-left-icon"></i></span>Posts</a>
                     </div>
                     <div>
                         <div class="navbar-left-item">
 
                             <a type="button" class="" href="#" id="btnDropdownMenuProduct">
-                                <span><i class="fas fa-list"></i></span>
-                                Category
-
+                                <span style="margin-right: 1.3rem"><i class="fas fa-list nav-left-icon"></i></span>
+                                <span style="font-size: 1rem; margin: 0">Category</span>
                                 <span class="btn-dropdown"><i class="fas fa-angle-down"></i></span>
                             </a>
                         </div>
@@ -70,18 +69,18 @@
 
                     <th:block sec:authorize="isAuthenticated()">
                         <div class="navbar-left-item">
-                            <a href=""><span><i class="fas fa-pencil-alt"></i></span> Create Post</a>
+                            <a href=""><span><i class="fas fa-pencil-alt nav-left-icon"></i></span>Create Post</a>
                         </div>
                         <div class="navbar-left-item">
-                            <a th:href="@{/user/profile}"><span><i class="fas fa-id-card"></i></span> Profile</a>
+                            <a th:href="@{/user/profile}"><span><i class="fas fa-id-card nav-left-icon"></i></span>Profile</a>
                         </div>
                         <div class="navbar-left-item">
-                            <a th:href="@{/user/posts/public}"><span><i class="fas fa-file-alt"></i></span> My Content</a>
+                            <a th:href="@{/user/posts/public}"><span><i class="fas fa-file-alt nav-left-icon"></i></span>My Content</a>
                         </div>
                             <hr>
                         <div class="navbar-left-item">
                             <form th:action="@{/logout}" method="post">
-                                <button type="submit"><span><i class="fas fa-sign-out-alt"></i></span> Logout</button>
+                                <button type="submit" style="background: none; outline: none; border: none; color: rgb(90, 90, 90)"><span><i class="fas fa-sign-out-alt nav-left-icon"></i></span>Logout</button>
                             </form>
                         </div>
                     </th:block>
@@ -157,7 +156,7 @@
                                         <a class="dropdown-item nav-link-user" th:href="@{/user/posts/public}"><span class="icon-nav-left"><i class="fas fa-file-alt"></i></span>My Content</a>
                                         <div class="line-user-nav"></div>
                                         <form th:action="@{/logout}" method="post">
-                                            <button class="dropdown-item btn-logout" style="outline: none" type="submit"><span class="icon-nav-left"><i class="fas fa-sign-out-alt"></i></span> Logout</button>
+                                            <button class="dropdown-item btn-logout" style="outline: none" type="submit"><span class="icon-nav-left"><i class="fas fa-sign-out-alt"></i></span>Logout</button>
                                         </form>
 
                                     </div>

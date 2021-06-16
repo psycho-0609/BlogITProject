@@ -2,8 +2,10 @@ package com.finnal.blogit.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -27,4 +29,9 @@ public class HistoryArticleEntity {
     @Column
     @Temporal(TemporalType.DATE)
     private Date cratedDate;
+
+    @Column
+    @DateTimeFormat(pattern="yyyy.MM.dd HH:mm:ss")
+    private LocalDateTime timeWatch;
+
 }

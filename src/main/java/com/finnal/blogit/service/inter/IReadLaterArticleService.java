@@ -1,7 +1,9 @@
 package com.finnal.blogit.service.inter;
 
+import com.finnal.blogit.dto.response.GetListReadLater;
 import com.finnal.blogit.entity.ReadLaterArticleEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IReadLaterArticleService {
@@ -11,4 +13,7 @@ public interface IReadLaterArticleService {
     void delete(Long id);
     void deleteAll();
     Long countItemByReadLaterId(Long id);
+    List<GetListReadLater> findAllByReadLaterId(Long id);
+    List<GetListReadLater> findForSearch(Long id, String title);
+
 }

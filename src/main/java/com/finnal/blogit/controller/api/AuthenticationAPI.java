@@ -148,9 +148,6 @@ public class AuthenticationAPI {
             throw new ItemCannotEmptyException("Confirm password not match");
         }
         entity = accountEntity.get();
-        System.out.println(entity.getPassword());
-        System.out.println(request.getCurrentPassword());
-        System.out.println(encoder.matches(request.getCurrentPassword(),entity.getPassword()));
         if(!encoder.matches(request.getCurrentPassword(),entity.getPassword())){
             throw new ItemCannotEmptyException("Current password not correct");
         }

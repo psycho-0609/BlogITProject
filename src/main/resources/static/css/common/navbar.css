@@ -397,7 +397,7 @@ img{
     border-radius: 10px;
     color: #fff;
     display:none;
-    z-index: 1000;
+    z-index: 2000;
 }
 .message-fail{
     padding: .3rem .5rem;
@@ -410,7 +410,7 @@ img{
     border-radius: 10px;
     color: #fff;
     display:none;
-    z-index: 1000;
+    z-index: 2000;
 }
 
 .avatar-user img{
@@ -462,6 +462,9 @@ img{
     margin: 0;
     left: 2px;
     background-color: gray;
+}
+.nav-left-icon{
+    width: 1.5rem;
 }
 
 

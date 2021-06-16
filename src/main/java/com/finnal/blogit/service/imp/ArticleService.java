@@ -170,16 +170,6 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    public List<ArticleEntity> findAllByStatusPublishedAndAccountId(ArticleStatus status, ArticlePublished published, Long id) {
-        return articleRepository.findAllByStatusAndPublishedAndUserAccountId(status,published,id);
-    }
-
-    @Override
-    public List<ArticleEntity> findAllByStatusAndUserAccount(ArticleStatus status,Long id) {
-        return articleRepository.findAllByStatusAndUserAccountId(status,id);
-    }
-
-    @Override
     public List<CustomArticleDTO> findAllByPublishedStatusAndAccount(ArticlePublished published, Long id, ArticleStatus status) {
         return articleRepository.findAllByPublishedStatusAndUserAccountId(published,id, status);
     }
@@ -188,6 +178,11 @@ public class ArticleService implements IArticleService {
     public List<CustomArticleDTO> findAllByAccountId(Long id) {
 
         return  articleRepository.findAllByAccountId(id);
+    }
+
+    @Override
+    public List<CustomArticleDTO> findAllForSearch(ArticlePublished published, Long id, ArticleStatus status, String title) {
+        return articleRepository.findAllForSearch(published,id,status,title);
     }
 
 

@@ -41,21 +41,36 @@ public class ArticleUserAPI {
     }
 
     @GetMapping("/unapproved")
-    public ResponseEntity<List<CustomArticleDTO>> findAllUnapprovedPosts(){
+    public ResponseEntity<List<CustomArticleDTO>> findAllUnapprovedPosts(@RequestParam(value = "title", required = false) String title){
         CustomUserDetail userDetail = UserInfor.getPrincipal();
+        if(title != null && !title.equals("")){
+            return new ResponseEntity<>(articleService.findAllForSearch(ArticlePublished.DISABLE,userDetail.getId(), ArticleStatus.PUBLIC, title), HttpStatus.OK);
+        }
         return new ResponseEntity<>(articleService.findAllByPublishedStatusAndAccount(ArticlePublished.DISABLE,userDetail.getId(), ArticleStatus.PUBLIC), HttpStatus.OK);
     }
     @GetMapping("/private")
-    public ResponseEntity<List<CustomArticleDTO>> findAllPrivatePosts(){
+    public ResponseEntity<List<CustomArticleDTO>> findAllPrivatePosts(@RequestParam(value = "title", required = false) String title) throws APIException{
         CustomUserDetail userDetail = UserInfor.getPrincipal();
+        if(userDetail == null){
+            throw new ItemCannotEmptyException("Not found user");
+        }
         List<CustomArticleDTO> lists = articleService.findAllByAccountId(userDetail.getId());
         lists = lists.stream().filter(el -> el.getStatus().equals(ArticleStatus.PRIVATE.getValue())).collect(Collectors.toList());
+        if(title != null && !title.equals("")){
+            lists = lists.stream().filter(el -> el.getTitle().contains(title)).collect(Collectors.toList());
+        }
         return new ResponseEntity<>(lists, HttpStatus.OK);
     }
 
     @GetMapping("/published")
-    public ResponseEntity<List<CustomArticleDTO>> findAllPublishedPosts(){
+    public ResponseEntity<List<CustomArticleDTO>> findAllPublishedPosts(@RequestParam(value = "title", required = false) String title) throws APIException {
         CustomUserDetail userDetail = UserInfor.getPrincipal();
+        if(userDetail == null){
+            throw new ItemCannotEmptyException("Not found user");
+        }
+        if(title != null && !title.equals("")){
+            return new ResponseEntity<>(articleService.findAllForSearch(ArticlePublished.ENABLE,userDetail.getId(), ArticleStatus.PUBLIC, title), HttpStatus.OK);
+        }
         return new ResponseEntity<>(articleService.findAllByPublishedStatusAndAccount(ArticlePublished.ENABLE,userDetail.getId(), ArticleStatus.PUBLIC), HttpStatus.OK);
     }
 

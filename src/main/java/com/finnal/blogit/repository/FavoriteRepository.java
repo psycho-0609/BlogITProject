@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface FavoriteRepository extends JpaRepository<FavoriteEntity,Long> {
 
     Optional<FavoriteEntity> findAllByUserAccount_Id(Long id);
+
 }

@@ -1,5 +1,6 @@
 package com.finnal.blogit.controller.user;
 
+import com.finnal.blogit.dto.response.CustomArticleDTO;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
 import com.finnal.blogit.exception.web.WebException;
@@ -12,6 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user/posts")
@@ -23,42 +28,59 @@ public class ArticleUserController {
     @Autowired
     private IArticleService articleService;
 
+
     @GetMapping("/public")
-    public String publicPosts(Model model) throws WebException{
+    public String publicPosts(@RequestParam(value = "title", required = false) String title, Model model) throws WebException{
         CustomUserDetail userDetail = UserInfor.getPrincipal();
         if(userDetail == null){
             throw new WebException();
+        }
+        if(title != null && !title.equals("")){
+            model.addAttribute("articles",articleService.findAllForSearch(ArticlePublished.ENABLE,userDetail.getId(),ArticleStatus.PUBLIC, title));
+        }else{
+            model.addAttribute("articles",articleService.findAllByPublishedStatusAndAccount(ArticlePublished.ENABLE,userDetail.getId(),ArticleStatus.PUBLIC));
         }
         model.addAttribute("status",ArticleStatus.PUBLIC.getValue());
         model.addAttribute("title","Public Posts");
         model.addAttribute("topics",topicService.findAll());
-        model.addAttribute("articles",articleService.findAllByStatusPublishedAndAccountId(ArticleStatus.PUBLIC, ArticlePublished.ENABLE,userDetail.getId()));
+        
         return "/user/userArticle";
     }
 
     @GetMapping("/private")
-    public String privatePosts(Model model) throws WebException{
+    public String privatePosts(@RequestParam(value = "title", required = false) String title, Model model) throws WebException{
         CustomUserDetail userDetail = UserInfor.getPrincipal();
         if(userDetail == null){
             throw new WebException();
         }
+        List<CustomArticleDTO> lists = articleService.findAllByAccountId(userDetail.getId());
+        lists = lists.stream().filter(el -> el.getStatus().equals(ArticleStatus.PRIVATE.getValue())).collect(Collectors.toList());
+        if(title != null && !title.equals("")){
+            lists = lists.stream().filter(el -> el.getTitle().contains(title)).collect(Collectors.toList());
+        }
+        model.addAttribute("articles",lists);
         model.addAttribute("status",ArticleStatus.PRIVATE.getValue());
         model.addAttribute("title","Private Posts");
         model.addAttribute("topics",topicService.findAll());
-        model.addAttribute("articles",articleService.findAllByStatusAndUserAccount(ArticleStatus.PRIVATE, userDetail.getId()));
         return "/user/userArticle";
     }
 
     @GetMapping("/unapproved")
-    public String unapprovedPosts(Model model) throws WebException{
+    public String unapprovedPosts(@RequestParam(value = "title", required = false) String title, Model model) throws WebException{
         CustomUserDetail userDetail = UserInfor.getPrincipal();
         if(userDetail == null){
             throw new WebException();
         }
+        if(title != null && !title.equals("")){
+            model.addAttribute("articles",articleService.findAllForSearch(ArticlePublished.DISABLE,userDetail.getId(),ArticleStatus.PUBLIC,title));
+        }else{
+            model.addAttribute("articles",articleService.findAllByPublishedStatusAndAccount(ArticlePublished.DISABLE,userDetail.getId(),ArticleStatus.PUBLIC));
+        }
         model.addAttribute("status",3);
         model.addAttribute("title","Unapproved Posts");
         model.addAttribute("topics",topicService.findAll());
-        model.addAttribute("articles",articleService.findAllByStatusPublishedAndAccountId(ArticleStatus.PUBLIC, ArticlePublished.DISABLE,userDetail.getId()));
         return "/user/userArticle";
     }
+
+
 }

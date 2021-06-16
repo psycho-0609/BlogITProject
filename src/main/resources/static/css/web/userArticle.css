@@ -21,4 +21,7 @@
 .card-edit .dropmenu-edit a{
     font-size: .8rem;
 }
+.btnDeletePosts:hover{
+    color: #FFFFFF;
+}
 

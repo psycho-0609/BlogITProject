@@ -2,8 +2,10 @@ package com.finnal.blogit.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "favorite_article")
@@ -22,5 +24,8 @@ public class FavoriteArticleEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "favorite_id")
     private FavoriteEntity favoriteEntity;
+
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
 
 }

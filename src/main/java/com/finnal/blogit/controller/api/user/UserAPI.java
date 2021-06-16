@@ -1,4 +1,4 @@
-package com.finnal.blogit.controller.api;
+package com.finnal.blogit.controller.api.user;
 
 import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.dto.request.PersonalInforRequest;

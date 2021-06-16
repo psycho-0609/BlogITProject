@@ -1,6 +1,7 @@
-package com.finnal.blogit.controller.api;
+package com.finnal.blogit.controller.api.user;
 
 import com.finnal.blogit.dto.response.FavReadResponse;
+import com.finnal.blogit.dto.response.GetListReadLater;
 import com.finnal.blogit.dto.response.MessageDTO;
 import com.finnal.blogit.entity.ReadLaterArticleEntity;
 import com.finnal.blogit.dto.request.HisFavLaterRequest;
@@ -16,8 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@RequestMapping("/api/readLater")
+@RequestMapping("/api/user/readLater")
 public class ReadLaterArticleAPI {
 
     @Autowired
@@ -52,6 +56,19 @@ public class ReadLaterArticleAPI {
         }
         readLaterArticleService.deleteAll();
         return new ResponseEntity<>(new MessageDTO("Success"),HttpStatus.OK);
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<GetListReadLater>> findByReadLater(@RequestParam(value = "title",required = false) String title) throws APIException {
+        CustomUserDetail userDetail = UserInfor.getPrincipal();
+        if(userDetail == null){
+            throw new ItemNotFoundException("Not found user");
+        }
+        List<GetListReadLater> lists = readLaterArticleService.findAllByReadLaterId(userDetail.getReadLaterId());
+        if(title != null && !title.equals("")){
+            lists = lists.stream().filter(el -> el.getArticle().getTitle().contains(title)).collect(Collectors.toList());
+        }
+        return new ResponseEntity<>(lists, HttpStatus.OK);
     }
 
 }

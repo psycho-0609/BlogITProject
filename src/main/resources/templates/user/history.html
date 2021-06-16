@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>History</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/userPage.css}">
+    <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+    <link rel="stylesheet" th:href="@{/css/web/history.css}">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+
+<main class="pt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-12  menu-left" id="menuBox">
+                <ul class="submenu">
+                    <li class="el-submenu-title">
+                        <a type="button" id="btnOpenMenuSm" class="el-link">
+                            <i class="fas fa-pencil-alt"></i>
+                            <span>Posts</span>
+                            <i class="fas fa-angle-down btn-drop"></i>
+                        </a>
+                        <div class="sm-menu-box" id="menuSm">
+                            <ul class="sm-menu">
+                                <li class="el-smmenu-title">
+                                    <a th:href="@{/user/posts/public}" class="el-sm-menu">
+                                        <i class="fas fa-globe-asia"></i>
+                                        Public
+                                    </a>
+                                    <a th:href="@{/user/posts/private}" class="el-sm-menu">
+                                        <i class="fas fa-lock"></i>
+                                        Private
+                                    </a>
+                                    <a th:href="@{/user/posts/unapproved}" class="el-sm-menu">
+                                        <i class="fas fa-hourglass-half"></i>
+                                        Unapproved
+                                    </a>
+                                </li>
+                            </ul>
+
+
+                        </div>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/history/posts}" class="el-link">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/favorite/posts}" class="el-link">
+                            <i class="fas fa-heart"></i>
+                            <span>Favorite</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/readLater/posts}" class="el-link">
+                            <i class="fas fa-clock"></i>
+                            <span>Read Later</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/profile}" class="el-link">
+                            <i class="fas fa-id-card"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/changePassword}" class="el-link">
+                            <i class="fas fa-key"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-9 col-md-12 col-sm-12 main-content">
+                <div class="header-content-post">
+                    <button id="btnActiveMenu" type="button" style="outline: none;" class="btn-active-menu"><i
+                            class="fas fa-indent"></i></button>
+                    <h2 class="header-content-title">History</h2>
+                    <hr class="header-line">
+                </div>
+                <div>
+                    <form th:action="@{${#httpServletRequest.requestURI}}" method="get">
+                        <div class="input-group mb-3">
+                            <input type="search" class="form-control inputSearch" name="title" id="searchPosts" th:value="${#httpServletRequest.getParameter('title')}" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="input-group-text btn-input-search" style="outline: none;"
+                                        type="submit" id="basic-addon2"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="text-right">
+                    <button th:if="${histories.size() > 0}" class="btn btn-outline-danger" id="btnDeleteAll"><i class="fas fa-trash"></i> Delete All</button>
+                    <button th:if="${histories.size() <= 0}" class="btn btn-outline-danger d-none" id="btnDeleteAll"><i class="fas fa-trash"></i> Delete All</button>
+                </div>
+                <div id="historyMainContent">
+                    <th:block th:if="${histories.size() > 0}" th:each="history : ${histories}">
+                        <div class="history-date">
+                            <hr>
+                            <p th:text="${history.date}"></p>
+                            <hr>
+                        </div>
+                        <div  class="card card-content" th:each="hisArticle:${history.historyArticle}">
+                            <div class="row no-gutters">
+                                <div class="col-md-5">
+                                    <a href=""> <img th:src="${hisArticle.article.imagePath}" alt="..."></a>
+                                </div>
+                                <div class="col-md-7">
+
+                                    <div class="card-body card-original">
+                                        <p class='card-original-cate'><a href=''
+                                                                         th:text="${hisArticle.article.topic.name}"></a>
+                                        </p>
+                                        <h5 class='card-title card-original-title'><a
+                                                href=''>[[${hisArticle.article.title}]]</a></h5>
+                                        <div class='card-original-author'>
+                                            <span><i class='fas fa-calendar-day'></i> [[${#temporals.format(hisArticle.article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
+                                            <a href=''><span class=''><i class='fas fa-user'></i></span>
+                                                [[${hisArticle.article.userAccount.userDetail.firstName}]]
+                                                [[${hisArticle.article.userAccount.userDetail.lastName}]]
+                                            </a>
+                                            <div class='dropdow dropMenuBox'>
+                                                <button style='outline: none;' class='btn-drop-menu' type='button'
+                                                        id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
+                                                        aria-expanded='false'>
+                                                    <i class='fas fa-ellipsis-h'></i>
+                                                </button>
+                                                <div class='dropdown-menu drop-menu' style='padding: 0;'
+                                                     aria-labelledby='dropdownMenu'>
+                                                    <a class='dropdown-item btn-add-read-later'
+                                                       style='font-size: .8rem;'
+                                                       th:id="${'readLate_'+hisArticle.article.id}" type="button">Add to
+                                                        Read later</a>
+                                                    <hr style='margin: 0;'>
+                                                    <a class='dropdown-item btn-delete-his' style='font-size: .8rem;'
+                                                       th:id="${'delete_'+hisArticle.id}" type="button">Delete</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <p class='card-original-short'>[[${hisArticle.article.shortDescription}]]</p>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                    <th:block th:if="${histories.size() <= 0}">
+                        <p style='color: grey; font-weight: bold; text-align: center'>There is nothing here!</p>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/menuUserPage.js}"></script>
+<script th:src="@{/js/web/user/history.js}"></script>
+</body>
+</html>

@@ -28,7 +28,7 @@ $(document).ready(function (){
     function saveReadLater(data){
         $("#processing").addClass("active");
         $.ajax({
-            url:"/api/readLater/create",
+            url:"/api/user/readLater/create",
             method:"post",
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -57,7 +57,7 @@ $(document).ready(function (){
     function crateFav(data){
         $("#processing").addClass("active");
         $.ajax({
-            url:"/api/favorite/create",
+            url:"/api/user/favorite/create",
             method:"post",
             contentType: "application/json",
             data: JSON.stringify(data),
@@ -76,7 +76,7 @@ $(document).ready(function (){
     function deleteFav(data){
         $("#processing").addClass("active");
         $.ajax({
-            url:"/api/favorite/delete/"+data,
+            url:"/api/user/favorite/delete/"+data,
             method:"delete",
             dataType: 'json'
         }).done(function (res){
@@ -90,5 +90,50 @@ $(document).ready(function (){
 
         })
     }
+
+    $("#formReport").on('submit',function (e){
+        e.preventDefault();
+        let data = {};
+        let formData = $(this).serializeArray();
+        $.each(formData, function (i, v) {
+            data["" + v.name + ""] = v.value;
+        });
+        if(validateReport(data) === true){
+            report(data);
+        }
+
+    })
+
+    function report(data){
+        $("#processing").addClass("active");
+        $.ajax({
+            url:'/api/report/create',
+            method:'post',
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            dataType: 'json'
+        }).done(function (res){
+            $("#processing").removeClass("active");
+            success(" Report successfully");
+            $(".type-report:checked")[0].checked = false;
+            $("#commentReport").val("");
+            $("#modalReport").modal('hide');
+        }).fail(function (res){
+            $("#processing").removeClass("active");
+            error(" " +res.responseJSON.message);
+        })
+    }
+
+    function validateReport(data){
+        if(data.typeReportId === undefined || data.typeReportId === ""){
+            $("#errorMessReport").text('Please chose the type of report!')
+            return false;
+        }else{
+            $("#errorMessReport").text('')
+            return true;
+        }
+    }
+
+
 
 })

@@ -2,18 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>[[${title}]]</title>
+    <title>Read Later</title>
     <div th:replace="common/link-css :: header-css"/>
-    <link rel="stylesheet" th:href="@{/css/web/userArticle.css}">
     <link rel="stylesheet" th:href="@{/css/web/userPage.css}">
     <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+    <link rel="stylesheet" th:href="@{/css/web/history.css}">
 </head>
 <body>
 <div th:replace="common/navbar :: header"/>
+
 <main class="pt-4">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3 col-md-12 menu-left" id="menuBox">
+            <div class="col-lg-3 col-md-12  menu-left" id="menuBox">
                 <ul class="submenu">
                     <li class="el-submenu-title">
                         <a type="button" id="btnOpenMenuSm" class="el-link">
@@ -38,6 +39,8 @@
                                     </a>
                                 </li>
                             </ul>
+
+
                         </div>
                     </li>
                     <li class="el-submenu-title">
@@ -76,13 +79,13 @@
                 <div class="header-content-post">
                     <button id="btnActiveMenu" type="button" style="outline: none;" class="btn-active-menu"><i
                             class="fas fa-indent"></i></button>
-                    <h2 class="header-content-title">[[${title}]]</h2>
+                    <h2 class="header-content-title">Read Later</h2>
                     <hr class="header-line">
                 </div>
                 <div>
-                    <form th:action="@{${#httpServletRequest.requestURI}}" method="get">
+                    <form th:action="@{${#httpServletRequest.requestURI}}">
                         <div class="input-group mb-3">
-                            <input type="search" class="form-control inputSearch" id="title" name="title" th:value="${#httpServletRequest.getParameter('title')}" placeholder="Search">
+                            <input type="search" class="form-control inputSearch" id="searchPosts" th:value="${#httpServletRequest.getParameter('title')}" placeholder="Search" name="title">
                             <div class="input-group-append">
                                 <button class="input-group-text btn-input-search" style="outline: none;"
                                         type="submit" id="basic-addon2"><i class="fas fa-search"></i></button>
@@ -90,51 +93,66 @@
                         </div>
                     </form>
                 </div>
-                <div class="main-content" id="mainContentPosts">
-                    <div th:if="${articles.size() > 0}" th:each="article:${articles}"  class="card card-content mb-0">
-                        <div class="card-body p-0 card-original">
-                            <p class="card-original-cate" style="color: red">[[${article.topic.name}]]</p>
-                            <h5 class="card-title card-original-title"><a th:href="@{'/posts/'+ ${article.id}}">[[${article.title}]]</a></h5>
+                <div class="text-right mb-3">
+                    <button th:if="${lists.size() > 0}" class="btn btn-outline-danger" id="btnDeleteAll"><i class="fas fa-trash"></i> Delete All</button>
+                    <button th:if="${lists.size() <= 0}" class="btn btn-outline-danger d-none" id="btnDeleteAll"><i class="fas fa-trash"></i> Delete All</button>
+                </div>
+                <div id="historyMainContent">
+                    <th:block th:if="${lists.size() > 0}" >
 
-                            <div th:if="${article.published == 1}" class="card-original-author card-edit">
-                                <span style="padding-top: .5rem"><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                            </div>
-                            <div class="d-flex mt-3">
-                                <th:block th:if="${article.modifiedDate != null}">
-                                    <p style="color: gray; margin-right: 1rem;margin-bottom: 0">Last edit: [[${#temporals.format(article.modifiedDate,'yyyy-MM-dd HH:mm')}]]</p>
-                                </th:block>
-                                <th:block th:if="${article.modifiedDate == null}">
-                                    <p style="color:grey; margin-right: 1rem;margin-bottom: 0">Last edit: [[${#temporals.format(article.createdDate,'yyyy-MM-dd HH:mm')}]]</p>
-                                </th:block>
-                                <div class="dropdown">
-                                    <button class="btn-edit" style="outline: none;" type="button"
-                                            id="" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
-                                    <div class="dropdown-menu dropmenu-edit p-0"
-                                         aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" th:href="@{'/posts/edit/'+${article.id}}">Edit</a>
-                                        <a class="dropdown-item btnDeletePosts" type="button" th:id="${'delete_'+article.id}">Delete</a>
+                        <div  class="card card-content" th:each="later : ${lists}">
+                            <div class="row no-gutters">
+                                <div class="col-md-5">
+                                    <a th:href="@{'/posts/'+${later.article.id}}"><img th:src="${later.article.imagePath}" alt="..."></a>
+                                </div>
+                                <div class="col-md-7">
+
+                                    <div class="card-body card-original">
+                                        <p class='card-original-cate'><a href=''
+                                                                         th:text="${later.article.topic.name}"></a>
+                                        </p>
+                                        <h5 class='card-title card-original-title'><a
+                                                th:href="@{'/posts/'+ ${later.article.id}}">[[${later.article.title}]]</a></h5>
+                                        <div class='card-original-author'>
+                                            <span><i class='fas fa-calendar-day'></i> [[${#temporals.format(later.article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
+                                            <a href=''><span class=''><i class='fas fa-user'></i></span>
+                                                [[${later.article.userAccount.userDetail.firstName}]]
+                                                [[${later.article.userAccount.userDetail.lastName}]]
+                                            </a>
+                                            <div class='dropdow dropMenuBox'>
+                                                <button style='outline: none;' class='btn-drop-menu' type='button'
+                                                        id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
+                                                        aria-expanded='false'>
+                                                    <i class='fas fa-ellipsis-h'></i>
+                                                </button>
+                                                <div class='dropdown-menu drop-menu' style='padding: 0;'
+                                                     aria-labelledby='dropdownMenu'>
+                                                    <hr style='margin: 0;'>
+                                                    <a class='dropdown-item btn-delete-fav' style='font-size: .8rem;'
+                                                       th:id="${'delete_'+later.id}" type="button">Delete</a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <p class='card-original-short'>[[${later.article.shortDescription}]]</p>
                                     </div>
+
+
                                 </div>
                             </div>
-
                         </div>
-                        <hr>
-                    </div>
-                    <div th:if="${articles.size() <=0 }" class="mt-4">
-                        <p style="color: grey; font-weight: bold; text-align: center">There is nothing here!</p>
-                    </div>
-
+                    </th:block>
+                    <th:block th:if="${lists.size() <= 0}">
+                        <p style='color: grey; font-weight: bold; text-align: center'>There is nothing here!</p>
+                    </th:block>
                 </div>
             </div>
         </div>
     </div>
-    <input type="hidden" name="type" id="type" th:value="${status}">
 </main>
+
 <div th:replace="common/footer :: footer"/>
 <script th:src="@{/js/web/menuUserPage.js}"></script>
-<script th:src="@{/js/web/user/userPost.js}"></script>
+<script th:src="@{/js/web/user/readLater.js}"></script>
 </body>
 </html>

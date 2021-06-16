@@ -102,3 +102,7 @@
 #btnSaveReadLater:hover{
     color: white;
 }
+.article-main-content img{
+    width: 100% !important;
+    height: auto !important;
+}

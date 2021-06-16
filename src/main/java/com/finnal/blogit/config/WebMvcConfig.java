@@ -17,11 +17,11 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         String upload = dirImageArticle.toFile().getAbsolutePath();
         Path pathImgUser = Paths.get("./src/main/resources/static/imgUser");
         String dirImgUser = pathImgUser.toFile().getAbsolutePath();
+        registry.addResourceHandler("/ckfinder/**").addResourceLocations("classpath:/static/ckfinder/");
         registry.addResourceHandler("/img/**").addResourceLocations("classpath:/static/img/");
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/public/image/**").addResourceLocations("file:" + upload + "/");
         registry.addResourceHandler("/imgUser/**").addResourceLocations("file:" + dirImgUser + "/");
-        registry.addResourceHandler("/ckfinder/**").addResourceLocations("classpath:/static/ckfinder/");
         Path imageDir = Paths.get("./src/main/resources/static/imgBackArticle");
         String uploadPath = imageDir.toFile().getAbsolutePath();
         registry.addResourceHandler("/imgBackArticle/**").addResourceLocations("file:" + uploadPath + "/");

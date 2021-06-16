@@ -3,8 +3,8 @@ package com.finnal.blogit.dto.request;
 import lombok.Data;
 
 @Data
-public class ArticleReportRequest {
-    private Integer reportId;
+public class ReportRequest {
+    private Integer typeReportId;
     private Long articleId;
-    private String content;
+    private String comment;
 }

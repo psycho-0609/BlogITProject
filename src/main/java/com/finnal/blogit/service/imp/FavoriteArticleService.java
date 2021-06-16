@@ -1,5 +1,6 @@
 package com.finnal.blogit.service.imp;
 
+import com.finnal.blogit.dto.response.GetFavArticle;
 import com.finnal.blogit.entity.FavoriteArticleEntity;
 import com.finnal.blogit.repository.ArticleRepository;
 import com.finnal.blogit.repository.FavoriteRepository;
@@ -7,8 +8,11 @@ import com.finnal.blogit.repository.FavouriteArticleRepository;
 import com.finnal.blogit.service.inter.IFavoriteArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FavoriteArticleService implements IFavoriteArticleService {
@@ -48,5 +52,23 @@ public class FavoriteArticleService implements IFavoriteArticleService {
     @Override
     public void deleteById(Long id) {
         favouriteArticleRepository.deleteById(id);
+    }
+
+    @Override
+    public List<GetFavArticle> getByFavId(Long id) {
+        return favouriteArticleRepository.getListFavByAccountId(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllByFavId(Long id) {
+        favouriteArticleRepository.deleteByFavoriteEntityId(id);
+    }
+
+    @Override
+    public List<GetFavArticle> findForSearch(Long id, String title) {
+        return favouriteArticleRepository.getListFavByAccountId(id)
+                .stream().filter(el -> el.getArticle().getTitle().contains(title))
+                .collect(Collectors.toList());
     }
 }

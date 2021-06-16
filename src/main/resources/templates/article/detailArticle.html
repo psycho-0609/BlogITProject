@@ -21,16 +21,18 @@
                     <h5 class="mb-4">Report</h5>
                     <div>
                         <p class="mb-2">Reason for reporting this content</p>
-                        <form action="">
+                        <form id="formReport">
                             <div class="radio-box mb-2">
+                                <input type="hidden" name="articleId" th:value="${article.id}">
                                 <div th:each="report : ${reports}">
-                                    <input type="radio" th:value="${report.id}"
-                                           aria-label="Radio button for following text input" name="report">
+                                    <input type="radio" class="type-report" name="typeReportId" th:value="${report.id}"
+                                           aria-label="Radio button for following text input">
                                     [[${report.name}]]
                                 </div>
+                                <div><span class="error-message" id="errorMessReport"></span></div>
 
                             </div>
-                            <textarea name="" id="" class="form-control mb-4" rows="3"
+                            <textarea name="comment" id="commentReport" class="form-control mb-4" rows="3"
                                       placeholder="Comment"></textarea>
                             <div class="text-right">
                                 <button type="submit" class="btn btn-danger">Report</button>
@@ -76,7 +78,7 @@
                                 </th:block>
                             </th:block>
                             <th:block sec:authorize="!isAuthenticated()">
-                                <span><i class="fas fa-heart"></i> [[${article.favoriteArticle.size()}]]</span>
+                                <span><i class="fas fa-heart"></i>[[${article.favoriteArticle.size()}]]</span>
                             </th:block>
 
                             <div sec:authorize="!isAuthenticated()" th:if="${article.published.value == 1 && article.status.value == 1}"

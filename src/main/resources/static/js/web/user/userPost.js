@@ -1,7 +1,9 @@
 $(document).ready(function () {
     let fail = "<i class=\"fas fa-times\"></i> ";
     let messSuccess = "<i class=\"fas fa-check\"></i>";
-    let statusType = parseInt($("#status").val());
+    let statusType = parseInt($("#type").val());
+    let container = $("#mainContentPosts");
+    const keySearch = window.location.search;
 
     function errorMessage(message) {
         $("#fail").html(fail + message)
@@ -21,8 +23,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.btnDeletePosts', function () {
         let id = $(this).attr("id").split("_")[1];
-        console.log(id);
-        if (id !== undefined || id === "") {
+        if (id !== undefined && id !== "") {
             deletePost(id);
         }
     })
@@ -51,11 +52,11 @@ $(document).ready(function () {
         })
     }
 
-    let container = $("#mainContentPosts");
+
 
     function getPostsUnapproved() {
         $.ajax({
-            url: '/api/user/posts/unapproved',
+            url: '/api/user/posts/unapproved' + keySearch,
             method: "get",
             dataType: 'json'
         }).done(function (res) {
@@ -68,7 +69,7 @@ $(document).ready(function () {
 
     function getPostsPublished() {
         $.ajax({
-            url: '/api/user/posts/published',
+            url: '/api/user/posts/published'+keySearch,
             method: "get",
             dataType: 'json'
         }).done(function (res) {
@@ -81,7 +82,7 @@ $(document).ready(function () {
 
     function getPostsPrivate() {
         $.ajax({
-            url: '/api/user/posts/private',
+            url: '/api/user/posts/private'+keySearch,
             method: "get",
             dataType: 'json'
         }).done(function (res) {
@@ -120,7 +121,7 @@ $(document).ready(function () {
 
         if (el.publishedDate != null) {
             published = "<div class='card-original-author card-edit'>\n" +
-                "     <span><i class='fas fa-calendar-day'></i> " + formatDate(el.publishedDate) + "</span>\n" +
+                "     <span style='padding-top: .5rem'><i class='fas fa-calendar-day'></i> " + formatDate(el.publishedDate) + "</span>\n" +
                 "</div>\n"
         }
 
@@ -136,7 +137,7 @@ $(document).ready(function () {
             "                                            aria-expanded='false'>\n" +
             "                                        <i class='fas fa-ellipsis-h'></i>\n" +
             "                                    </button>\n" +
-            "                                    <div class='dropdown-menu dropmenu-edit'\n" +
+            "                                    <div class='dropdown-menu dropmenu-edit p-0'\n" +
             "                                         aria-labelledby='dropdownMenuButton'>\n" +
             "                                        <a class='dropdown-item' href='/user/posts/edit/ " + el.id + "'>Edit</a>\n" +
             "                                        <a class='dropdown-item btnDeletePosts' type='button' id='delete_" + el.id + "'>Delete</a>\n" +
@@ -147,23 +148,13 @@ $(document).ready(function () {
             "                        <hr>\n" +
             "                    </div>"
 
-        console.log(item);
         return item;
     }
 
 
     function formatDate(data) {
         let date = new Date(data);
-        let hour = parseInt(date.getHours());
-        let time;
-        if (hour > 12) {
-            time = date.getHours() - 12 + ":" + date.getMinutes() + " PM"
-        } else if (hour === 12) {
-            time = date.getHours() + ":" + date.getMinutes() + " PM"
-        } else {
-            time = date.getHours() + ":" + date.getMinutes() + " AM"
-        }
-        let formatted_date = date.getDay() + "-" + date.getMonth() + "-" + date.getFullYear() + " " + time;
+        let formatted_date = date.getDay() + "-" + date.getMonth() + "-" + date.getFullYear() + " " + date.getHours()+":"+date.getMinutes();
         return formatted_date;
     }
 })

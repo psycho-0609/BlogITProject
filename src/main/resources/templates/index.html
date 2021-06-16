@@ -71,8 +71,17 @@
                 </div>
                 <div class="col-md-4" >
                     <select class="custom-select" name="status" id="status">
-                        <option value="1">Public</option>
-                        <option value="2">Private</option>
+                        <th:block th:if="${article.status != null}">
+                            <option th:if="${article.status.value.intValue() == 1}" value="1" selected>Public</option>
+                            <option th:if="${article.status.value.intValue() != 1}" value="1">Public</option>
+                            <option th:if="${article.status.value.intValue() == 2}" value="2" selected>Private</option>
+                            <option th:if="${article.status.value.intValue() != 2}" value="2">Private</option>
+                        </th:block>
+                        <th:block th:if="${article.status == null}">
+                            <option value="1">Public</option>
+                            <option value="2">Private</option>
+
+                        </th:block>
                     </select>
                     <span class="errorInput" id="errorStatus"></span>
                 </div>

@@ -17,11 +17,10 @@ public interface IArticleService {
     ArticleEntity update(ArticleRequest articleRequest);
     Optional<ArticleEntity> findById(Long id);
     void deleteArticle(Long id);
-//    ResponseArticleDTO changeStatus(ArticleRequest dto);
     void plusCountView(ArticleEntity articleEntity);
     ArticleEntity save(ArticleEntity articleEntity);
-    List<ArticleEntity> findAllByStatusPublishedAndAccountId(ArticleStatus status, ArticlePublished published, Long id);
-    List<ArticleEntity> findAllByStatusAndUserAccount(ArticleStatus status, Long id);
     List<CustomArticleDTO> findAllByPublishedStatusAndAccount(ArticlePublished published, Long id, ArticleStatus status);
     List<CustomArticleDTO> findAllByAccountId(Long id);
+    List<CustomArticleDTO> findAllForSearch(ArticlePublished published, Long id, ArticleStatus status, String title);
+
 }

@@ -1,0 +1,36 @@
+.btn-drop-menu{
+    border: none;
+    background: none;
+    outline: none;
+
+}
+.btn-drop-menu i{
+    display: block;
+    color: gray;
+}
+.dropMenuBox{
+    display: inline-block;
+    margin-left: 1rem;
+}
+.drop-menu a:hover{
+    color: #FFFFFF !important;
+}
+.drop-menu a{
+    padding: .5rem 1rem !important;
+}
+.history-date{
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+}
+.history-date hr{
+    flex: 1 1 auto!important;
+    margin: 0!important;
+}
+.history-date p{
+    margin: 0;
+    font-weight: bold;
+}
