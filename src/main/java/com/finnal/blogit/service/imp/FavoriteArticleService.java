@@ -71,4 +71,9 @@ public class FavoriteArticleService implements IFavoriteArticleService {
                 .stream().filter(el -> el.getArticle().getTitle().contains(title))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Long countTotalFav(List<Long> ids) {
+        return favouriteArticleRepository.countTotalFavorite(ids);
+    }
 }

@@ -15,7 +15,6 @@
     <header>
         <div id="hideContent" class=""></div>
         <section class="navbar-left-box">
-            <!--    <div id="hideContent" class=""></div>-->
             <div id="navbar-active" class="navbar-left">
                 <th:block sec:authorize="!isAuthenticated()">
                     <div class="visual">
@@ -45,31 +44,29 @@
                 <div class="navbar-left-content">
                     <div class="navbar-left-item">
 
-                        <a href="index.html" class="active-nav"><span><i class="fas fa-home nav-left-icon"></i></span>Home</a>
+                        <a th:href="@{/home}" class="active-nav"><span><i class="fas fa-home nav-left-icon"></i></span>Home</a>
                     </div>
                     <div class="navbar-left-item">
 
-                        <a href="blog.html"><span><i class="far fa-newspaper nav-left-icon"></i></span>Posts</a>
+                        <a th:href="@{/posts}"><span><i class="far fa-newspaper nav-left-icon"></i></span>Posts</a>
                     </div>
                     <div>
                         <div class="navbar-left-item">
 
-                            <a type="button" class="" href="#" id="btnDropdownMenuProduct">
+                            <a type="button" class=""  id="btnDropdownMenuProduct">
                                 <span style="margin-right: 1.3rem"><i class="fas fa-list nav-left-icon"></i></span>
                                 <span style="font-size: 1rem; margin: 0">Category</span>
                                 <span class="btn-dropdown"><i class="fas fa-angle-down"></i></span>
                             </a>
                         </div>
                         <div id="dropdownMenuProduct" class="dropdown-menu-product">
-
-                            <a th:each="topic:${topics}" href="shirt.html">[[${topic.name}]]</a>
-
+                            <a th:each="topic:${topics}" th:href="@{'/posts/topic/'+${topic.id}}">[[${topic.name}]]</a>
                         </div>
                     </div>
 
                     <th:block sec:authorize="isAuthenticated()">
                         <div class="navbar-left-item">
-                            <a href=""><span><i class="fas fa-pencil-alt nav-left-icon"></i></span>Create Post</a>
+                            <a th:href="@{/user/posts/newPost}"><span><i class="fas fa-pencil-alt nav-left-icon"></i></span>Create Post</a>
                         </div>
                         <div class="navbar-left-item">
                             <a th:href="@{/user/profile}"><span><i class="fas fa-id-card nav-left-icon"></i></span>Profile</a>
@@ -92,7 +89,7 @@
         <div class="header-wellcome">
 
             <div class="text-header">
-                <p>Wellcome to Blog !</p>
+                <p>Welcome to Daily Blog !</p>
             </div>
 
         </div>
@@ -102,7 +99,7 @@
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand" href="index.html"><img style="width: 70px;" th:src="@{/img/logo.jpg}"
+                <a class="navbar-brand" th:href="@{/home}"><img style="width: 70px;" th:src="@{/img/logo.jpg}"
                                                                alt=""></a>
                 <div class="header-nav-card">
                     <button class="btn-search" id="btnSearchNav" type="button" style="outline: none"><span><i
@@ -112,14 +109,14 @@
                 </div>
                 <div class="nav-search-box" id="navSearchBox">
                     <div class="nav-icon-search"><span><i class="fa fa-search" aria-hidden="true"></i></span></div>
-                    <form action="">
-                        <input type="text" name="name" class="w-100 form-control" placeholder="Search">
+                    <form th:action="@{/search}" method="get">
+                        <input type="text" name="title" class="w-100 form-control" placeholder="Search">
                     </form>
                 </div>
                 <div class="collapse navbar-collapse main-menu" id="navbarNav">
                     <div class="navbar-nav navbar-menu">
-                        <div class="nav-item"><a href="index.html">Home</a></div>
-                        <div class="nav-item"><a href="index.html">Posts</a></div>
+                        <div class="nav-item"><a th:href="@{/home}">Home</a></div>
+                        <div class="nav-item"><a th:href="@{/posts}">Posts</a></div>
                         <div class="nav-item dropdown ">
                             <a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -127,22 +124,22 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a th:each="topic:${topics}" class="dropdown-item"
-                                   href="shirt.html">[[${topic.name}]]</a>
+                                   th:href="@{'/posts/topic/'+${topic.id}}">[[${topic.name}]]</a>
 
                             </div>
                         </div>
 
 
                         <div class="nav-item">
-                            <form action="">
-                                <input type="text" class="form-control search-input" placeholder="Search">
+                            <form th:action="@{/search}" method="get">
+                                <input type="text" name="title" class="form-control search-input" placeholder="Search">
                             </form>
                         </div>
                     </div>
                     <ul class="navbar-nav navbar-icon m-auto">
                         <th:block sec:authorize="isAuthenticated()">
                             <li class="nav-item">
-                                <a class="nav-link" style="cursor: pointer"><span><i class="fas fa-pencil-alt" style="font-size: 1.3rem"></i></span></a>
+                                <a class="nav-link" th:href="@{/user/posts/newPost}" style="cursor: pointer"><span><i class="fas fa-pencil-alt" style="font-size: 1.3rem"></i></span></a>
                             </li>
 
                             <li class="nav-item user-infor-box">

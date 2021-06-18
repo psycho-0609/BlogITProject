@@ -17,4 +17,6 @@ public interface IFavoriteArticleService {
     List<GetFavArticle> getByFavId(Long id);
     void deleteAllByFavId(Long id);
     List<GetFavArticle> findForSearch(Long id, String title);
+    Long countTotalFav(List<Long> ids);
+
 }

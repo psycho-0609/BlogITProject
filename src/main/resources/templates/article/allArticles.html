@@ -1,11 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>[[${title}]]</title>
     <div th:replace="common/link-css :: header-css"/>
     <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
     <link rel="stylesheet" th:href="@{/css/web/originalCate.css}">
+    <style>
+        .btn-drop-menu{
+            border: none;
+            background: none;
+            outline: none;
+
+        }
+        .btn-drop-menu i{
+            display: block;
+            color: gray;
+        }
+        .dropMenuBox{
+            display: inline-block;
+            margin-left: 1rem;
+        }
+        .drop-menu a:hover{
+            color: #FFFFFF !important;
+        }
+        .drop-menu a{
+            padding: .5rem 1rem !important;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="common/navbar :: header"/>
@@ -14,21 +37,41 @@
         <section>
             <div class="row">
                 <div class=" col-lg-9 col-md-12 col-sm-12">
-                    <div class="card-box-item">
+                    <p th:if="${articles.size() <=0 }" class="pt-4" style="color: grey; font-weight: bold; text-align: center">There is nothing here!</p>
+                    <div th:if="${articles.size()>0}" class="card-box-item">
                         <div class="card card-content" th:each="article:${articles}">
                             <div class="row no-gutters">
                                 <div class="col-md-5">
-                                    <a th:href="@{'/article/'+${article.id}}"><img th:src="${article.imagePath}" alt="..."></a>
+                                    <a th:href="@{'/posts/'+${article.id}}"><img th:src="${article.imagePath}"
+                                                                                 alt="..."></a>
                                 </div>
                                 <div class="col-md-7">
                                     <div class="card-body card-original">
-                                        <p class="card-original-cate"><a href="">[[${article.topic.name}]]</a></p>
-                                        <h5 class="card-title card-original-title"><a th:href="@{'/article/'+${article.id}}">[[${article.title}]]</a></h5>
+                                        <p class="card-original-cate"><a
+                                                th:href="@{'/posts/topic/'+${article.topic.id}}">[[${article.topic.name}]]</a>
+                                        </p>
+                                        <h5 class="card-title card-original-title"><a
+                                                th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a></h5>
                                         <div class="card-original-author">
-                                            <span><i class="fas fa-calendar-day"></i> 21/01/2021</span>
+                                            <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
                                             <a href=""><span class=""><i class="fas fa-user"></i></span>
-                                                Minh
-                                                Nguyễn</a>
+                                                [[${article.userAccount.userDetail.firstName}]]
+                                                [[${article.userAccount.userDetail.lastName}]]
+                                            </a>
+                                            <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
+                                                <button style='outline: none;' class='btn-drop-menu' type='button'
+                                                        id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
+                                                        aria-expanded='false'>
+                                                    <i class='fas fa-ellipsis-h'></i>
+                                                </button>
+                                                <div class='dropdown-menu drop-menu' style='padding: 0;'
+                                                     aria-labelledby='dropdownMenu'>
+                                                    <a class='dropdown-item btn-add-read-later'
+                                                       style='font-size: .8rem;'
+                                                       th:id="${'readLate_'+article.id}" type="button">Add to
+                                                        Read later</a>
+                                                </div>
+                                            </div>
                                         </div>
                                         <p class="card-original-short">[[${article.shortDescription}]]
                                         </p>
@@ -48,20 +91,8 @@
                         </div>
                         <div class="blog-category-filter">
                             <ul class="list-category">
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
-                                </li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Dã Ngoại</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Tết</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
-                                </li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Dã Ngoại</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Tết</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Mùa đông</a></li>
-                                <li><a href=""><span><i class="fas fa-angle-right"></i></span> Phong cách mới</a>
-                                </li>
-
+                                <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id}}"><span><i
+                                        class="fas fa-angle-right"></i></span> [[${topic.name}]]</a></li>
                             </ul>
                         </div>
                     </div>
@@ -72,5 +103,6 @@
 </main>
 <div th:replace="common/footer :: footer"/>
 <script th:src="@{/js/web/cate.js}"></script>
+<script th:src="@{/js/web/readLaterAjax.js}"></script>
 </body>
 </html>

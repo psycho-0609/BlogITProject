@@ -59,7 +59,7 @@
                             <div class="article-name-author">
                                 <a href="">[[${article.userAccount.userDetailEntity.firstName}]]
                                     [[${article.userAccount.userDetailEntity.lastName}]]</a>
-                                <p class="article-published">Published 5/6/2021</p>
+                                <p class="article-published">[[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</p>
                             </div>
                         </div>
                         <div class="article-infor-icon">
@@ -127,7 +127,7 @@
                                                data-target="#modalReport"
                                                type="button">Report</a>
                                         </th:block>
-                                        <a class="dropdown-item" th:href="@{'/posts/edit/'+ ${article.id}}">Edit</a>
+                                        <a class="dropdown-item" th:href="@{'/user/posts/edit/'+ ${article.id}}">Edit</a>
                                         <a class="dropdown-item" href="#"
                                            type="button">Delete</a>
                                     </div>
@@ -236,9 +236,7 @@
                         </div>
                         <div class="blog-category-filter">
                             <ul class="list-category">
-                                <li th:each="topic:${topics}"><a href=""><span><i class="fas fa-angle-right"></i></span>
-                                    [[${topic.name}]]</a></li>
-
+                                <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id}}"><span><i class="fas fa-angle-right"></i></span> [[${topic.name}]]</a></li>
                             </ul>
                         </div>
                     </div>

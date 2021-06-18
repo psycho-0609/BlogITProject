@@ -3,6 +3,7 @@ package com.finnal.blogit.controller;
 import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.FavoriteArticleEntity;
+import com.finnal.blogit.entity.TopicEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
 import com.finnal.blogit.exception.web.WebException;
@@ -40,22 +41,18 @@ public class ArticleController {
     private IFavoriteArticleService favoriteArticleService;
 
     @GetMapping
-    public String home(Model model) {
-        model.addAttribute("article", new ArticleEntity());
-        model.addAttribute("topics", topicService.findAll());   
-        return "index";
-    }
-
-    @GetMapping("/findAll")
     public String findAll(Model model) {
-        model.addAttribute("articles", articleService.findAll());
+        model.addAttribute("title","Posts");
+        model.addAttribute("articles", articleService.findByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC));
         model.addAttribute("topics", topicService.findAll());
-        return "list-article";
+        return "article/allArticles";
     }
 
-    @GetMapping("/all")
-    public String allArticles(Model model) {
-        model.addAttribute("articles", articleService.findAll());
+    @GetMapping("/topic/{topicId}")
+    public String findByTopicId(@PathVariable("topicId") Integer id, Model model) throws WebException {
+        TopicEntity entity = topicService.findById(id).orElseThrow(()-> new WebException());
+        model.addAttribute("title",entity.getName());
+        model.addAttribute("articles",articleService.findAllByTopicId(entity.getId()));
         model.addAttribute("topics", topicService.findAll());
         return "/article/allArticles";
     }
@@ -92,16 +89,6 @@ public class ArticleController {
         return "article/detailArticle";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editArticle(@PathVariable("id") Long id, Model model) throws WebException {
-        ArticleEntity entity = articleService.findById(id).orElseThrow(() -> new WebException());
-        if (UserInfor.getPrincipal().getId().intValue() != entity.getUserAccount().getId().intValue()) {
-            throw new WebException();
-        }
-        model.addAttribute("topics", topicService.findAll());
-        model.addAttribute("article", entity);
-        return "index";
-    }
 
     @GetMapping("/access-denied")
     public String denied() {

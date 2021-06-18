@@ -114,7 +114,7 @@
                                     </button>
                                     <div class="dropdown-menu dropmenu-edit p-0"
                                          aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" th:href="@{'/posts/edit/'+${article.id}}">Edit</a>
+                                        <a class="dropdown-item" th:href="@{'/user/posts/edit/'+ ${article.id}}">Edit</a>
                                         <a class="dropdown-item btnDeletePosts" type="button" th:id="${'delete_'+article.id}">Delete</a>
                                     </div>
                                 </div>

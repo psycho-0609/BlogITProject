@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${title}]]</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+    <link rel="stylesheet" th:href="@{/css/web/articlesOfAuthor.css}">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+
+<main class="pt-4">
+    <div class="container">
+        <div class="top">
+            <div class="author-infor">
+                <div class="img-author">
+                    <img th:src="${author.userDetailEntity.imagePath}" alt="">
+                </div>
+                <div>
+                    <h1>[[${author.userDetailEntity.firstName}]] [[${author.userDetailEntity.lastName}]]</h1>
+                    <p>[[${author.email}]]</p>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row pt-4">
+            <div class=" col-lg-9 col-md-12 col-sm-12">
+                <th:block th:if="${articles.size() > 0}" >
+
+                    <div  class="card card-content" th:each="article : ${articles}">
+                        <div class="row no-gutters">
+                            <div class="col-md-5">
+                                <a th:href="@{'/posts/'+${article.id}}"><img th:src="${article.imagePath}" alt="..."></a>
+                            </div>
+                            <div class="col-md-7">
+
+                                <div class="card-body card-original">
+                                    <p class='card-original-cate'><a href=''
+                                                                     th:text="${article.topic.name}"></a>
+                                    </p>
+                                    <h5 class='card-title card-original-title'><a
+                                            th:href="@{'/posts/'+ ${article.id}}">[[${article.title}]]</a></h5>
+                                    <div class='card-original-author'>
+                                        <span><i class='fas fa-calendar-day'></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
+                                        <a href=''><span class=''><i class='fas fa-user'></i></span>
+                                            [[${article.userAccount.userDetail.firstName}]]
+                                            [[${article.userAccount.userDetail.lastName}]]
+                                        </a>
+                                        <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
+                                            <button style='outline: none;' class='btn-drop-menu' type='button'
+                                                    id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
+                                                    aria-expanded='false'>
+                                                <i class='fas fa-ellipsis-h'></i>
+                                            </button>
+                                            <div class='dropdown-menu drop-menu' style='padding: 0;'
+                                                 aria-labelledby='dropdownMenu'>
+                                                <a class='dropdown-item btn-add-read-later'
+                                                   style='font-size: .8rem;'
+                                                   th:id="${'readLate_'+article.id}" type="button">Add to
+                                                    Read later</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <p class='card-original-short'>[[${article.shortDescription}]]</p>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${articles.size() <= 0}">
+                    <p style='color: grey; font-weight: bold; text-align: center'>There is nothing here!</p>
+                </th:block>
+
+            </div>
+            <div class="col-lg-3 col-md-12 mb-4">
+                <div class="more-infor-box">
+                    <div>
+                        <p>Total Posts</p>
+                        <p>[[${articles.size()}]]</p>
+                    </div>
+                    <div>
+                        <p>Total View</p>
+                        <p>[[${totalView}]]</p>
+                    </div>
+                    <div>
+                        <p>Total Favorite</p>
+                        <p>[[${totalFav}]]</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/readLaterAjax.js}"></script>
+</body>
+</html>

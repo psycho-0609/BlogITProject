@@ -185,5 +185,20 @@ public class ArticleService implements IArticleService {
         return articleRepository.findAllForSearch(published,id,status,title);
     }
 
+    @Override
+    public List<CustomArticleDTO> findByPublishedAndStatus(ArticlePublished published, ArticleStatus status) {
+        return articleRepository.findAllByPublishedAndStatus(published,status);
+    }
+
+    @Override
+    public List<CustomArticleDTO> findAllByTopicId(Integer id) {
+        return articleRepository.findByTopicId(ArticlePublished.ENABLE, ArticleStatus.PUBLIC, id);
+    }
+
+    @Override
+    public Long totalCountView(List<Long> ids) {
+        return articleRepository.totalCountView(ids);
+    }
+
 
 }

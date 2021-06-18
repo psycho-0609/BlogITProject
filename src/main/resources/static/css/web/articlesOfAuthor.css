@@ -1,0 +1,45 @@
+.img-author img{
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+.img-author{
+    margin-right: 3rem;
+}
+
+.author-infor{
+    display: flex;
+    justify-content: center;
+}
+.more-infor-box{
+    padding: 1.5rem;
+    border: 1px solid black;
+}
+
+.more-infor-box div{
+    display: flex;
+    justify-content: space-between;
+}
+.more-infor-box div:last-child p{
+    margin: 0;
+}
+.btn-drop-menu{
+    border: none;
+    background: none;
+    outline: none;
+
+}
+.btn-drop-menu i{
+    display: block;
+    color: gray;
+}
+.dropMenuBox{
+    display: inline-block;
+    margin-left: 1rem;
+}
+.drop-menu a:hover{
+    color: #FFFFFF !important;
+}
+.drop-menu a{
+    padding: .5rem 1rem !important;
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${title}]]</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/createpost.css}">
+    <link rel="stylesheet" th:href="@{/css/modalUploadImg.css}">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+
+<section>
+    <div class="loading" id="processing">
+        <div class="lds-hourglass"></div>
+    </div>
+</section>
+
+<section>
+    <div class="message">
+        <div id="success" class="message-success"></div>
+        <div id="fail" class="message-fail"></div>
+    </div>
+</section>
+
+<section>
+
+    <!-- Modal -->
+    <div class="modal fade " id="modalUploadImg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-position">
+            <div class="modal-content style-modal">
+
+                <div class="modal-body">
+                    <div class="img-body">
+                        <img src="" alt="" id="imgPreview">
+                    </div>
+                    <div class="input-file-box">
+                        <input type="file" id="file" class="style-input-file" />
+                        <label for="file" class="btn-3">
+                            <span class="title-btn">Upload Image</span>
+                        </label>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-secondary" id="btnCancel">Cancel</button>
+                        <button class="btn btn-primary" id="btnApply">Apply</button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="container">
+    <div class="form-post">
+        <form id="formSubmit" enctype="multipart/form-data">
+            <input type="hidden" id="id" name="id" th:value="${article.id}">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Title" name="title" id="title"
+                       th:value="${article.title}">
+                <span class="errorInput" id="errorTitle"></span>
+            </div>
+
+            <div class="row form-group button-group">
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-secondary" id="btnModalImg" data-target="#modalUploadImg">
+                        Select Image
+                    </button>
+                </div>
+                <div class="col-md-4" >
+                    <select class="custom-select" name="status" id="status">
+                        <th:block th:if="${article.status != null}">
+                            <option th:if="${article.status.value.intValue() == 1}" value="1" selected>Public</option>
+                            <option th:if="${article.status.value.intValue() != 1}" value="1">Public</option>
+                            <option th:if="${article.status.value.intValue() == 2}" value="2" selected>Private</option>
+                            <option th:if="${article.status.value.intValue() != 2}" value="2">Private</option>
+                        </th:block>
+                        <th:block th:if="${article.status == null}">
+                            <option value="1">Public</option>
+                            <option value="2">Private</option>
+
+                        </th:block>
+                    </select>
+                    <span class="errorInput" id="errorStatus"></span>
+                </div>
+                <div class="col-md-4">
+                    <select name="topicId" id="topic" class="custom-select">
+                        <option id="defaultValueSelect" value="">---Select topic---</option>
+                        <th:block th:each="topic:${topics}">
+                            <th:block th:if="${article.topic != null && article.topic.id == topic.id}">
+                                <option th:value="${topic.id}"
+                                        th:text="${topic.name}" selected/>
+                            </th:block>
+                            <th:block th:if="${article.topic == null || article.topic.id != topic.id}">
+                                <option th:value="${topic.id}"
+                                        th:text="${topic.name}"/>
+                            </th:block>
+                        </th:block>
+                    </select>
+                    <span class="errorInput" id="errorTopic"></span>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <textarea name="shortDescription" id="shortDescription" cols="30" rows="4" class="form-control"
+                          placeholder="Short Description">[[${article.shortDescription}]]</textarea>
+                <span class="errorInput" id="errorShortDes"></span>
+            </div>
+            <div class="form-group">
+                <textarea name="content" id="content" cols="30" rows="18" class="form-control" placeholder="Content"> [[${article.content}]]</textarea>
+                <span class="errorInput" id="errorContent"></span>
+            </div>
+            <button class="btn btn-primary" id="submit" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+</div>
+<div th:replace="common/footer :: footer"/>
+
+<script th:src="@{/ckeditor/ckeditor.js}"></script>
+<script th:src="@{/ckfinder/ckfinder.js}"></script>
+<script th:src="@{/js/modalUploadImg.js}"></script>
+<script th:src="@{/js/post-article.js}"></script>
+</body>
+</html>

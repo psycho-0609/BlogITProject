@@ -28,18 +28,16 @@ public class CustomAuthenSuccess implements AuthenticationSuccessHandler {
 
         UserInforAccountDTO inforDTO = new UserInforAccountDTO();
         Optional<UserAccountEntity> accountEntity = repository.findByEmail(authentication.getName());
-        System.out.println(authentication.getName());
         if(accountEntity.isPresent()){
             UserAccountEntity entity = accountEntity.get();
             UserDetailEntity detailEntity = entity.getUserDetailEntity();
             inforDTO.setId(entity.getId());
             inforDTO.setEmail(entity.getEmail());
             inforDTO.setUserDetail(new CustomerUserDetailDTO(detailEntity.getId(), detailEntity.getFirstName(), detailEntity.getLastName(), detailEntity.getImagePath()));
-            System.out.println("=>>>>>>>>>" + inforDTO.getUserDetail().getThumbnail());
         }
 
         HttpSession session = httpServletRequest.getSession();
         session.setAttribute("user", inforDTO);
-        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/posts");
+        httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/");
     }
 }

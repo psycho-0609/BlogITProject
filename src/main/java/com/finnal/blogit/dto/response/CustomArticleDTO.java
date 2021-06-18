@@ -56,6 +56,7 @@ public class CustomArticleDTO {
         return news == null ? null : news.getValue() ;
     }
 
+
     public CustomArticleDTO(Long id, String title, ArticlePublished published, ArticleNew news,ArticleStatus status, Long countView,
                             String imagePath, String shortDescription, LocalDateTime createdDate, LocalDateTime publishedDate,
                             LocalDateTime modifiedDate, Integer topicId, String topicName, Long accountId,

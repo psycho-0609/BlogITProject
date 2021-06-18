@@ -22,5 +22,8 @@ public interface IArticleService {
     List<CustomArticleDTO> findAllByPublishedStatusAndAccount(ArticlePublished published, Long id, ArticleStatus status);
     List<CustomArticleDTO> findAllByAccountId(Long id);
     List<CustomArticleDTO> findAllForSearch(ArticlePublished published, Long id, ArticleStatus status, String title);
+    List<CustomArticleDTO> findByPublishedAndStatus(ArticlePublished published, ArticleStatus status);
+    List<CustomArticleDTO> findAllByTopicId(Integer id);
+    Long totalCountView(List<Long> ids);
 
 }
