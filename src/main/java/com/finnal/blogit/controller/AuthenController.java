@@ -34,10 +34,6 @@ public class AuthenController {
         return "/reset-password";
     }
 
-    @GetMapping("/navbar")
-    public String nav(){
-        return "/common/navbar";
-    }
 
     @GetMapping("/confirmAccount")
     public String confirmAccount(@RequestParam("token") String token) throws WebException{

@@ -73,15 +73,15 @@ $(document).ready(function (){
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
         setTimeout(function () {
-            $("#fail").fadeOut(3000);
-        }, 1500)
+            $("#fail").fadeOut(500);
+        }, 3000)
     }
     function success(message){
         $("#success").html(messSuccess + message)
         $("#success").fadeIn();
         setTimeout(function () {
-            $("#success").fadeOut(3000);
-        }, 1500)
+            $("#success").fadeOut(500);
+        }, 3000)
     }
 
     $("#formUpdatePass").on('submit',function (e){

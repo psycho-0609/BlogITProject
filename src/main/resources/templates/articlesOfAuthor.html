@@ -37,7 +37,7 @@
                             <div class="col-md-7">
 
                                 <div class="card-body card-original">
-                                    <p class='card-original-cate'><a href=''
+                                    <p class='card-original-cate'><a th:href="@{'/posts/topic/'+${article.topic.id}}"
                                                                      th:text="${article.topic.name}"></a>
                                     </p>
                                     <h5 class='card-title card-original-title'><a
@@ -80,16 +80,16 @@
             <div class="col-lg-3 col-md-12 mb-4">
                 <div class="more-infor-box">
                     <div>
-                        <p>Total Posts</p>
-                        <p>[[${articles.size()}]]</p>
+                        <p class="title-item">Total Posts</p>
+                        <p class="amount">[[${articles.size()}]]</p>
                     </div>
                     <div>
-                        <p>Total View</p>
-                        <p>[[${totalView}]]</p>
+                        <p class="title-item">Total View</p>
+                        <p class="amount">[[${totalView}]]</p>
                     </div>
                     <div>
-                        <p>Total Favorite</p>
-                        <p>[[${totalFav}]]</p>
+                        <p class="title-item">Total Favorite</p>
+                        <p class="amount">[[${totalFav}]]</p>
                     </div>
                 </div>
             </div>

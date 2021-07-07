@@ -1,0 +1,11 @@
+.news td{
+    font-weight: 700;
+}
+
+tr td{
+    color: #161616;
+}
+tr a:hover{
+    text-decoration: none;
+    /*color: blue;*/
+}

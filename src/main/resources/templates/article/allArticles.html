@@ -54,7 +54,7 @@
                                                 th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a></h5>
                                         <div class="card-original-author">
                                             <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                            <a href=""><span class=""><i class="fas fa-user"></i></span>
+                                            <a th:href="@{'/author/'+${article.userAccount.id}}"><span class=""><i class="fas fa-user"></i></span>
                                                 [[${article.userAccount.userDetail.firstName}]]
                                                 [[${article.userAccount.userDetail.lastName}]]
                                             </a>

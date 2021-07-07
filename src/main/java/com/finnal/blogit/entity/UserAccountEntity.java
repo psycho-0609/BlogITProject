@@ -34,11 +34,9 @@ public class UserAccountEntity {
     @OneToOne(mappedBy = "userAccount", cascade = CascadeType.ALL)
     private UserDetailEntity userDetailEntity;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name = "account_role",
-            joinColumns = @JoinColumn(name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<RoleEntity> roles;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roleId")
+    private RoleEntity role;
 
     @OneToMany(mappedBy = "userAccount",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ArticleEntity> articles;

@@ -53,11 +53,11 @@
                     <div class="article-infor">
 
                         <div class="article-author">
-                            <a href="" class="article-img-author">
+                            <a th:href="@{'/author/'+${article.userAccount.id}}" class="article-img-author">
                                 <img th:src="${article.userAccount.userDetailEntity.getImagePath()}" alt="">
                             </a>
                             <div class="article-name-author">
-                                <a href="">[[${article.userAccount.userDetailEntity.firstName}]]
+                                <a th:href="@{'/author/'+${article.userAccount.id}}">[[${article.userAccount.userDetailEntity.firstName}]]
                                     [[${article.userAccount.userDetailEntity.lastName}]]</a>
                                 <p class="article-published">[[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</p>
                             </div>
@@ -133,11 +133,8 @@
                                     </div>
                                 </div>
                             </th:block>
-
                         </div>
-
                     </div>
-
                     <div class="content-article">
                         <th:block th:if="${article.image != null && !article.image.equals('')}">
                             <div class="text-center mb-4">
@@ -151,6 +148,7 @@
                             [[${article.content}]]
                         </div>
                     </div>
+                    <hr>
                     <h5 class="mb-4">Comment</h5>
                     <th:block sec:authorize="isAuthenticated()">
                         <div class="article-comment">
@@ -192,35 +190,49 @@
                     </div>
 
 
-                    <div class="Release">
+                    <div th:if="${articlesRelease != null && articlesRelease.size() > 0}" class="Release">
                         <div class="title-box mb-4">
                             <h1>RELEASE</h1>
                         </div>
                         <div>
-                            <div class="card card-content">
+                            <div th:each="article:${articlesRelease}" class="card card-content">
                                 <div class="row no-gutters">
                                     <div class="col-md-5">
-                                        <a href=""><img src="/imgblog2.jpg" alt="..."></a>
+                                        <a th:href="@{'/posts/'+${article.id}}"><img th:src="${article.imagePath}"
+                                                                                     alt="..."></a>
                                     </div>
                                     <div class="col-md-7">
                                         <div class="card-body card-original">
-                                            <p class="card-original-cate"><a href="">Technology</a></p>
-                                            <h5 class="card-title card-original-title"><a href="">The world’s first
-                                                fitness
-                                                influencer
-                                                was a
-                                                Victorian
-                                                strongman</a></h5>
+                                            <p class="card-original-cate"><a
+                                                    th:href="@{'/posts/topic/'+${article.topic.id}}">[[${article.topic.name}]]</a>
+                                            </p>
+                                            <h5 class="card-title card-original-title"><a
+                                                    th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a></h5>
                                             <div class="card-original-author">
-                                                <span><i class="fas fa-calendar-day"></i> 21/01/2021</span>
-                                                <a href=""><span class=""><i class="fas fa-user"></i></span>
-                                                    Minh
-                                                    Nguyễn</a>
+                                                <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
+                                                <a th:href="@{'/author/'+${article.userAccount.id}}"><span class=""><i
+                                                        class="fas fa-user"></i></span>
+                                                    [[${article.userAccount.userDetail.firstName}]]
+                                                    [[${article.userAccount.userDetail.lastName}]]
+                                                </a>
+                                                <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
+                                                    <button style='outline: none;' class='btn-drop-menu' type='button'
+                                                            id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
+                                                            aria-expanded='false'>
+                                                        <i class='fas fa-ellipsis-h'></i>
+                                                    </button>
+                                                    <div class='dropdown-menu drop-menu' style='padding: 0;'
+                                                         aria-labelledby='dropdownMenu'>
+                                                        <a class='dropdown-item btn-add-read-later'
+                                                           style='font-size: .8rem;'
+                                                           th:id="${'readLate_'+ article.id}"
+                                                           type="button">Add to
+                                                            Read later</a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <p class="card-original-short">Lorem ipsum dolor sit amet consectetur
-                                                adipisicing elit. Quam quod
-                                                molestias
-                                                voluptatem cupiditate magnam ipsam error? Labore blanditiis ex repellat.
+                                            <p class="card-original-short">
+                                                [[${article.shortDescription}]]
                                             </p>
                                         </div>
                                     </div>

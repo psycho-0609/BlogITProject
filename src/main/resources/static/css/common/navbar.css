@@ -1,7 +1,7 @@
 * {
     box-sizing: border-box;
     margin: 0;
-    padding: 0;
+    /*padding: 0;*/
 }
 /* navbar */
 .header-wellcome {
@@ -368,8 +368,8 @@ img{
     border-radius: 50%;
 }
 .user-menu{
-    left: -11.5rem;
-    width: 14rem;
+    left: -7.5rem;
+    width: 16px;
     margin-top: 1.3rem;
     padding: 0;
 }
@@ -394,7 +394,7 @@ img{
     left: 50%;
     top: 15%;
     transform: translate(-50%,-50%);
-    border-radius: 10px;
+    border-radius: 5px;
     color: #fff;
     display:none;
     z-index: 2000;
@@ -407,7 +407,7 @@ img{
     left: 50%;
     top: 15%;
     transform: translate(-50%,-50%);
-    border-radius: 10px;
+    border-radius: 5px;
     color: #fff;
     display:none;
     z-index: 2000;
@@ -454,14 +454,14 @@ img{
     width: 23px;
 }
 .nav-link-user span i{
-    font-size: 1rem;
+    font-size: 1rem !important;
 }
 .line-user-nav{
     width: 100%;
     height: 1px;
     margin: 0;
     left: 2px;
-    background-color: gray;
+    background-color: #c6c6c6;
 }
 .nav-left-icon{
     width: 1.5rem;

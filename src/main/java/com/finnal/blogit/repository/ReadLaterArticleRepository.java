@@ -16,7 +16,7 @@ public interface ReadLaterArticleRepository extends JpaRepository<ReadLaterArtic
 
     @Query("select new com.finnal.blogit.dto.response.GetListReadLater(h.id, h.articleEntity.id, h.articleEntity.title, h.articleEntity.published," +
             "h.articleEntity.news, h.articleEntity.status, h.articleEntity.countView, h.articleEntity.image, h.articleEntity.shortDescription," +
-            "h.articleEntity.createdDate, h.articleEntity.publishedDate, h.articleEntity.modifiedDate, h.articleEntity.topic.id, h.articleEntity.topic.name," +
+            "h.articleEntity.createdDate, h.articleEntity.publishedDate, h.articleEntity.modifiedDate, h.articleEntity.prioritize, h.articleEntity.topic.id, h.articleEntity.topic.name," +
             "h.articleEntity.userAccount.id, h.articleEntity.userAccount.email, h.articleEntity.userAccount.userDetailEntity.id, h.articleEntity.userAccount.userDetailEntity.firstName, h.articleEntity.userAccount.userDetailEntity.lastName," +
             "h.articleEntity.userAccount.userDetailEntity.thumbnail) from ReadLaterArticleEntity as h where h.readLaterEntity.id =:id order by h.createdDate desc")
     List<GetListReadLater> getListReadLaterByReadLaterId(@Param("id") Long id);

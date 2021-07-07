@@ -1,6 +1,7 @@
 package com.finnal.blogit.service.imp;
 
 import com.finnal.blogit.constant.Constant;
+import com.finnal.blogit.dto.response.ArticleCustomDTO;
 import com.finnal.blogit.dto.response.CustomArticleDTO;
 import com.finnal.blogit.dto.response.CustomUserAccount;
 import com.finnal.blogit.dto.response.CustomerUserDetailDTO;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ArticleService implements IArticleService {
@@ -89,6 +89,7 @@ public class ArticleService implements IArticleService {
         entity.setShortDescription(articleEntity.getShortDescription());
         entity.setTopic(topicRepository.findById(articleEntity.getTopicId()).get());
         entity.setCreatedDate(LocalDateTime.now());
+        entity.setModifiedDate(LocalDateTime.now());
         UserAccountEntity userAccountEntity = accountRepository.findByEmail(UserInfor.getPrincipal().getUsername()).get();
         entity.setUserAccount(userAccountEntity);
         ArticleEntity articleSaved = articleRepository.save(entity);
@@ -199,6 +200,42 @@ public class ArticleService implements IArticleService {
     public Long totalCountView(List<Long> ids) {
         return articleRepository.totalCountView(ids);
     }
+
+    @Override
+    public List<ArticleEntity> findByPrioritize() {
+        return articleRepository.findAllByPrioritize();
+    }
+
+    @Override
+    public List<ArticleEntity> getForPopular() {
+        return  articleRepository.findForPopular();
+    }
+
+    @Override
+    public List<CustomArticleDTO> findByStatus(ArticleStatus status) {
+        return articleRepository.findByStatus(status);
+    }
+
+    @Override
+    public Optional<ArticleCustomDTO> getById(Long id) {
+        return articleRepository.getById(id);
+    }
+
+    @Override
+    public Optional<ArticleEntity> findByPrioritize(Integer number) {
+        return articleRepository.findByPrioritize(number);
+    }
+
+    @Override
+    public List<CustomArticleDTO> findByPublishedAndStatusForWeb(ArticlePublished published, ArticleStatus status) {
+        return articleRepository.findAllByPublishedAndStatusForWeb(published,status);
+    }
+
+    @Override
+    public List<ArticleEntity> getAllOderByFavCount(ArticlePublished published, ArticleStatus status) {
+        return articleRepository.getAllOderByFavCount(published, status);
+    }
+
 
 
 }

@@ -3,17 +3,27 @@ $(document).ready(function (){
     let fail = "<i class=\"fas fa-times\"></i> ";
     let messSuccess = "<i class=\"fas fa-check\"></i>";
 
+    let errorTimeout;
+    let successTimeOut;
+    function clearTime() {
+        clearTimeout(errorTimeout);
+        clearTimeout(successTimeOut);
+        $("#success").fadeOut();
+        $("#fail").fadeOut();
+    }
     function error(message){
+        clearTime();
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
-        setTimeout(function () {
+        errorTimeout = setTimeout(function () {
             $("#fail").fadeOut(3000);
         }, 1500)
     }
     function success(message){
+        clearTime();
         $("#success").html(messSuccess + message)
         $("#success").fadeIn();
-        setTimeout(function () {
+        successTimeOut = setTimeout(function () {
             $("#success").fadeOut(3000);
         }, 1500)
     }
@@ -107,7 +117,7 @@ $(document).ready(function (){
     function report(data){
         $("#processing").addClass("active");
         $.ajax({
-            url:'/api/report/create',
+            url:'/api/web/report/create',
             method:'post',
             contentType: "application/json",
             data: JSON.stringify(data),

@@ -2,19 +2,29 @@ $(document).ready(function (){
     let fail = "<i class=\"fas fa-times\"></i> ";
     let messSuccess = "<i class=\"fas fa-check\"></i>";
     const keySearch = window.location.search;
+    let errorTimeout;
+    let successTimeOut;
+    function clearTime() {
+        clearTimeout(errorTimeout);
+        clearTimeout(successTimeOut);
+        $("#success").fadeOut();
+        $("#fail").fadeOut();
+    }
     function error(message){
+        clearTime();
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
-        setTimeout(function () {
-            $("#fail").fadeOut(3000);
-        }, 1500)
+        errorTimeout = setTimeout(function () {
+            $("#fail").fadeOut(500);
+        }, 3000)
     }
     function success(message){
+        clearTime();
         $("#success").html(messSuccess + message)
         $("#success").fadeIn();
-        setTimeout(function () {
-            $("#success").fadeOut(3000);
-        }, 1500)
+        successTimeOut = setTimeout(function () {
+            $("#success").fadeOut(500);
+        }, 3000)
     }
 
     $(document).on("click", ".btn-add-read-later", function () {
@@ -53,6 +63,8 @@ $(document).ready(function (){
 
     })
 
+
+
     function deleteFunc(id) {
         $("#processing").addClass("active");
         $.ajax({
@@ -65,7 +77,8 @@ $(document).ready(function (){
             success(" Delete successfully");
         }).fail(function (res) {
             $("#processing").removeClass("active");
-            errorMessage(" " + res.responseJSON.message);
+            getData();
+            error(" " + res.responseJSON.message);
         })
     }
 
@@ -117,7 +130,7 @@ $(document).ready(function (){
             "                                                href='/posts/" + el.article.id +"'>" + el.article.title + "</a></h5>\n" +
             "                                        <div class='card-original-author'>\n" +
             "                                            <span><i class='fas fa-calendar-day'></i>"+ publicDate +"</span>\n" +
-            "                                            <a href=''><span class=''><i class='fas fa-user'></i></span>\n" +
+            "                                            <a href='/author/"+el.article.userAccount.userDetail.id+"'><span class=''><i class='fas fa-user'></i></span>\n" +
             "                                                " + el.article.userAccount.userDetail.firstName +
             "                                                " + el.article.userAccount.userDetail.lastName +
             "                                            </a>\n" +

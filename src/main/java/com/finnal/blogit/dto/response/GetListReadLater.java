@@ -14,11 +14,11 @@ public class GetListReadLater {
 
     public GetListReadLater(Long id, Long articleId, String title, ArticlePublished published, ArticleNew news, ArticleStatus status, Long countView,
                          String imagePath, String shortDescription, LocalDateTime articleCreatedDate, LocalDateTime publishedDate,
-                         LocalDateTime modifiedDate, Integer topicId, String topicName, Long accountId,
+                         LocalDateTime modifiedDate, Integer prioritize, Integer topicId, String topicName, Long accountId,
                          String email, Long userDetailId, String firstName, String lastName, String thumbnail){
 
         this.id = id;
         this.article = new CustomArticleDTO(articleId, title, published,news, status, countView,imagePath, shortDescription, articleCreatedDate,
-                publishedDate,modifiedDate,topicId,topicName,accountId,email,userDetailId,firstName,lastName,thumbnail);
+                publishedDate,modifiedDate, prioritize, topicId,topicName,accountId,email,userDetailId,firstName,lastName,thumbnail);
     }
 }

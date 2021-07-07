@@ -115,7 +115,7 @@
                                                 th:href="@{'/posts/'+ ${fav.article.id}}">[[${fav.article.title}]]</a></h5>
                                         <div class='card-original-author'>
                                             <span><i class='fas fa-calendar-day'></i> [[${#temporals.format(fav.article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                            <a href=''><span class=''><i class='fas fa-user'></i></span>
+                                            <a th:href="@{'/author/'+${fav.article.userAccount.id}}"><span class=''><i class='fas fa-user'></i></span>
                                                 [[${fav.article.userAccount.userDetail.firstName}]]
                                                 [[${fav.article.userAccount.userDetail.lastName}]]
                                             </a>

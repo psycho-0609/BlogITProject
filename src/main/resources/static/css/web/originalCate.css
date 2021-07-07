@@ -2,6 +2,9 @@
     list-style: none;
     margin-bottom: 0.5rem;
 }
+.list-category{
+    padding: 0;
+}
 .blog-category-filter .list-category li a {
     font-size: .9rem;
     font-family: "Roboto", sans-serif;

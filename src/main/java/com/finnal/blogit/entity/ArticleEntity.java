@@ -84,6 +84,9 @@ public class ArticleEntity {
     @Column
     private Long countView;
 
+    @Column
+    private Integer prioritize;
+
     @Transient
     public String getImagePath(){
         if(image == null|| id==null) return null;

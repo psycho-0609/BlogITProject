@@ -15,6 +15,9 @@
     font-size: .7rem;
     color: rgb(155, 155, 155);
 }
+.infor-news{
+    margin-bottom: .5rem;
+}
 .infor-news a{
     font-size: .7rem;
     padding: 0;
@@ -40,8 +43,7 @@ img{
     width: 100%;
 }
 .card-sm-header{
-    padding: 0;
-    padding-left: .7rem;
+    padding: 0 0 0 .7rem;
 }
 .card-sm-title{
     font-size: 1rem;
@@ -55,10 +57,9 @@ img{
 }
 .card-sm-cate{
     padding: 0;
-    margin: 0;
     font-size: .8rem;
     color: red;
-    margin-bottom: .3rem;
+    margin: 0 0 .3rem;
 }
 .card-sm-cate a{
     color: red;
@@ -81,7 +82,7 @@ img{
     color: rgb(133, 133, 133);
 }
 .line{
-    background: black;
+    background: #d9d9d9;
     height: .1rem;
     width: 100%;
     margin-bottom: 2rem;
@@ -100,8 +101,7 @@ img{
     padding: 0.7rem;
     font-size: 1.2rem;
     color: #fff;
-    margin: 0;
-    margin-bottom: -1px;
+    margin: 0 0 -1px;
     font-family: "Shippori Mincho",serif;
     font-weight: bold;
 }
@@ -144,5 +144,99 @@ img{
         padding: 0;
     }
 
+
+}
+.list-category{
+    padding: 0;
+}
+
+.card-fav{
+    border: none;
+}
+.card-fav .card-fav-body{
+    padding: 1rem 0 0 ;
+}
+.card-fav .card-fav-body .card-fav-title{
+    font-size: 1rem;
+}
+.card-fav .card-fav-body .card-fav-topic{
+    margin-bottom: .3rem;
+}
+.card-fav .card-fav-body .card-fav-topic a{
+    color: red;
+}
+.card-fav .card-fav-body .card-fav-title{
+    margin-bottom: 0;
+}
+.card-fav .card-fav-body .card-fav-title a{
+    color: #000000;
+}
+.card-fav .card-fav-body .card-fav-title a:hover{
+    text-decoration: none;
+    color: #007bff;
+}
+.card-fav .card-fav-body .card-fav-shortDes{
+    display: none;
+}
+
+@media (max-width:991px) {
+
+    .card-fav .fav-img{
+        padding-right: 0 !important;
+    }
+    .card-fav .fav-body{
+        padding-left: 0 !important;
+    }
+    .card-fav-body{
+        padding-left: 1rem !important;
+    }
+}
+
+@media (max-width:768px) {
+    .card-fav .fav-img{
+        padding-right: 15px !important;
+    }
+    .card-fav .fav-body{
+        padding-left: 15px !important;
+    }
+    .card-fav-shortDes{
+        display: block !important;
+        max-height: 5.3rem;
+        overflow: hidden;
+        font-family: 'Roboto', sans-serif;
+        font-size: .9rem;
+    }
+    .content-card{
+        font-size: .9rem;
+    }
+    .card-fav-body{
+        padding-left: 0rem !important;
+    }
+    .card-sm-short{
+        font-size: .9rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .card-fav .card-fav-body .card-fav-title{
+        font-size: 1.1rem;
+    }
+    .title-right{
+        border: none;
+    }
+    .title-right h1{
+        font-family: 'Benne', serif;
+        color: #3971eb;
+        padding-right: 0;
+        padding-left: 0;
+        /* padding: 0; */
+        background: none;
+        /* color: black; */
+        border-bottom: 2px solid #3971eb;
+
+    }
+    .box-left{
+        padding-right: 2.5rem;
+    }
 
 }

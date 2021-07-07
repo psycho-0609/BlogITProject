@@ -1,6 +1,6 @@
 package com.finnal.blogit.controller;
 
-import com.finnal.blogit.constant.Constant;
+import com.finnal.blogit.dto.response.CustomArticleDTO;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.FavoriteArticleEntity;
 import com.finnal.blogit.entity.TopicEntity;
@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -43,7 +45,7 @@ public class ArticleController {
     @GetMapping
     public String findAll(Model model) {
         model.addAttribute("title","Posts");
-        model.addAttribute("articles", articleService.findByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC));
+        model.addAttribute("articles", articleService.findByPublishedAndStatusForWeb(ArticlePublished.ENABLE, ArticleStatus.PUBLIC));
         model.addAttribute("topics", topicService.findAll());
         return "article/allArticles";
     }
@@ -61,11 +63,15 @@ public class ArticleController {
     public String detailArticle(@PathVariable("id") Long id, Model model) throws WebException {
         ArticleEntity article = articleService.findById(id).orElseThrow(() -> new WebException());
         CustomUserDetail userDetail = UserInfor.getPrincipal();
+        List<CustomArticleDTO> list = articleService.findAllByTopicId(article.getTopic().getId());
+        if(list.size() > 4){
+            list = list.stream().limit(4L).collect(Collectors.toList());
+        }
         if (article.getPublished().equals(ArticlePublished.ENABLE) && article.getStatus().equals(ArticleStatus.PUBLIC)) {
             articleService.plusCountView(article);
         } else {
             if (userDetail != null) {
-                if (!userDetail.getId().equals(article.getUserAccount().getId()) || !userDetail.getRoleType().equals(Constant.ADMIN_TYPE)) {
+                if (!userDetail.getId().equals(article.getUserAccount().getId())) {
                     throw new WebException();
                 }
             } else {
@@ -86,6 +92,7 @@ public class ArticleController {
         model.addAttribute("article", article);
         model.addAttribute("topics", topicService.findAll());
         model.addAttribute("reports", reportService.findAll());
+        model.addAttribute("articlesRelease", list);
         return "article/detailArticle";
     }
 

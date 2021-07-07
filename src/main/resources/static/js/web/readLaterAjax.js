@@ -2,20 +2,31 @@ $(document).ready(function (){
     let fail = "<i class=\"fas fa-times\"></i> ";
     let messSuccess = "<i class=\"fas fa-check\"></i>";
 
+    let errorTimeout;
+    let successTimeOut;
+    function clearTime() {
+        clearTimeout(errorTimeout);
+        clearTimeout(successTimeOut);
+        $("#success").fadeOut();
+        $("#fail").fadeOut();
+    }
     function error(message){
+        clearTime();
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
-        setTimeout(function () {
-            $("#fail").fadeOut(3000);
-        }, 1500)
+        errorTimeout = setTimeout(function () {
+            $("#fail").fadeOut(500);
+        }, 3000)
     }
     function success(message){
+        clearTime();
         $("#success").html(messSuccess + message)
         $("#success").fadeIn();
-        setTimeout(function () {
-            $("#success").fadeOut(3000);
-        }, 1500)
+        successTimeOut = setTimeout(function () {
+            $("#success").fadeOut(500);
+        }, 3000)
     }
+
     $(document).on("click", ".btn-add-read-later", function () {
         let id = $(this).attr('id').split("_")[1];
         let data = {

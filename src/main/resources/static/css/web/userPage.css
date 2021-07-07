@@ -2,13 +2,13 @@
     list-style: none;
     background-color: #f5f7fa;
     box-shadow: 0 1px 3px 0 rgb(202, 202, 202);
+    padding: 0;
 }
 .el-submenu-title{
 
     line-height: 50px;
 
 }
-
 .el-link{
     padding: 0 1.3rem;
     color: #303133;
@@ -38,6 +38,7 @@
 }
 .sm-menu{
     list-style: none;
+    padding: 0;
 }
 .el-sm-menu{
     padding:0 40px;

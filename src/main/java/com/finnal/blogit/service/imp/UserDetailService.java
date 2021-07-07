@@ -14,9 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserDetailService implements UserDetailsService {
@@ -32,19 +30,17 @@ public class UserDetailService implements UserDetailsService {
             throw  new UsernameNotFoundException(email);
         }
         UserAccountEntity entity = entityOp.get();
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for(RoleEntity roleEntity:entity.getRoles()){
-            authorities.add(new SimpleGrantedAuthority(roleEntity.getName()));
-        }
-        CustomUserDetail customUserDetail = new CustomUserDetail(entity.getEmail(),entity.getPassword(),true,true,true,true,authorities);
+        GrantedAuthority authorities = new SimpleGrantedAuthority(entity.getRole().getName());
+
+        CustomUserDetail customUserDetail = new CustomUserDetail(entity.getEmail(),entity.getPassword(),true,true,true,true, Collections.singleton((SimpleGrantedAuthority) authorities));
         customUserDetail.setHistoryId(entity.getHistory().getId());
         customUserDetail.setFavoriteId(entity.getFavoriteArticle().getId());
         customUserDetail.setReadLaterId(entity.getReadLater().getId());
         customUserDetail.setUserDetail(entity.getUserDetailEntity().getId());
         customUserDetail.setId(entity.getId());
-        if(entity.getRoles().get(0).getName().equals("ADMIN")){
+        if(entity.getRole().getName().equals("ADMIN")){
             customUserDetail.setRoleType(Constant.ADMIN_TYPE);
-        }else if(entity.getRoles().get(0).getName().equals("USER")){
+        }else if(entity.getRole().getName().equals("USER")){
             customUserDetail.setRoleType(Constant.USER_TYPE);
         }
         return customUserDetail;

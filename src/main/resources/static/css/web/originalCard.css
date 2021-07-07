@@ -1,10 +1,8 @@
 .card-original{
-    padding: 0;
-    padding-left: 1rem;
+    padding: 0 0 0 1rem;
 }
 .card-original-cate{
-    margin: 0;
-    margin-bottom: .3rem;
+    margin: 0 0 .3rem;
 }
 .card-original-cate a{
     color: red;
@@ -24,6 +22,9 @@
     font-size: .7rem;
     margin-right: 1rem;
 }
+.card-original-author{
+    margin-bottom: .5rem;
+}
 .card-original-author a{
     font-size: .7rem;
 }
@@ -32,6 +33,9 @@
 }
 .card-original-short{
     font-size: .9rem;
+    max-height: 5.3rem;
+    overflow: hidden;
+    font-family: 'Roboto', sans-serif;
 }
 
 @media screen and (max-width:1198px) {
@@ -52,4 +56,25 @@
 .card-content{
     border: none;
     margin-bottom: 1.5rem;
+}
+
+.btn-drop-menu{
+    border: none;
+    background: none;
+    outline: none;
+
+}
+.btn-drop-menu i{
+    display: block;
+    color: gray;
+}
+.dropMenuBox{
+    display: inline-block;
+    margin-left: .8rem;
+}
+.drop-menu a:hover{
+    color: #FFFFFF !important;
+}
+.drop-menu a{
+    padding: .5rem 1rem !important;
 }

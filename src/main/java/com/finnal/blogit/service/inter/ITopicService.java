@@ -1,5 +1,6 @@
 package com.finnal.blogit.service.inter;
 
+import com.finnal.blogit.dto.response.CustomTopicDTO;
 import com.finnal.blogit.entity.TopicEntity;
 
 import java.util.List;
@@ -11,4 +12,7 @@ public interface ITopicService {
     void delete(Integer id);
     Optional<TopicEntity> findById(Integer id);
     List<TopicEntity> findAll();
+    Optional<TopicEntity> findByName(String name);
+    List<CustomTopicDTO> getAll();
+    void deleteById(Integer id);
 }

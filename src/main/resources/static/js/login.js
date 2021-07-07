@@ -11,13 +11,12 @@ $(document).ready(function () {
 
     function loginError(){
         let message = $("#errorLogin").text();
-        console.log(message);
         if(message !== undefined && message != ""){
                 $("#fail").html(fail + message)
                 $("#fail").fadeIn();
                 setTimeout(function () {
-                    $("#fail").fadeOut(3000);
-                }, 1500)
+                    $("#fail").fadeOut(500);
+                }, 3000)
         }
     }
     loginError();
@@ -118,8 +117,8 @@ $(document).ready(function () {
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
         setTimeout(function () {
-            $("#fail").fadeOut(3000);
-        }, 1500)
+            $("#fail").fadeOut(500);
+        }, 3000)
     }
 // registter
     $("#formRegister").on("submit", function (e) {

@@ -5,26 +5,35 @@ $(document).ready(function () {
     let container = $("#mainContentPosts");
     const keySearch = window.location.search;
 
-    function errorMessage(message) {
+    let errorTimeout;
+    let successTimeOut;
+    function clearTime() {
+        clearTimeout(errorTimeout);
+        clearTimeout(successTimeOut);
+        $("#success").fadeOut();
+        $("#fail").fadeOut();
+    }
+    function errorMessage(message){
+        clearTime();
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
-        setTimeout(function () {
-            $("#fail").fadeOut(3000);
-        }, 1500)
+        errorTimeout = setTimeout(function () {
+            $("#fail").fadeOut(500);
+        }, 3000)
     }
-
-    function success(message) {
+    function success(message){
+        clearTime();
         $("#success").html(messSuccess + message)
         $("#success").fadeIn();
-        setTimeout(function () {
-            $("#success").fadeOut(3000);
-        }, 1500)
+        successTimeOut = setTimeout(function () {
+            $("#success").fadeOut(500);
+        }, 3000)
     }
 
     $(document).on('click', '.btnDeletePosts', function () {
         let id = $(this).attr("id").split("_")[1];
         if (id !== undefined && id !== "") {
-            deletePost(id);
+            confirmDelete(id);
         }
     })
 
@@ -48,11 +57,30 @@ $(document).ready(function () {
             success(" Delete successfully");
         }).fail(function (res) {
             $("#processing").removeClass("active");
+            if(statusType === 1){
+                getPostsPublished();
+            }else if(statusType === 2){
+                getPostsPrivate();
+            }else if(statusType === 3){
+                getPostsUnapproved();
+            }
             errorMessage(res.responseJSON.message);
         })
     }
 
-
+    function confirmDelete(id) {
+        swal({
+            title: "Are you sure?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    deletePost(id);
+                }
+            });
+    }
 
     function getPostsUnapproved() {
         $.ajax({
@@ -157,4 +185,5 @@ $(document).ready(function () {
         let formatted_date = date.getDay() + "-" + date.getMonth() + "-" + date.getFullYear() + " " + date.getHours()+":"+date.getMinutes();
         return formatted_date;
     }
+
 })

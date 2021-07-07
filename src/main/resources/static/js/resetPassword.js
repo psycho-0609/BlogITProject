@@ -58,15 +58,15 @@ $(document).ready(function (){
             resetInput();
             $("#success").fadeIn();
             setTimeout(function () {
-                $("#success").fadeOut(1500);
-            }, 1500)
+                $("#success").fadeOut(500);
+            }, 3000)
         }).fail(function (res){
             $("#processing").removeClass("active");
             $("#fail").html(fail + res.responseJSON.message);
             $("#fail").fadeIn();
             setTimeout(function () {
-                $("#fail").fadeOut(3000);
-            }, 1500)
+                $("#fail").fadeOut(500);
+            }, 3000)
         })
     }
 })

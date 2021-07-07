@@ -170,19 +170,29 @@ $(document).ready(function (){
         })
 
     }
-
+    let errorTimeout;
+    let successTimeOut;
+    function clearTime() {
+        clearTimeout(errorTimeout);
+        clearTimeout(successTimeOut);
+        $("#success").fadeOut();
+        $("#fail").fadeOut();
+    }
     function errorMessage(message){
+        clearTime();
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
-        setTimeout(function () {
+        errorTimeout = setTimeout(function () {
             $("#fail").fadeOut(3000);
         }, 1500)
     }
     function success(message){
+        clearTime();
         $("#success").html(messSuccess + message)
         $("#success").fadeIn();
-        setTimeout(function () {
+        successTimeOut = setTimeout(function () {
             $("#success").fadeOut(3000);
         }, 1500)
     }
+
 })

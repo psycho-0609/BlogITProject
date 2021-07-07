@@ -7,6 +7,7 @@ import com.finnal.blogit.dto.response.RegisterResponse;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.dto.request.LoginRequest;
 import com.finnal.blogit.dto.request.RegisterRequest;
+import com.finnal.blogit.entity.enumtype.AccountStatus;
 import com.finnal.blogit.service.inter.IUserAccountService;
 import com.finnal.blogit.untils.EmailUntil;
 import com.finnal.blogit.untils.Utility;
@@ -80,7 +81,7 @@ public class AuthenticationAPI {
 
     @PostMapping("/resetPassword")
     public ResponseEntity<MessageDTO> resetPassword(@RequestBody ResetPasswordRequest request, HttpServletRequest servletRequest) throws APIException, UnsupportedEncodingException, MessagingException {
-        Optional<UserAccountEntity> accountEntityOp = userAccountService.findByUsername(request.getEmail());
+        Optional<UserAccountEntity> accountEntityOp = userAccountService.findByEmailAndStatus(request.getEmail(), AccountStatus.ENABLE);
         String token = RandomString.make(45);
         String link = Utility.getSiteURL(servletRequest) +"/resetPassword?token=" + token;
         StringBuilder message = new StringBuilder();

@@ -15,7 +15,7 @@ public class TopicEntity {
     private Integer id;
     private String name;
 
-    @OneToMany(mappedBy = "topic")
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ArticleEntity> lists;
 
     private String shortDescription;

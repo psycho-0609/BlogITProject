@@ -1,6 +1,7 @@
 package com.finnal.blogit.controller;
 
 import com.finnal.blogit.dto.response.CustomArticleDTO;
+import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
@@ -35,7 +36,23 @@ public class HomeController {
 
     @GetMapping({"/home","/"})
     public String home(Model model){
+        List<CustomArticleDTO> articleNews = articleService.findByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
+        if(articleNews.size() > 4){
+            articleNews = articleNews.stream().limit(4L).collect(Collectors.toList());
+        }
+        List<ArticleEntity> articlePopular = articleService.getForPopular();
+        if(articlePopular.size() > 4){
+            articlePopular = articlePopular.stream().limit(4L).collect(Collectors.toList());
+        }
+        List<ArticleEntity> articleFav = articleService.getAllOderByFavCount(ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
+        if(articleFav.size() > 4){
+            articleFav = articleFav.stream().limit(4).collect(Collectors.toList());
+        }
+        model.addAttribute("articleFav",articleFav);
         model.addAttribute("topics",topicService.findAll());
+        model.addAttribute("articlePrioritize",articleService.findByPrioritize());
+        model.addAttribute("articleNews",articleNews);
+        model.addAttribute("articlePopular",articlePopular);
         return "/home";
     }
     @GetMapping("/search")
@@ -62,6 +79,16 @@ public class HomeController {
         model.addAttribute("topics",topicService.findAll());
         model.addAttribute("title",entity.getUserDetailEntity().getFirstName() + " " + entity.getUserDetailEntity().getLastName());
         return "/articlesOfAuthor";
+    }
+
+    @GetMapping("/admin")
+    public String adminPage(){
+        return "/adminPage/homeAdmin";
+    }
+
+    @GetMapping("/table")
+    public String table(){
+        return "/adminPage/article/published";
     }
 
 }

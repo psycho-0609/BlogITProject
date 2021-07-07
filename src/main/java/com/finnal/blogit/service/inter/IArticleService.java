@@ -1,6 +1,7 @@
 package com.finnal.blogit.service.inter;
 
 import com.finnal.blogit.dto.request.ArticleRequest;
+import com.finnal.blogit.dto.response.ArticleCustomDTO;
 import com.finnal.blogit.dto.response.CustomArticleDTO;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
@@ -25,5 +26,13 @@ public interface IArticleService {
     List<CustomArticleDTO> findByPublishedAndStatus(ArticlePublished published, ArticleStatus status);
     List<CustomArticleDTO> findAllByTopicId(Integer id);
     Long totalCountView(List<Long> ids);
+    List<ArticleEntity> findByPrioritize();
+    List<ArticleEntity> getForPopular();
+    List<CustomArticleDTO> findByStatus(ArticleStatus status);
+    Optional<ArticleCustomDTO> getById(Long id);
+    Optional<ArticleEntity> findByPrioritize(Integer number);
+    List<CustomArticleDTO> findByPublishedAndStatusForWeb(ArticlePublished published, ArticleStatus status);
+    List<ArticleEntity> getAllOderByFavCount(ArticlePublished published, ArticleStatus status);
+
 
 }

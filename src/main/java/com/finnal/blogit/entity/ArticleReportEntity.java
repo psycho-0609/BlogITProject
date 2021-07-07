@@ -1,8 +1,11 @@
 package com.finnal.blogit.entity;
 
+import com.finnal.blogit.entity.enumtype.ArticleReportNews;
+import com.finnal.blogit.entity.enumtype.converter.ArticleReportNewsConverter;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -21,4 +24,9 @@ public class ArticleReportEntity {
     private ArticleEntity articleEntity;
 
     private String content;
+
+    private LocalDateTime createdDate;
+
+    @Convert(converter = ArticleReportNewsConverter.class)
+    private ArticleReportNews news;
 }

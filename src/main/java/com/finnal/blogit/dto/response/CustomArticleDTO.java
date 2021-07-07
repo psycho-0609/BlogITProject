@@ -1,6 +1,5 @@
 package com.finnal.blogit.dto.response;
 
-
 import com.finnal.blogit.entity.enumtype.ArticleNew;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
@@ -30,6 +29,8 @@ public class CustomArticleDTO {
     private LocalDateTime modifiedDate;
     private TopicResponse topic;
     private CustomUserAccount userAccount;
+    private Integer prioritize;
+
     public CustomArticleDTO(){}
 
     public CustomArticleDTO(Long id) {
@@ -59,7 +60,7 @@ public class CustomArticleDTO {
 
     public CustomArticleDTO(Long id, String title, ArticlePublished published, ArticleNew news,ArticleStatus status, Long countView,
                             String imagePath, String shortDescription, LocalDateTime createdDate, LocalDateTime publishedDate,
-                            LocalDateTime modifiedDate, Integer topicId, String topicName, Long accountId,
+                            LocalDateTime modifiedDate, Integer prioritize, Integer topicId, String topicName, Long accountId,
                             String email, Long userDetailId, String firstName, String lastName, String thumbnail){
 
         CustomerUserDetailDTO userDetailDTO = new CustomerUserDetailDTO(userDetailId, firstName,lastName,thumbnail);
@@ -75,12 +76,13 @@ public class CustomArticleDTO {
         this.publishedDate = publishedDate;
         this.topic = new TopicResponse(topicId,topicName);
         this.userAccount = new CustomUserAccount(accountId, email, userDetailDTO);
+        this.prioritize = prioritize;
         this.status = status;
 
     }
 
     public String getImagePath() {
-        if(imagePath == null|| id == null) return null;
+        if(imagePath == null|| id == null) return "/img/logo.png";
         return "/imgBackArticle/" + id + "/" + imagePath;
     }
 }

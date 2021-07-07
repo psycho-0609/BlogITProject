@@ -18,21 +18,15 @@ $(document).ready(function () {
         image.attr("src", "");
         console.log($("#file")[0].files[0]);
     })
-
+    let errorTimeout;
     function errorMessage(message) {
+        clearTimeout(errorTimeout);
+        $("#fail").fadeOut();
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
-        setTimeout(function () {
-            $("#fail").fadeOut(3000);
-        }, 1500)
-    }
-
-    function success(message) {
-        $("#success").html(messSuccess + message)
-        $("#success").fadeIn();
-        setTimeout(function () {
-            $("#success").fadeOut(3000);
-        }, 1500)
+        errorTimeout = setTimeout(function () {
+            $("#fail").fadeOut(500);
+        }, 3000)
     }
 
     $("#btnApply").click(function () {

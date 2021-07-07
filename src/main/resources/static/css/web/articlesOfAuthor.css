@@ -13,7 +13,7 @@
 }
 .more-infor-box{
     padding: 1.5rem;
-    border: 1px solid black;
+    border: 1px solid #c5c5c5;
 }
 
 .more-infor-box div{
@@ -42,4 +42,10 @@
 }
 .drop-menu a{
     padding: .5rem 1rem !important;
+}
+.title-item{
+    color: #777777;
+}
+.amount{
+    font-weight: bold;
 }
