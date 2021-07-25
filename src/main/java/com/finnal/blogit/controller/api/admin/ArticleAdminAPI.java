@@ -1,9 +1,7 @@
 package com.finnal.blogit.controller.api.admin;
 
 import com.finnal.blogit.dto.request.ArticleChangeStatusRequest;
-import com.finnal.blogit.dto.response.ArticleCustomDTO;
-import com.finnal.blogit.dto.response.CustomArticleDTO;
-import com.finnal.blogit.dto.response.MessageDTO;
+import com.finnal.blogit.dto.response.*;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticleNew;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
@@ -24,7 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/admin/post/")
+@RequestMapping("/api/admin/post")
 public class ArticleAdminAPI {
 
     @Autowired
@@ -100,5 +98,15 @@ public class ArticleAdminAPI {
         return new ResponseEntity<>(new MessageDTO("Delete successfully"), HttpStatus.OK);
     }
 
+    @GetMapping("/statistic")
+    public ResponseEntity<List<StatisticCustomDTO>> getStatistic(){
+        return new ResponseEntity<>(articleService.getForStatistic(), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/statisticPie")
+    public ResponseEntity<List<StatisticPieChartCustom>> getStatisticPie(){
+        return new ResponseEntity<>(articleService.getStatisticPercent(), HttpStatus.OK);
+    }
 
 }

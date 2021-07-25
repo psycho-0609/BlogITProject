@@ -7,6 +7,7 @@ import com.finnal.blogit.entity.enumtype.converter.ArticleNewConverter;
 import com.finnal.blogit.entity.enumtype.converter.ArticlePublishedConverter;
 import com.finnal.blogit.entity.enumtype.converter.ArticleStatusConverter;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "article")
 @Data
+@NoArgsConstructor
 public class ArticleEntity {
 
     @Id
@@ -93,4 +95,7 @@ public class ArticleEntity {
         return "/imgBackArticle/" + id + "/" + image;
     }
 
+    public ArticleEntity(Long id) {
+        this.id = id;
+    }
 }

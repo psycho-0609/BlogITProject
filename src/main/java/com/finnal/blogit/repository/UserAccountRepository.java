@@ -23,4 +23,7 @@ public interface UserAccountRepository extends JpaRepository<UserAccountEntity,L
     @Query("select new com.finnal.blogit.dto.response.CustomUserAccount(u.id, u.email, u.status, u.userDetailEntity.id, " +
             "u.userDetailEntity.firstName, u.userDetailEntity.lastName, u.userDetailEntity.thumbnail) from UserAccountEntity as u where u.id = :id")
     Optional<CustomUserAccount> findOneById(@Param("id") Long id);
+
+    @Query("select count(ua) from UserAccountEntity ua where ua.status = 1 and ua.role.name = 'USER'")
+    Long countALLByStatus();
 }

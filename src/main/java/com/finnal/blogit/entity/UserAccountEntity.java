@@ -4,6 +4,7 @@ import com.finnal.blogit.entity.enumtype.AccountStatus;
 import com.finnal.blogit.entity.enumtype.converter.AccountStatusConverter;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_account")
 @Data
+@NoArgsConstructor
 public class UserAccountEntity {
 
     @Id
@@ -50,5 +52,7 @@ public class UserAccountEntity {
     @OneToOne(mappedBy = "userAccount",cascade = CascadeType.ALL)
     private ReadLaterEntity readLater;
 
-
+    public UserAccountEntity(Long id) {
+        this.id = id;
+    }
 }

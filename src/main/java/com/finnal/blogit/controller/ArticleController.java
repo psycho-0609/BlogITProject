@@ -42,6 +42,9 @@ public class ArticleController {
     @Autowired
     private IFavoriteArticleService favoriteArticleService;
 
+    @Autowired
+    private ICommentService commentService;
+
     @GetMapping
     public String findAll(Model model) {
         model.addAttribute("title","Posts");
@@ -93,6 +96,7 @@ public class ArticleController {
         model.addAttribute("topics", topicService.findAll());
         model.addAttribute("reports", reportService.findAll());
         model.addAttribute("articlesRelease", list);
+        model.addAttribute("comments",commentService.getAllByArticleId(id));
         return "article/detailArticle";
     }
 

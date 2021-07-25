@@ -66,7 +66,9 @@
 .comment{
     margin-bottom: 2rem;
 }
-
+.comment-reader{
+    margin-bottom: 1.5rem;
+}
 
 /* report */
 .radio-box input{

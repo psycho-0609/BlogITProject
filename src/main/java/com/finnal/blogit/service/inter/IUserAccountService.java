@@ -20,5 +20,6 @@ public interface IUserAccountService {
     Optional<UserAccountEntity> findByEmailAndStatus(String email, AccountStatus status);
     List<CustomUserAccount> getAllAccountUser();
     Optional<CustomUserAccount> findOneById(Long id);
+    Long accountAllAccountByStatus();
 
 }

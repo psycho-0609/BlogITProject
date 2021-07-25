@@ -49,8 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .antMatchers("/api/authen/**").permitAll()
                 .antMatchers("/article/**").permitAll()
-                .antMatchers("/admin/**").access("hasAuthority('ADMIN')")
+                .antMatchers("/admin/**","/api/admin/**").access("hasAuthority('ADMIN')")
+//                .antMatchers("/api/user/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -64,8 +66,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedPage("/login")
                 .and()
                 .csrf().disable();
-
-
-
     }
 }

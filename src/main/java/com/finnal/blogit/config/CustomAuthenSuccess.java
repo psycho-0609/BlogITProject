@@ -33,7 +33,7 @@ public class CustomAuthenSuccess implements AuthenticationSuccessHandler {
             UserDetailEntity detailEntity = entity.getUserDetailEntity();
             inforDTO.setId(entity.getId());
             inforDTO.setEmail(entity.getEmail());
-            inforDTO.setUserDetail(new CustomerUserDetailDTO(detailEntity.getId(), detailEntity.getFirstName(), detailEntity.getLastName(), detailEntity.getImagePath()));
+            inforDTO.setUserDetail(new CustomerUserDetailDTO(detailEntity.getId(), detailEntity.getFirstName(), detailEntity.getLastName(), detailEntity.getThumbnail()));
         }
 
         HttpSession session = httpServletRequest.getSession();

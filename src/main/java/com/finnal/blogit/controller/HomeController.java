@@ -81,10 +81,6 @@ public class HomeController {
         return "/articlesOfAuthor";
     }
 
-    @GetMapping("/admin")
-    public String adminPage(){
-        return "/adminPage/homeAdmin";
-    }
 
     @GetMapping("/table")
     public String table(){

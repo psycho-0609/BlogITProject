@@ -50,4 +50,9 @@ public class TopicService implements ITopicService {
     public void deleteById(Integer id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public Long countAllTopic() {
+        return repository.count();
+    }
 }

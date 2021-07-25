@@ -1,10 +1,7 @@
 package com.finnal.blogit.service.imp;
 
 import com.finnal.blogit.constant.Constant;
-import com.finnal.blogit.dto.response.ArticleCustomDTO;
-import com.finnal.blogit.dto.response.CustomArticleDTO;
-import com.finnal.blogit.dto.response.CustomUserAccount;
-import com.finnal.blogit.dto.response.CustomerUserDetailDTO;
+import com.finnal.blogit.dto.response.*;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.dto.request.ArticleRequest;
 import com.finnal.blogit.entity.ArticleEntity;
@@ -24,23 +21,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ArticleService implements IArticleService {
 
     @Autowired
     private ArticleRepository articleRepository;
+
     @Autowired
     private UploadFileUtils fileUtils;
+
     @Autowired
     private UserAccountRepository accountRepository;
 
     @Autowired
     private TopicRepository topicRepository;
+
+    private final String[] LIST_MONTH = {"January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "September", "October", "November", "December"};
 
     @Override
     public List<ArticleEntity> findAll() {
@@ -133,7 +132,7 @@ public class ArticleService implements IArticleService {
                 byte[] decodeBase64 = Base64.getDecoder().decode(articleRequest.getBase64().getBytes());
                 try {
                     fileUtils.writeOrUpdate(currentEntity.getId(), decodeBase64, articleRequest.getFile(), Constant.DIR_IMG_BACK_ARTICLE);
-                    if(img != null && Strings.isEmpty(img)){
+                    if (img != null && Strings.isEmpty(img)) {
                         String deleteDir = Constant.DIR_IMG_BACK_ARTICLE + currentEntity.getId() + "/" + img;
                         fileUtils.deleteFile(deleteDir);
                     }
@@ -172,23 +171,23 @@ public class ArticleService implements IArticleService {
 
     @Override
     public List<CustomArticleDTO> findAllByPublishedStatusAndAccount(ArticlePublished published, Long id, ArticleStatus status) {
-        return articleRepository.findAllByPublishedStatusAndUserAccountId(published,id, status);
+        return articleRepository.findAllByPublishedStatusAndUserAccountId(published, id, status);
     }
 
     @Override
     public List<CustomArticleDTO> findAllByAccountId(Long id) {
 
-        return  articleRepository.findAllByAccountId(id);
+        return articleRepository.findAllByAccountId(id);
     }
 
     @Override
     public List<CustomArticleDTO> findAllForSearch(ArticlePublished published, Long id, ArticleStatus status, String title) {
-        return articleRepository.findAllForSearch(published,id,status,title);
+        return articleRepository.findAllForSearch(published, id, status, title);
     }
 
     @Override
     public List<CustomArticleDTO> findByPublishedAndStatus(ArticlePublished published, ArticleStatus status) {
-        return articleRepository.findAllByPublishedAndStatus(published,status);
+        return articleRepository.findAllByPublishedAndStatus(published, status);
     }
 
     @Override
@@ -208,7 +207,7 @@ public class ArticleService implements IArticleService {
 
     @Override
     public List<ArticleEntity> getForPopular() {
-        return  articleRepository.findForPopular();
+        return articleRepository.findForPopular();
     }
 
     @Override
@@ -228,7 +227,7 @@ public class ArticleService implements IArticleService {
 
     @Override
     public List<CustomArticleDTO> findByPublishedAndStatusForWeb(ArticlePublished published, ArticleStatus status) {
-        return articleRepository.findAllByPublishedAndStatusForWeb(published,status);
+        return articleRepository.findAllByPublishedAndStatusForWeb(published, status);
     }
 
     @Override
@@ -236,6 +235,64 @@ public class ArticleService implements IArticleService {
         return articleRepository.getAllOderByFavCount(published, status);
     }
 
+    @Override
+    public Long countAllByStatusAndPublished() {
+        return articleRepository.countAllByStatusAndPublished();
+    }
+
+    @Override
+    public List<StatisticCustomDTO> getForStatistic() {
+        Integer currentMonth = LocalDateTime.now().getMonthValue();
+        List<Integer> listMonth = getListMonth(currentMonth);
+        List<StatisticCustomDTO> statistics = new ArrayList<>();
+        for (Integer month : listMonth) {
+            StatisticCustomDTO statistic = new StatisticCustomDTO();
+            statistic.setMonth(LIST_MONTH[month - 1].substring(0, 3));
+            statistic.setAmount(articleRepository.countByMonth(month));
+            statistics.add(statistic);
+        }
+        return statistics;
+    }
+
+    @Override
+    public List<StatisticPieChartCustom> getStatisticPercent() {
+        List<CustomTopicDTO> topics = topicRepository.getAll();
+        List<StatisticPieChartCustom> list = new ArrayList<>();
+        int month = LocalDateTime.now().getMonthValue();
+        Long totalArticle = articleRepository.countAllByStatusAndPublished();
+        String rgb;
+        for (CustomTopicDTO topic : topics) {
+            rgb = "rgb(" + randomRGB() + ", " + randomRGB() + ", " + randomRGB() + ")";
+            StatisticPieChartCustom statistic = new StatisticPieChartCustom();
+            statistic.setPercent(Float.valueOf(articleRepository.countAllByTopicAndMonth(month, topic.getId())) / totalArticle * 100);
+            statistic.setTopic(topic);
+            statistic.setColor(rgb);
+            list.add(statistic);
+        }
+        return list;
+    }
+
+    @Override
+    public boolean isExistedById(Long id) {
+        return articleRepository.existsById(id);
+    }
+
+    private List<Integer> getListMonth(Integer currentMonth) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 6; i > 0; i--) {
+            if (currentMonth - i >= 0) {
+                list.add(currentMonth - i + 1);
+            } else {
+                list.add(currentMonth - i + 12 + 1);
+            }
+        }
+        return list;
+    }
+
+    private Integer randomRGB() {
+        Random random = new Random();
+        return random.nextInt((255) + 1);
+    }
 
 
 }

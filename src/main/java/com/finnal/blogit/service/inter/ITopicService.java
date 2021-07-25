@@ -15,4 +15,5 @@ public interface ITopicService {
     Optional<TopicEntity> findByName(String name);
     List<CustomTopicDTO> getAll();
     void deleteById(Integer id);
+    Long countAllTopic();
 }

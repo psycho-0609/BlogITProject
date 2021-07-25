@@ -17,12 +17,14 @@ public interface ArticleReportRepository extends JpaRepository<ArticleReportEnti
     @Query("select ar.articleEntity.id from ArticleReportEntity as ar where ar.news =:news")
     List<Long> getListArticleIdNews(@Param("news") ArticleReportNews news);
 
-    @Query("select new com.finnal.blogit.dto.response.ListReportArticleDTO(ar.id, ar.content, ar.news, ar.createdDate, ar.reportEntity.id, ar.reportEntity.name) from ArticleReportEntity as ar where ar.articleEntity.id = :id order by ar.createdDate desc ")
+    @Query("select new com.finnal.blogit.dto.response.ListReportArticleDTO(ar.id, ar.content, ar.news, ar.createdDate, ar.reportEntity.id, ar.reportEntity.name) from ArticleReportEntity as ar where ar.articleEntity.id = :id order by ar.createdDate desc")
     List<ListReportArticleDTO> getListReportByArticleId(@Param("id") Long id);
 
     void deleteAllByArticleEntityId(Long id);
 
     @Query("select ar from ArticleReportEntity ar where ar.articleEntity.id =:id and ar.news = 1")
     List<ArticleReportEntity> findAllByArticleEntityIdAndNews(@Param("id") Long id);
+
+
 
 }

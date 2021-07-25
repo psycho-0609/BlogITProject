@@ -117,4 +117,10 @@ public class UserAccountService implements IUserAccountService {
         return userAccountRepository.findOneById(id);
     }
 
+    @Override
+    public Long accountAllAccountByStatus() {
+        return userAccountRepository.countALLByStatus();
+    }
+
+
 }

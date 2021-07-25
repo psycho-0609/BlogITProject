@@ -59,7 +59,8 @@
                             <div class="article-name-author">
                                 <a th:href="@{'/author/'+${article.userAccount.id}}">[[${article.userAccount.userDetailEntity.firstName}]]
                                     [[${article.userAccount.userDetailEntity.lastName}]]</a>
-                                <p class="article-published">[[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</p>
+                                <p class="article-published">[[${#temporals.format(article.publishedDate,'yyyy-MM-dd
+                                    HH:mm')}]]</p>
                             </div>
                         </div>
                         <div class="article-infor-icon">
@@ -81,7 +82,8 @@
                                 <span><i class="fas fa-heart"></i>[[${article.favoriteArticle.size()}]]</span>
                             </th:block>
 
-                            <div sec:authorize="!isAuthenticated()" th:if="${article.published.value == 1 && article.status.value == 1}"
+                            <div sec:authorize="!isAuthenticated()"
+                                 th:if="${article.published.value == 1 && article.status.value == 1}"
                                  class="dropdown dropleft">
                                 <a class="btn-drop" href="#" role="button" id="dropdownMenuLink"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -94,7 +96,8 @@
                                 </div>
                             </div>
 
-                            <div sec:authorize="isAuthenticated()" th:if="${article.published.value == 1 && article.status.value == 1 && article.userAccount.id != session.user.id}"
+                            <div sec:authorize="isAuthenticated()"
+                                 th:if="${article.published.value == 1 && article.status.value == 1 && article.userAccount.id != session.user.id}"
                                  class="dropdown dropleft">
                                 <a class="btn-drop" href="#" role="button" id="dropdownMenuLink"
                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -127,7 +130,8 @@
                                                data-target="#modalReport"
                                                type="button">Report</a>
                                         </th:block>
-                                        <a class="dropdown-item" th:href="@{'/user/posts/edit/'+ ${article.id}}">Edit</a>
+                                        <a class="dropdown-item"
+                                           th:href="@{'/user/posts/edit/'+ ${article.id}}">Edit</a>
                                         <a class="dropdown-item" href="#"
                                            type="button">Delete</a>
                                     </div>
@@ -153,12 +157,13 @@
                     <th:block sec:authorize="isAuthenticated()">
                         <div class="article-comment">
                             <a href="" class="article-img-author">
-                                <img th:src="${session.user.userDetail.thumbnail}" alt="">
+                                <img id="avatarUser" th:src="${session.user.userDetail.thumbnail}" alt="">
                             </a>
-                            <form action="" class="w-100">
-                                <input type="hidden" name="articleId" id="articleId" th:value="${article.id}">
+                            <form action="" class="w-100" id="formComment">
+                                <input type="hidden" name="articleId" id="arId" th:value="${article.id}">
                                 <textarea name="content" id="contentComment" class="form-control mb-3"
                                           rows="5"></textarea>
+                                <div class="message-error" id="messageError"></div>
                                 <div class="text-right">
                                     <button class="btn btn-primary" type="submit">Post Comment</button>
                                 </div>
@@ -169,26 +174,51 @@
                         <p class="text-center">Login to comment this article</p>
                     </th:block>
                     <hr>
-                    <div class="comment">
-                        <div class="comment-reader">
-                            <div class="infor-reader">
-                                <a href="" class="article-img-author">
-                                    <img src="/iStock_519731334.jpg" alt="">
-                                </a>
-                                <div class="detail-reader">
-                                    <a href="">Hung Luu</a>
-                                    <span>date</span>
+                    <div id="commentBox">
+                        <div class="comment" id="" th:each="comment:${comments}">
+
+                            <div class='comment-reader'>
+                                <div class='infor-reader'>
+                                    <a th:href="@{'/author/'+${comment.account.id}}" class="article-img-author">
+                                        <img th:src='${comment.account.userDetail.thumbnail}' alt=''>
+                                    </a>
+                                    <div class='detail-reader'>
+                                        <a th:href="@{'/author/'+${comment.account.id}}">Hung Luu</a>
+                                        <span style="font-size: .8rem">[[${#temporals.format(comment.createdDate,'yyyy-MM-dd HH:mm')}]]</span>
+                                    </div>
+                                </div>
+                                <div style="padding-left: 3.5rem" class="content-comment-box">
+                                    <p class='mb-1 content-comment'>[[${comment.content}]]</p>
+                                    <button class='btn btn-reply' th:id="${'btnRepLy_'+comment.id}"
+                                            style="font-size: .8rem">Reply
+                                    </button>
+                                    <button class="btn-edit-comment btn" th:id="${'btnEdit_'+comment.id}">Edit</button>
                                 </div>
                             </div>
-                            <p class="mb-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus eum autem
-                                repellat
-                                recusandae incidunt similique aliquid expedita voluptatibus obcaecati doloribus
-                                architecto suscipit, nesciunt quibusdam molestias corporis ab. Voluptates, veritatis
-                                dolore!</p>
-                            <button class="btn btn-reply">Reply</button>
+                            <div class="subcomment" style="padding-left: 3.5rem"></div>
+                            <div class="editComment"></div>
+                            <div style="padding-left: 3.5rem" class="reply-comment"
+                                 th:each="reply:${comment.replyComment}">
+                                <div class="main-content-reply-comment">
+                                    <div class='infor-reader'>
+                                        <a th:href="@{'/author/'+${reply.account.id}}" class="article-img-author">
+                                            <img th:src='${reply.account.userDetail.thumbnail}' alt=''>
+                                        </a>
+                                        <div class='detail-reader'>
+                                            <a th:href="@{'/author/'+${reply.account.id}}">Hung Luu</a>
+                                            <span style="font-size: .8rem">[[${#temporals.format(reply.createdDate,'yyyy-MM-dd HH:mm')}]]</span>
+                                        </div>
+                                    </div>
+                                    <div style="padding-left: 3.5rem">
+                                        <p class='mb-1 reply-content'>[[${reply.content}]]</p>
+                                        <button class="btn btn-edit-reply" th:id="${'btnEditReply_'+ reply.id}">Edit</button>
+                                    </div>
+                                </div>
+                                <div class="edit-reply-comment"></div>
+                            </div>
+
                         </div>
                     </div>
-
 
                     <div th:if="${articlesRelease != null && articlesRelease.size() > 0}" class="Release">
                         <div class="title-box mb-4">
@@ -217,7 +247,8 @@
                                                 </a>
                                                 <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
                                                     <button style='outline: none;' class='btn-drop-menu' type='button'
-                                                            id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
+                                                            id='dropdownMenu' data-toggle='dropdown'
+                                                            aria-haspopup='true'
                                                             aria-expanded='false'>
                                                         <i class='fas fa-ellipsis-h'></i>
                                                     </button>
@@ -248,7 +279,8 @@
                         </div>
                         <div class="blog-category-filter">
                             <ul class="list-category">
-                                <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id}}"><span><i class="fas fa-angle-right"></i></span> [[${topic.name}]]</a></li>
+                                <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id}}"><span><i
+                                        class="fas fa-angle-right"></i></span> [[${topic.name}]]</a></li>
                             </ul>
                         </div>
                     </div>
@@ -261,6 +293,7 @@
 <div th:replace="common/footer :: footer"/>
 <script th:src="@{/js/web/cate.js}"></script>
 <script th:src="@{/js/web/detailArticle.js}"></script>
+<script th:src="@{/js/web/user/comment.js}"></script>
 <script>
     $("#content").html($("#content").text());
     let x = [[${article.id}]]
