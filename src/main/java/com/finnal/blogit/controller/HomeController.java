@@ -53,7 +53,7 @@ public class HomeController {
         model.addAttribute("articlePrioritize",articleService.findByPrioritize());
         model.addAttribute("articleNews",articleNews);
         model.addAttribute("articlePopular",articlePopular);
-        return "/home";
+        return "home";
     }
     @GetMapping("/search")
     public String Search(@RequestParam(value = "title", required = false) String title,  Model model){
