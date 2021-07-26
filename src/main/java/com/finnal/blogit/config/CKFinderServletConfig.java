@@ -1,10 +1,10 @@
 package com.finnal.blogit.config;
 
 
-import com.ckfinder.connector.ConnectorServlet;
+//import com.ckfinder.connector.ConnectorServlet;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.annotation.Bean;
+//import org.springframework.boot.web.servlet.ServletRegistrationBean;
+//import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
