@@ -47,7 +47,7 @@ public class ArticleUserController {
         }
         model.addAttribute("topics", topicService.findAll());
         model.addAttribute("article", entity);
-        return "/user/add-post";
+        return "user/add-post";
     }
     @GetMapping("/public")
     public String publicPosts(@RequestParam(value = "title", required = false) String title, Model model) throws WebException{
@@ -64,7 +64,7 @@ public class ArticleUserController {
         model.addAttribute("title","Public Posts");
         model.addAttribute("topics",topicService.findAll());
         
-        return "/user/userArticle";
+        return "user/userArticle";
     }
 
     @GetMapping("/private")
@@ -82,7 +82,7 @@ public class ArticleUserController {
         model.addAttribute("status",ArticleStatus.PRIVATE.getValue());
         model.addAttribute("title","Private Posts");
         model.addAttribute("topics",topicService.findAll());
-        return "/user/userArticle";
+        return "user/userArticle";
     }
 
     @GetMapping("/unapproved")
@@ -99,7 +99,7 @@ public class ArticleUserController {
         model.addAttribute("status",3);
         model.addAttribute("title","Unapproved Posts");
         model.addAttribute("topics",topicService.findAll());
-        return "/user/userArticle";
+        return "user/userArticle";
     }
 
 

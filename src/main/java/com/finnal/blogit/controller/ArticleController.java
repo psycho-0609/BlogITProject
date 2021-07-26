@@ -59,7 +59,7 @@ public class ArticleController {
         model.addAttribute("title",entity.getName());
         model.addAttribute("articles",articleService.findAllByTopicId(entity.getId()));
         model.addAttribute("topics", topicService.findAll());
-        return "/article/allArticles";
+        return "article/allArticles";
     }
 
     @GetMapping("/{id}")

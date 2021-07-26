@@ -35,6 +35,6 @@ public class ReadLaterController {
             model.addAttribute("lists",readLaterService.findAllByReadLaterId(userDetail.getReadLaterId()));
         }
         model.addAttribute("topics",topicService.findAll());
-        return "/user/readLater";
+        return "user/readLater";
     }
 }

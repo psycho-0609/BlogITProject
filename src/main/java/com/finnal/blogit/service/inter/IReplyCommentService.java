@@ -7,5 +7,6 @@ import java.util.Optional;
 public interface IReplyCommentService {
     ReplyCommentEntity save(ReplyCommentEntity entity);
     Optional<ReplyCommentEntity> findById(Long id);
+    void deleteById(Long id);
 
 }

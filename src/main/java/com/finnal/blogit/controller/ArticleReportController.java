@@ -29,7 +29,7 @@ public class ArticleReportController {
     @GetMapping
     public String allReport(Model model){
         model.addAttribute("reports",service.findAll());
-        return "/adminPage/reportArticle";
+        return "adminPage/reportArticle";
     }
 
     @GetMapping("/all")
@@ -45,7 +45,7 @@ public class ArticleReportController {
         list.forEach(el -> el.setNews(ArticleReportNews.DISABLE));
         service.saveAll(list);
         model.addAttribute("articleReport",listArticleReport);
-        return "/adminPage/report-by-article";
+        return "adminPage/report-by-article";
     }
 
 }

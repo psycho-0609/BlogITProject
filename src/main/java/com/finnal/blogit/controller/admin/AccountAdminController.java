@@ -17,7 +17,7 @@ public class AccountAdminController {
     @GetMapping
     public String getAll(Model model){
         model.addAttribute("accounts",accountService.getAllAccountUser());
-        return "/adminPage/account";
+        return "adminPage/account";
     }
 
 }

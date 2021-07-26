@@ -25,6 +25,6 @@ public class HomeAdminController {
         model.addAttribute("totalArticle", articleService.countAllByStatusAndPublished());
         model.addAttribute("totalTopic",topicService.countAllTopic());
         model.addAttribute("totalAccount", accountService.accountAllAccountByStatus());
-        return "/adminPage/homeAdmin";
+        return "adminPage/homeAdmin";
     }
 }

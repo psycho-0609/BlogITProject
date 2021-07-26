@@ -17,6 +17,6 @@ public class TopicAdminController {
     @GetMapping
     public String allTopic(Model model){
         model.addAttribute("topics",tService.findAll());
-        return "/adminPage/topic";
+        return "adminPage/topic";
     }
 }

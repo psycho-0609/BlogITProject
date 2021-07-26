@@ -44,21 +44,21 @@ public class ArticleAdminController {
     public String publishedPosts(Model model){
         model.addAttribute("articles",articleService.findByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC));
         model.addAttribute("type", Constant.PUBLISHED);
-        return "/adminPage/article/published";
+        return "adminPage/article/published";
     }
 
     @GetMapping("/unapproved")
     public String unapproved(Model model){
         model.addAttribute("articles",articleService.findByPublishedAndStatus(ArticlePublished.DISABLE, ArticleStatus.PUBLIC));
         model.addAttribute("type", Constant.UNLISTED);
-        return "/adminPage/article/unapproved";
+        return "adminPage/article/unapproved";
     }
 
     @GetMapping("/allPosts")
     public String allPosts(Model model){
         model.addAttribute("articles",articleService.findByStatus(ArticleStatus.PUBLIC));
         model.addAttribute("type", Constant.ALL);
-        return "/adminPage/article/allArticle";
+        return "adminPage/article/allArticle";
     }
 
     @GetMapping("/{id}")
@@ -83,6 +83,6 @@ public class ArticleAdminController {
         model.addAttribute("article", article);
         model.addAttribute("topics", topicService.findAll());
         model.addAttribute("reports", reportService.findAll());
-        return "/article/detailArticle";
+        return "article/detailArticle";
     }
 }

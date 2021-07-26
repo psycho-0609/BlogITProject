@@ -23,4 +23,9 @@ public class ReplyCommentService implements IReplyCommentService {
     public Optional<ReplyCommentEntity> findById(Long id) {
         return repository.findById(id);
     }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
 }

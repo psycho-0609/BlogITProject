@@ -31,7 +31,7 @@ public class AuthenController {
         }
 
         model.addAttribute("user",entityOptional.get());
-        return "/reset-password";
+        return "reset-password";
     }
 
 
@@ -41,11 +41,11 @@ public class AuthenController {
         entity.setToken(null);
         entity.setStatus(AccountStatus.ENABLE);
         userAccountService.save(entity);
-        return "/confirm-account";
+        return "confirm-account";
     }
 
     @GetMapping("/articles")
     public String allAricle(){
-        return "/article/allArticles";
+        return "article/allArticles";
     }
 }

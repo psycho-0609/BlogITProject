@@ -64,7 +64,7 @@ public class HomeController {
         model.addAttribute("title","Search");
         model.addAttribute("articles",list);
         model.addAttribute("topics",topicService.findAll());
-        return "/article/allArticles";
+        return "article/allArticles";
     }
 
     @GetMapping("/author/{id}")
@@ -78,13 +78,13 @@ public class HomeController {
         model.addAttribute("articles",articleService.findAllByPublishedStatusAndAccount(ArticlePublished.ENABLE, entity.getId(),ArticleStatus.PUBLIC));
         model.addAttribute("topics",topicService.findAll());
         model.addAttribute("title",entity.getUserDetailEntity().getFirstName() + " " + entity.getUserDetailEntity().getLastName());
-        return "/articlesOfAuthor";
+        return "articlesOfAuthor";
     }
 
 
     @GetMapping("/table")
     public String table(){
-        return "/adminPage/article/published";
+        return "adminPage/article/published";
     }
 
 }

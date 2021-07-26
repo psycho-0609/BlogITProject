@@ -35,6 +35,6 @@ public class FavoriteArticleController {
             model.addAttribute("favorites",favoriteArticleService.getByFavId(userDetail.getFavoriteId()));
         }
         model.addAttribute("topics",topicService.findAll());
-        return "/user/favArticles";
+        return "user/favArticles";
     }
 }

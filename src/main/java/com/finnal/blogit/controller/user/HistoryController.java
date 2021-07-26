@@ -36,6 +36,6 @@ public class HistoryController {
             model.addAttribute("histories",historyArticleService.getHistoryArticleFlowDate(userDetail.getHistoryId()));
         }
         model.addAttribute("topics",topicService.findAll());
-        return "/user/history";
+        return "user/history";
     }
 }

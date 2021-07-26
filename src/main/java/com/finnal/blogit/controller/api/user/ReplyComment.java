@@ -6,6 +6,7 @@ import com.finnal.blogit.entity.CommentEntity;
 import com.finnal.blogit.entity.ReplyCommentEntity;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.exception.api.APIException;
+import com.finnal.blogit.exception.api.ItemCanNotModifyException;
 import com.finnal.blogit.exception.api.ItemCannotEmptyException;
 import com.finnal.blogit.exception.api.ItemNotFoundException;
 import com.finnal.blogit.service.inter.ICommentService;
@@ -16,10 +17,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -53,6 +51,16 @@ public class ReplyComment {
 
     }
 
+    @DeleteMapping("/delete/{id}")
+    private ResponseEntity<MessageDTO> delete(@PathVariable("id") Long id) throws APIException{
+        CustomUserDetail userDetail = UserInfor.getPrincipal();
+        ReplyCommentEntity entity = service.findById(id).orElseThrow(()-> new ItemNotFoundException("Comment not found"));
+        if(!entity.getAccount().getId().equals(userDetail.getId())){
+            throw new ItemCanNotModifyException("Cannot delete this comment");
+        }
+        service.deleteById(id);
+        return new ResponseEntity<>(new MessageDTO("Delete successfully"), HttpStatus.OK);
+    }
     private void validateDataToCreate(ReplyCommentRequest request) throws APIException {
         if(request.getCommentId() == null){
             throw new ItemCannotEmptyException("Comment Id cannot empty");

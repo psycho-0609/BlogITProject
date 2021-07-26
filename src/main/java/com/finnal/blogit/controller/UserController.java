@@ -33,12 +33,12 @@ public class UserController {
         model.addAttribute("user",accountEntity);
         model.addAttribute("title","Personal Information");
         model.addAttribute("topics",topicService.findAll());
-        return "/user/personalInfor";
+        return "user/personalInfor";
     }
 
     @GetMapping("/changePassword")
     public String changePassword(Model model){
         model.addAttribute("topics",topicService.findAll());
-        return "/user/changePassword";
+        return "user/changePassword";
     }
 }
