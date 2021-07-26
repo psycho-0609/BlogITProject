@@ -97,6 +97,7 @@ $(document).ready(function () {
             "               </div>\n" +
             "              </div>\n" +
             "        <div style='padding-left: 3.5rem'><p class='mb-1'>" + el.content + "</p>\n" +
+            "<button class=\"btn btn-edit-reply\" id=\"'btnEditReply_"+ el.id+"'\">Edit</button>"+
             "        </div>\n"+
             "</div>"
         return res;
