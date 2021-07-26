@@ -27,13 +27,13 @@ public class ArticleEntity {
     @Column(name = "title")
     private String title;
 
-    @Column
+    @Column(length = 10485760)
     private String content;
 
     @Column
     private String videoFile;
 
-    @Column
+    @Column(length = 3000)
     private String shortDescription;
 
     @Column
