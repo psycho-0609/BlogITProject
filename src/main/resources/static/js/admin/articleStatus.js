@@ -99,7 +99,6 @@ $(document).ready(function () {
         $.each(formData, function (i, v) {
             data["" + v.name + ""] = v.value;
         });
-        console.log(data);
         ajaxChangeStatus(data);
     })
 
@@ -182,7 +181,7 @@ $(document).ready(function () {
         let item = "<tr>\n" +
             "                                    <td style=\"width: 30rem\"><a href='/admin/post/" + el.id + "'>" + el.title + "</a>\n" +
             "                                    </td>\n" +
-            "                                    <td><a href='/author/" + el.userAccount.userDetail.id + "'>\n" + el.userAccount.userDetail.firstName +" " + el.userAccount.userDetail.lastName +
+            "                                    <td><a href='/author/" + el.userAccount.id + "'>\n" + el.userAccount.userDetail.firstName +" " + el.userAccount.userDetail.lastName +
             "                                    </a></td>\n" + lastEditDate +
             "                                    <td>" + formatDate(el.publishedDate) + "</td>\n" +
             "                                    <td>" + prioritize + "</td>\n" +
@@ -210,7 +209,7 @@ $(document).ready(function () {
             "              <td style=\"width: 30rem\"><a href='/admin/post/" + el.id + "'>" + el.title + "</a>\n" +
             "                                    </td>\n" +
             "                                   <td>" + el.topic.name + "</td>" +
-            "                                    <td><a href='/author/" + el.userAccount.userDetail.id + "'>\n" + el.userAccount.userDetail.firstName + el.userAccount.userDetail.lastName +
+            "                                    <td><a href='/author/" + el.userAccount.id + "'>\n" + el.userAccount.userDetail.firstName + el.userAccount.userDetail.lastName +
             "                                    </a></td>\n" + lastEditDate +
             "                                    <td class='text-center' style=\"width: 10rem\">\n" +
             "                                       <button type=\"button\" id='edit_" + el.id + "' class=\"btn btn-warning btn-edit mb-2\">Edit</button>\n" +
@@ -243,7 +242,7 @@ $(document).ready(function () {
             "              <td style=\"width: 30rem\"><a href='/admin/post/" + el.id + "'>" + el.title + "</a>\n" +
             "                                    </td>\n" +
             "                                    <td>" + el.topic.name + "</td>\n" +
-            "                                    <td><a href='/author/" + el.userAccount.userDetail.id + "'>\n" + el.userAccount.userDetail.firstName + el.userAccount.userDetail.lastName +
+            "                                    <td><a href='/author/" + el.userAccount.id + "'>\n" + el.userAccount.userDetail.firstName + el.userAccount.userDetail.lastName +
             "                                    </a></td>\n" + lastEditDate +
             "                                    <td>" + published + "</td>\n" +
             "                                    <td class=\"text-center\" style=\"width: 10rem\">\n" +

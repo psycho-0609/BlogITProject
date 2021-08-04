@@ -200,7 +200,7 @@ $(document).ready(function () {
         }).done(function (res){
             $("#processing").removeClass("active");
             resetInput();
-            $("#messConfirmAccount").text(messConfirm + " <b>"+data.email+"</b>");
+            $("#messConfirmAccount").html(messConfirm + " <b>"+data.email+"</b>");
             $("#alertRegisSuccess").css("display","block");
         }).fail(function (res){
             $("#processing").removeClass("active");

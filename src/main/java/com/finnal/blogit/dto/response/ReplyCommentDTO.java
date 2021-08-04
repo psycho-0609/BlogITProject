@@ -13,6 +13,7 @@ public class ReplyCommentDTO {
     private Long id;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long commentId;
+    private Long articleId;
     private String content;
     private LocalDateTime createdDate;
     private CustomUserAccount account;

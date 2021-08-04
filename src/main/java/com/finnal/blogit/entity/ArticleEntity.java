@@ -75,6 +75,9 @@ public class ArticleEntity {
     @OneToMany(mappedBy = "articleEntity", cascade = CascadeType.ALL)
     private List<ReadLaterArticleEntity> readLaterArticle;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<CommentEntity> comments;
+
     @ManyToOne
     @JoinColumn(name = "topic_id")
     private TopicEntity topic;

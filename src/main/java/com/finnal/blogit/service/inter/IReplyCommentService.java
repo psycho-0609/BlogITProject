@@ -8,5 +8,6 @@ public interface IReplyCommentService {
     ReplyCommentEntity save(ReplyCommentEntity entity);
     Optional<ReplyCommentEntity> findById(Long id);
     void deleteById(Long id);
+    boolean isExistById(Long id);
 
 }

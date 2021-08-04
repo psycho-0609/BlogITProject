@@ -1,6 +1,7 @@
 package com.finnal.blogit.service.inter;
 
 import com.finnal.blogit.dto.response.CommentDTO;
+import com.finnal.blogit.dto.response.ListArticleComment;
 import com.finnal.blogit.entity.CommentEntity;
 
 import java.util.List;
@@ -13,5 +14,7 @@ public interface ICommentService {
     Optional<CommentEntity> findById(Long id);
     void deleteById(Long id);
     Boolean existsById(Long id);
+    List<ListArticleComment> listTotalComment();
+    List<ListArticleComment> findByTitle(String title);
 
 }

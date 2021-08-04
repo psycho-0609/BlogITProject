@@ -74,6 +74,9 @@
                         <div class="navbar-left-item">
                             <a th:href="@{/user/posts/public}"><span><i class="fas fa-file-alt nav-left-icon"></i></span>My Content</a>
                         </div>
+                        <div sec:authorize="hasAuthority('ADMIN')" class="navbar-left-item">
+                            <a th:href="@{/admin}"><span><i class="fas fa-shield-alt"></i></span>Admin Page</a>
+                        </div>
                             <hr>
                         <div class="navbar-left-item">
                             <form th:action="@{/logout}" method="post">
@@ -147,10 +150,12 @@
                                     <a class="user"  role="button" id="dropdownMenuLink" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
                                         <img th:src="${session.user.userDetail.thumbnail}" alt="">
+
                                     </a>
                                     <div class="dropdown-menu user-menu" aria-labelledby="dropdownMenuLink">
                                         <a class="dropdown-item nav-link-user" th:href="@{/user/profile}"><span class="icon-nav-left"><i class="fas fa-id-card"></i></span>Profile</a>
                                         <a class="dropdown-item nav-link-user" th:href="@{/user/posts/public}"><span class="icon-nav-left"><i class="fas fa-file-alt"></i></span>My Content</a>
+                                        <a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item nav-link-user" th:href="@{/admin}"><span class="icon-nav-left"><i class="fas fa-shield-alt"></i></span>Admin Page</a>
                                         <div class="line-user-nav"></div>
                                         <form th:action="@{/logout}" method="post">
                                             <button class="dropdown-item btn-logout" style="outline: none" type="submit"><span class="icon-nav-left"><i class="fas fa-sign-out-alt"></i></span>Logout</button>
@@ -158,6 +163,7 @@
 
                                     </div>
                                 </div>
+                                <input type="hidden" id="idOfUser" th:value="${session.user.id}">
                             </li>
 
                         </th:block>

@@ -1,8 +1,8 @@
 package com.finnal.blogit.service.imp;
 
-import com.finnal.blogit.dto.response.CommentDTO;
-import com.finnal.blogit.dto.response.ReplyCommentDTO;
+import com.finnal.blogit.dto.response.*;
 import com.finnal.blogit.entity.CommentEntity;
+import com.finnal.blogit.repository.ArticleRepository;
 import com.finnal.blogit.repository.CommentRepository;
 import com.finnal.blogit.repository.ReplyCommentRepository;
 import com.finnal.blogit.service.inter.ICommentService;
@@ -22,6 +22,9 @@ public class CommentService implements ICommentService {
 
     @Autowired
     private ReplyCommentRepository replyCommentRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Override
     public CommentEntity save(CommentEntity entity) {
@@ -50,5 +53,35 @@ public class CommentService implements ICommentService {
     @Override
     public Boolean existsById(Long id) {
         return repository.existsById(id);
+    }
+
+    @Override
+    public List<ListArticleComment> listTotalComment() {
+        List<ListArticleComment> list = repository.countComment();
+        getListComment(list);
+        return list;
+    }
+
+    @Override
+    public List<ListArticleComment> findByTitle(String title) {
+        List<ListArticleComment> list = repository.getAllByLikeTitle(title);
+        getListComment(list);
+        return list;
+    }
+
+    private void getListComment(List<ListArticleComment> list){
+        if(list.size() > 0){
+            List<TotalReplyComment> replyComments = replyCommentRepository.getTotalComment();
+            Map<Long, List<TotalReplyComment>> mapRep = replyComments.stream().collect(Collectors.groupingBy(TotalReplyComment::getArticleId));
+            List<Long> articleIds = list.stream().map(ListArticleComment::getArticleId).collect(Collectors.toList());
+            List<CustomArticleDTO> listArticles = articleRepository.getListArticle(articleIds);
+            Map<Long, List<CustomArticleDTO>> map  = listArticles.stream().collect(Collectors.groupingBy(CustomArticleDTO::getId));
+            list.forEach(t -> {
+                t.setArticle(map.get(t.getArticleId()).get(0));
+                if (mapRep.get(t.getArticleId()) != null) {
+                    t.setTotalComment(t.getTotalComment() + mapRep.get(t.getArticleId()).get(0).getTotal());
+                }
+            });
+        }
     }
 }

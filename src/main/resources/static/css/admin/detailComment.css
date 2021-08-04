@@ -1,0 +1,52 @@
+.article-comment {
+    display: flex;
+}
+
+.infor-reader {
+    display: flex;
+    margin-bottom: .5rem;
+}
+
+.detail-reader a {
+    display: block;
+}
+
+.detail-reader span {
+    font-size: .9rem;
+    color: gray;
+}
+
+.btn-reply {
+    padding: 0;
+    margin: 0;
+    font-size: .9rem;
+    color: gray;
+    outline: none !important;
+}
+
+.comment {
+    margin-bottom: 2rem;
+}
+
+.comment-reader {
+    margin-bottom: 1.5rem;
+}
+
+.article-img-author img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.article-img-author {
+    margin-right: .7rem;
+}
+.wrap-comment{
+    display: flex;
+    justify-content: space-between;
+}
+.btn-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

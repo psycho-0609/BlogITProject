@@ -36,8 +36,6 @@ public class CommentAPI {
     @Autowired
     private ICommentService commentService;
 
-    @Autowired
-    private IReplyCommentService service;
 
 
     @GetMapping("/getAll")

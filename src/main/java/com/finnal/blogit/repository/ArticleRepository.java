@@ -3,6 +3,7 @@ package com.finnal.blogit.repository;
 
 import com.finnal.blogit.dto.response.ArticleCustomDTO;
 import com.finnal.blogit.dto.response.CustomArticleDTO;
+import com.finnal.blogit.dto.response.ListArticleComment;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
@@ -105,9 +106,12 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
     @Query("select count(a) from ArticleEntity a where a.status = 1 and a.published = 1")
     Long countAllByStatusAndPublished();
 
-    @Query(value = "select count(*) FROM blogit.article AS a where month(a.created_date) = :month and a.published = 1 and a.status = 1", nativeQuery = true)
+    @Query(value = "select count(*) FROM article AS a where month(a.created_date) = :month and a.published = 1 and a.status = 1", nativeQuery = true)
     Long countByMonth(Integer month);
 
-    @Query(value = "SELECT count(*) FROM blogit.article as a inner join blogit.topic as t on a.topic_id = t.id where a.published = 1 and a.status = 1 and month(a.published_date) = :month and t.id = :topicId", nativeQuery = true)
+    @Query(value = "SELECT count(*) FROM article as a inner join blogit.topic as t on a.topic_id = t.id where a.published = 1 and a.status = 1 and month(a.published_date) = :month and t.id = :topicId", nativeQuery = true)
     Long countAllByTopicAndMonth(@Param("month") Integer month, @Param("topicId") Integer id);
+    
+
+
 }

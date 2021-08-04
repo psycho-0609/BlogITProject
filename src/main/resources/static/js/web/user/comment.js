@@ -1,5 +1,6 @@
 $(document).ready(function () {
     let articleId = $("#articleOfArticle").val();
+    let userId = $("#idOfUser").val();
     $("#formComment").on('submit', function (e) {
         e.preventDefault();
         let data = {};
@@ -53,6 +54,18 @@ $(document).ready(function () {
     }
 
     function write(el) {
+        let btnGroup = "";
+        if(userId !== undefined && parseInt(el.account.id) === parseInt(userId)){
+            btnGroup = "<div style='display: inline-block'>\n" +
+                "              <button type=\"button\" class=\"btn-drop-comment\" style=\"outline: none\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+                "                    <i class=\"fas fa-ellipsis-h\"></i>\n" +
+                "               </button>\n" +
+                "               <div class=\"dropdown-menu\">\n" +
+                "                     <a class=\"dropdown-item btn-edit-comment\"  type='button' id='btnEditComment_" + el.id + "'>Edit</a>\n" +
+                "                     <a class=\"dropdown-item btn-delete-comment\" id='btnDeleteComment_" + el.id +"'  type=\"button\">Delete</a>\n" +
+                "                </div>\n" +
+                "               </div>"
+        }
         let res = " <div class=\"comment\" id=\"commentBox\">" +
             "<div class='comment-reader'>\n" +
             "                            <div class='infor-reader'>\n" +
@@ -66,9 +79,10 @@ $(document).ready(function () {
             "                            </div>\n" +
             "                            <div style='padding-left: 3.5rem'  class=\"content-comment-box\"><p class='mb-1 content-comment'>" + el.content + "</p>\n" +
             "                            <button class='btn btn-reply' style='font-size: .8rem' id='btnReply_" + el.id + "'>Reply</button>\n" +
-            "                            <button class='btn btn-edit-comment' style='font-size: .8rem' id='btnEdit_" + el.id + "'>Edit</button></div>\n" +
+                                        btnGroup +
             "                        </div>" +
-            "<div class=\"subcomment\"></div>" +
+            "                        </div>" +
+            "<div class=\"subcomment\" style=\"padding-left: 3.5rem\"></div>" +
             "<div class=\"editComment\"></div>" +
                 replyComment(el.replyComment) +
             "</div>"
@@ -86,7 +100,20 @@ $(document).ready(function () {
     }
 
     function writeReply(el) {
+        let btnGroup = "";
+        if(userId !== undefined && parseInt(el.account.id) === parseInt(userId)){
+            btnGroup = "<div >\n" +
+                "              <button type=\"button\" class=\"btn-drop-comment\" style=\"outline: none\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n" +
+                "                    <i class=\"fas fa-ellipsis-h\"></i>\n" +
+                "               </button>\n" +
+                "               <div class=\"dropdown-menu\">\n" +
+                "                     <a class=\"dropdown-item btn-edit-reply\"  type='button' id='btnEditReply_" + el.id + "'>Edit</a>\n" +
+                "                     <a class=\"dropdown-item btn-delete-reply\" id='btnDeleteReply_" + el.id +"'  type=\"button\">Delete</a>\n" +
+                "                </div>\n" +
+                "               </div>"
+        }
         let res ="<div style='padding-left: 3.5rem'>"+
+            "<div class=\"main-content-reply-comment\">"+
             "<div class='infor-reader'>\n" +
             "           <a href='/author/" + el.account.id + "' class=\"article-img-author\">\n" +
             "            <img src='" + el.account.userDetail.thumbnail + "' alt=''>\n" +
@@ -96,10 +123,13 @@ $(document).ready(function () {
             "                        <span style='font-size: .8rem'>" + formatDate(el.createdDate) + "</span>\n" +
             "               </div>\n" +
             "              </div>\n" +
-            "        <div style='padding-left: 3.5rem'><p class='mb-1'>" + el.content + "</p>\n" +
-            "<button class=\"btn btn-edit-reply\" id=\"'btnEditReply_"+ el.id+"'\">Edit</button>"+
+            "        <div style='padding-left: 3.5rem'><p class='mb-1 reply-content'>" + el.content + "</p>\n" +
+                    btnGroup +
             "        </div>\n"+
+            "</div>"+
+            "<div class=\"edit-reply-comment\"></div>"+
             "</div>"
+
         return res;
     }
 
@@ -160,7 +190,7 @@ $(document).ready(function () {
     $(document).on("click", ".btn-reply", function () {
         hideFormEditComment();
         hideFormSubComment();
-        $(this).css("display", "none");
+        $(this).css("visibility", "hidden");
         let div = $(this).closest('div').parent().parent().children(".subcomment");
         div.html(el)
         $("#commentId").val($(this).attr("id").split("_")[1]);
@@ -190,7 +220,7 @@ $(document).ready(function () {
         }
         for (let i = 0; i < max; i++) {
             els.eq(i).html("");
-            btnReply.eq(i).css("display", "inline-block");
+            btnReply.eq(i).css("visibility", "inherit");
             editReply.eq(i).html("");
             mainReply.eq(i).css("display","block");
         }
@@ -236,9 +266,10 @@ $(document).ready(function () {
         hideFormSubComment();
         hideFormEditComment();
         let id = $(this).attr("id").split("_")[1];
-        let commentBox = $(this).closest('div').parent().parent().children(".comment-reader");
+        let commentBox = $(this).closest('div').parent().parent().parent().parent().children(".comment-reader");
+        console.log(commentBox);
         commentBox.css("display","none")
-        let div = $(this).closest('div').parent().parent().children(".editComment");
+        let div = $(this).closest('div').parent().parent().parent().parent().children(".editComment");
         div.html(editComment)
         $("#formEditComment #contentComment").val(commentBox.children(".content-comment-box").children(".content-comment").text())
         $("#formEditComment #id").val(id);
@@ -256,7 +287,6 @@ $(document).ready(function () {
     function hideFormEditComment(){
         let els =$(".edit-comment")
         let commentBox = $(".comment-reader");
-        console.log(commentBox);
         for (let i = 0; i < (els.length > commentBox.length ? els.length : commentBox.length); i++) {
             els.eq(i).html("");
             commentBox.eq(i).css("display", "block")
@@ -271,7 +301,6 @@ $(document).ready(function () {
             $.each(formData, function (i, v) {
                 data["" + v.name + ""] = v.value;
             });
-            console.log(data);
             if (data["content"] === undefined || data["content"] === "") {
                 $("#formEditComment #errorMess").text("Content is require");
             } else {
@@ -301,18 +330,84 @@ $(document).ready(function () {
     $(document).on("click",".btn-edit-reply", function (){
         hideFormEditComment();
         hideFormSubComment();
-        let parentDiv = $(this).parent().parent().parent();
-        console.log(parentDiv);
+        let parentDiv = $(this).parent().parent().parent().parent().parent();
         let mainContent = parentDiv.children(".main-content-reply-comment");
         let divForm =  parentDiv.children(".edit-reply-comment");
         let id = $(this).attr("id").split("_")[1];
         mainContent.css("display","none");
         divForm.html(el);
         $("#formReply #id").val(id)
-        $("#formReply #content").val($(this).parent().children(".reply-content").text());
+        $("#formReply #content").val($(this).parent().parent().parent().children(".reply-content").text());
+        console.log($(this).parent().parent().parent());
         $("#formReply #articleId").val(articleId);
         $("#formReply #btnSubmitReply").text("Update");
         SubComment();
         submitFormReply();
     })
+
+
+    // delete comment
+    $(document).on("click",".btn-delete-comment",function (){
+        let id = $(this).attr("id").split("_")[1];
+        if(id !== undefined && id !== ""){
+            swalAlertDeleteComment(id);
+        }
+    })
+    function deleteComment(id){
+        $.ajax({
+            url:'/api/user/comment/delete/'+id,
+            method:'delete',
+            type:'json'
+        }).done(function (res){
+            getData();
+        }).fail(function (){
+            getData();
+        })
+    }
+
+    // delete reply comment
+    $(document).on("click",".btn-delete-reply",function (){
+        let id = $(this).attr("id").split("_")[1];
+        if(id !== undefined && id !== ""){
+            swalAlertDeleteReplyComment(id);
+        }
+    })
+    function deleteReplyComment(id){
+        $.ajax({
+            url:'/api/user/replyComment/delete/'+id,
+            method:'delete',
+            type:'json'
+        }).done(function (res){
+            getData();
+        }).fail(function (){
+            getData();
+        })
+    }
+
+    function swalAlertDeleteComment(id) {
+        swal({
+            title: "Are you sure?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    deleteComment(id);
+                }
+            });
+    }
+    function swalAlertDeleteReplyComment(id) {
+        swal({
+            title: "Are you sure?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    deleteReplyComment(id);
+                }
+            });
+    }
 })

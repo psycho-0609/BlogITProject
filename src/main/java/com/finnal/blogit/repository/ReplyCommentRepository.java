@@ -1,6 +1,7 @@
 package com.finnal.blogit.repository;
 
 import com.finnal.blogit.dto.response.ReplyCommentDTO;
+import com.finnal.blogit.dto.response.TotalReplyComment;
 import com.finnal.blogit.entity.ReplyCommentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,7 @@ public interface ReplyCommentRepository extends JpaRepository<ReplyCommentEntity
             "r.account.userDetailEntity.lastName, r.account.userDetailEntity.thumbnail) " +
             "from ReplyCommentEntity r where r.comment.article.id = :id order by r.createdDate desc ")
     List<ReplyCommentDTO> findAllByArticleId(@Param("id") Long id);
+
+    @Query("select new com.finnal.blogit.dto.response.TotalReplyComment(r.comment.article.id, count (r)) from ReplyCommentEntity r group by r.comment.article.id")
+    List<TotalReplyComment> getTotalComment();
 }

@@ -26,6 +26,11 @@ public class ReplyCommentService implements IReplyCommentService {
 
     @Override
     public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
 
+    @Override
+    public boolean isExistById(Long id) {
+        return repository.existsById(id);
     }
 }

@@ -259,7 +259,7 @@ public class ArticleService implements IArticleService {
         List<CustomTopicDTO> topics = topicRepository.getAll();
         List<StatisticPieChartCustom> list = new ArrayList<>();
         int month = LocalDateTime.now().getMonthValue();
-        Long totalArticle = articleRepository.countAllByStatusAndPublished();
+        Long totalArticle = articleRepository.countByMonth(month);
         String rgb;
         for (CustomTopicDTO topic : topics) {
             rgb = "rgb(" + randomRGB() + ", " + randomRGB() + ", " + randomRGB() + ")";

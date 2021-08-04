@@ -26,7 +26,7 @@ public class CommentEntity {
     private String content;
     private LocalDateTime createdDate;
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<ReplyCommentEntity> replyComments;
 
     public CommentEntity(Long id) {
