@@ -277,6 +277,11 @@ public class ArticleService implements IArticleService {
         return articleRepository.existsById(id);
     }
 
+    @Override
+    public List<StatisticAuthor> getStatisticAuthor() {
+        return articleRepository.getStatisticAuthor();
+    }
+
     private List<Integer> getListMonth(Integer currentMonth) {
         List<Integer> list = new ArrayList<>();
         for (int i = 6; i > 0; i--) {

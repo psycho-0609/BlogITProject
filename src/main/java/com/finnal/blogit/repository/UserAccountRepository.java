@@ -1,6 +1,7 @@
 package com.finnal.blogit.repository;
 
 import com.finnal.blogit.dto.response.CustomUserAccount;
+import com.finnal.blogit.dto.response.UserInforDto;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,21 @@ public interface UserAccountRepository extends JpaRepository<UserAccountEntity,L
 
     @Query("select count(ua) from UserAccountEntity ua where ua.status = 1 and ua.role.name = 'USER'")
     Long countALLByStatus();
+
+    @Query("select ua from UserAccountEntity ua where ua.role.name = 'ADMIN'")
+    List<UserAccountEntity> findAdminAccount();
+
+    @Query("select distinct new com.finnal.blogit.dto.response.UserInforDto(ua.id, ua.userDetailEntity.firstName, ua.userDetailEntity.lastName, ua.userDetailEntity.thumbnail, ua.userDetailEntity.id) " +
+            "from UserAccountEntity ua where ua.role.name ='USER'")
+    List<UserInforDto> getAllInforUser();
+
+    @Query("select distinct new com.finnal.blogit.dto.response.UserInforDto(ua.id, ua.userDetailEntity.firstName, ua.userDetailEntity.lastName, ua.userDetailEntity.thumbnail, ua.userDetailEntity.id) " +
+            "from UserAccountEntity ua where ua.role.name ='USER' and (ua.userDetailEntity.lastName like %:name% or ua.userDetailEntity.firstName like %:name%)")
+    List<UserInforDto> getAllInforUserByName(@Param("name") String name);
+
+    @Query("select new  com.finnal.blogit.dto.response.UserInforDto(ua.id, ua.userDetailEntity.firstName, ua.userDetailEntity.lastName, ua.userDetailEntity.thumbnail, ua.userDetailEntity.id) from UserAccountEntity ua where ua.id =:id")
+    Optional<UserInforDto> findOneUserById(@Param("id") Long id);
+
+    @Query("select new com.finnal.blogit.dto.response.UserInforDto(ua.id, ua.userDetailEntity.firstName, ua.userDetailEntity.lastName, ua.userDetailEntity.thumbnail, ua.userDetailEntity.id) from UserAccountEntity ua where ua.status = 1")
+    List<UserInforDto> getInforAdmin();
 }

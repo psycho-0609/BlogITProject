@@ -1,6 +1,7 @@
 package com.finnal.blogit.service.inter;
 
 import com.finnal.blogit.dto.response.CustomUserAccount;
+import com.finnal.blogit.dto.response.UserInforDto;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.dto.request.RegisterRequest;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
@@ -21,5 +22,11 @@ public interface IUserAccountService {
     List<CustomUserAccount> getAllAccountUser();
     Optional<CustomUserAccount> findOneById(Long id);
     Long accountAllAccountByStatus();
+    boolean existsById(Long id);
+    List<UserAccountEntity> findAccountAdmin();
+    List<UserInforDto> getAllUser();
+    List<UserInforDto> getAllUserByName(String name);
+    Optional<UserInforDto> findUserById(Long id);
+    List<UserInforDto> getInforAdmin();
 
 }

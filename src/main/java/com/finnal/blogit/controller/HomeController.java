@@ -82,9 +82,15 @@ public class HomeController {
     }
 
 
-    @GetMapping("/table")
+    @GetMapping("/chat")
     public String table(){
-        return "adminPage/article/published";
+        return "chatMessage";
     }
+
+    @GetMapping("/chatUser")
+    public String chatUser(){
+        return "chatAdmin";
+    }
+
 
 }

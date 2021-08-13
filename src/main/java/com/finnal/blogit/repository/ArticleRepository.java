@@ -4,6 +4,7 @@ package com.finnal.blogit.repository;
 import com.finnal.blogit.dto.response.ArticleCustomDTO;
 import com.finnal.blogit.dto.response.CustomArticleDTO;
 import com.finnal.blogit.dto.response.ListArticleComment;
+import com.finnal.blogit.dto.response.StatisticAuthor;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
@@ -111,6 +112,9 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
 
     @Query(value = "SELECT count(*) FROM article as a inner join blogit.topic as t on a.topic_id = t.id where a.published = 1 and a.status = 1 and month(a.published_date) = :month and t.id = :topicId", nativeQuery = true)
     Long countAllByTopicAndMonth(@Param("month") Integer month, @Param("topicId") Integer id);
+
+    @Query(value = "select a.user_account_id, count(*) total from article as a where month(a.created_date) between 6 and 8 and a.published = 1 and a.status = 1 group by a.user_account_id",nativeQuery = true)
+    List<StatisticAuthor> getStatisticAuthor();
     
 
 

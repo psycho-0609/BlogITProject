@@ -1,10 +1,7 @@
 package com.finnal.blogit.service.inter;
 
 import com.finnal.blogit.dto.request.ArticleRequest;
-import com.finnal.blogit.dto.response.ArticleCustomDTO;
-import com.finnal.blogit.dto.response.CustomArticleDTO;
-import com.finnal.blogit.dto.response.StatisticCustomDTO;
-import com.finnal.blogit.dto.response.StatisticPieChartCustom;
+import com.finnal.blogit.dto.response.*;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
@@ -39,6 +36,7 @@ public interface IArticleService {
     List<StatisticCustomDTO> getForStatistic();
     List<StatisticPieChartCustom> getStatisticPercent();
     boolean isExistedById(Long id);
+    List<StatisticAuthor> getStatisticAuthor();
 
 
 

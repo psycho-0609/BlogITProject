@@ -3,6 +3,7 @@ package com.finnal.blogit.controller.api.admin;
 import com.finnal.blogit.dto.request.ChangeStatusAccountRequest;
 import com.finnal.blogit.dto.response.CustomUserAccount;
 import com.finnal.blogit.dto.response.MessageDTO;
+import com.finnal.blogit.dto.response.UserInforDto;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
 import com.finnal.blogit.exception.api.APIException;
@@ -55,5 +56,11 @@ public class AccountAPI {
         account.setStatus(AccountStatus.fromValue(request.getStatus()));
         service.save(account);
         return new ResponseEntity<>(new MessageDTO("Your action is successfully"), HttpStatus.OK);
+    }
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<UserInforDto> findOneById(@PathVariable("id") Long id) throws APIException{
+        UserInforDto user = service.findUserById(id).orElseThrow(()-> new ItemNotFoundException("User is not found"));
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

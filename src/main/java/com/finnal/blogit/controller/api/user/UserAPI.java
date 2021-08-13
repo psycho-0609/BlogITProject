@@ -51,7 +51,7 @@ public class UserAPI {
         String thumbnail = detailEntity.getThumbnail();
         detailEntity.setThumbnail(request.getFileName());
         detailEntity = detailService.save(detailEntity);
-        accountDTO.getUserDetail().setThumbnail(detailEntity.getImagePath());
+        accountDTO.getUserDetail().setThumbnail(detailEntity.getThumbnail());
         session.setAttribute(Constant.USER, accountDTO);
         if (thumbnail != null && !Strings.isEmpty(thumbnail)) {
             String deleteDir = Constant.DIR_USER_IMG + detailEntity.getId() + "/" + thumbnail;

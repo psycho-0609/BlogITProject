@@ -2,6 +2,7 @@ package com.finnal.blogit.service.imp;
 
 
 import com.finnal.blogit.dto.response.CustomUserAccount;
+import com.finnal.blogit.dto.response.UserInforDto;
 import com.finnal.blogit.entity.*;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
 import com.finnal.blogit.dto.request.RegisterRequest;
@@ -120,6 +121,36 @@ public class UserAccountService implements IUserAccountService {
     @Override
     public Long accountAllAccountByStatus() {
         return userAccountRepository.countALLByStatus();
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return userAccountRepository.existsById(id);
+    }
+
+    @Override
+    public List<UserAccountEntity> findAccountAdmin() {
+        return userAccountRepository.findAdminAccount();
+    }
+
+    @Override
+    public List<UserInforDto> getAllUser() {
+        return userAccountRepository.getAllInforUser();
+    }
+
+    @Override
+    public List<UserInforDto> getAllUserByName(String name) {
+        return userAccountRepository.getAllInforUserByName(name);
+    }
+
+    @Override
+    public Optional<UserInforDto> findUserById(Long id) {
+        return userAccountRepository.findOneUserById(id);
+    }
+
+    @Override
+    public List<UserInforDto> getInforAdmin() {
+        return userAccountRepository.getInforAdmin();
     }
 
 

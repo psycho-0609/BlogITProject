@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>History</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/userPage.css}">
+    <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <link th:href="@{/css/chat.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+<input type="hidden" id="userId" th:value="${session.user.id}">
+<main class="pt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-12  menu-left" id="menuBox">
+                <ul class="submenu">
+                    <li class="el-submenu-title">
+                        <a type="button" id="btnOpenMenuSm" class="el-link">
+                            <i class="fas fa-pencil-alt"></i>
+                            <span>Posts</span>
+                            <i class="fas fa-angle-down btn-drop"></i>
+                        </a>
+                        <div class="sm-menu-box" id="menuSm">
+                            <ul class="sm-menu">
+                                <li class="el-smmenu-title">
+                                    <a th:href="@{/user/posts/public}" class="el-sm-menu">
+                                        <i class="fas fa-globe-asia"></i>
+                                        Public
+                                    </a>
+                                    <a th:href="@{/user/posts/private}" class="el-sm-menu">
+                                        <i class="fas fa-lock"></i>
+                                        Private
+                                    </a>
+                                    <a th:href="@{/user/posts/unapproved}" class="el-sm-menu">
+                                        <i class="fas fa-hourglass-half"></i>
+                                        Unapproved
+                                    </a>
+                                </li>
+                            </ul>
+
+
+                        </div>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/history/posts}" class="el-link">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/favorite/posts}" class="el-link">
+                            <i class="fas fa-heart"></i>
+                            <span>Favorite</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/readLater/posts}" class="el-link">
+                            <i class="fas fa-clock"></i>
+                            <span>Read Later</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/profile}" class="el-link">
+                            <i class="fas fa-id-card"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="el-submenu-title">
+                        <a th:href="@{/user/changePassword}" class="el-link">
+                            <i class="fas fa-key"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-lg-9 col-md-12 col-sm-12 main-content">
+                <div class="header-content-post">
+                    <button id="btnActiveMenu" type="button" style="outline: none;" class="btn-active-menu"><i
+                            class="fas fa-indent"></i></button>
+                    <h2 class="header-content-title">Contact admin</h2>
+                    <hr class="header-line">
+                </div>
+
+                <div id="historyMainContent">
+                    <div class="chatBox">
+<!--                         -->
+
+                        <div class="chat">
+<!--                            <div class="display-select" id="displaySelect"><p>Select user to chat</p></div>-->
+                            <div class="" id="mainChat">
+                                <div class="chat-header">
+                                    <img alt="avatar" class="avatar" id="imgUser" height="55px" src=""
+                                         width="55px"/>
+
+                                    <div class="char-user" id="nameUser">
+
+                                    </div>
+
+                                </div> <!-- end chat-header -->
+
+                                <div class="chat-history" id="chatHistory">
+                                    <ul id="contentBox">
+
+                                    </ul>
+
+                                </div> <!-- end chat-history -->
+
+                                <div class="chat-message clearfix">
+                                    <form action="" id="formSubmit">
+                                        <div class="form-chat">
+                                            <input type="text" name="content" autocomplete="off"
+                                                   placeholder="Type your message" class="form-control"
+                                                   id="messageContent">
+                                            <!--                                                <textarea id="message-to-send" name="content"-->
+                                            <!--                                                          placeholder="Type your message" class="form-control"-->
+                                            <!--                                                          rows="2"></textarea>-->
+
+                                            <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+                                            <i class="fa fa-file-image-o"></i>
+                                            <button type="submit" id="sendBtn" class="btn-send-mess"><i
+                                                    class="fas fa-paper-plane"></i></button>
+                                        </div>
+                                    </form>
+
+                                </div> <!-- end chat-message -->
+                            </div>
+                        </div> <!-- end chat -->
+
+                    </div> <!-- end container -->
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/menuUserPage.js}"></script>
+<script th:src="@{/js/chatUser.js}"></script>
+</body>
+</html>
