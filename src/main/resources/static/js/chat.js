@@ -2,7 +2,7 @@ $(document).ready(function (){
     let stompClient;
     let newMessages = new Map();
     let toId;
-    const url = 'http://localhost:8081';
+    const url = window.location.origin;
     // user id
     let sendFromId = $("#userId").val();
     function connectToChat(id){

@@ -1,6 +1,6 @@
 $(document).ready(function (){
     let stompClient;
-    const url = 'http://localhost:8081';
+    const url = window.location.origin;
     let userId =$("#userId").val();
     function connectToChat(){
         console.log("connect to chat")
