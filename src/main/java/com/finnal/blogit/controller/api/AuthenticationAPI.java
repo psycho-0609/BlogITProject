@@ -8,6 +8,7 @@ import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.dto.request.LoginRequest;
 import com.finnal.blogit.dto.request.RegisterRequest;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
+import com.finnal.blogit.service.inter.IEmailService;
 import com.finnal.blogit.service.inter.IUserAccountService;
 import com.finnal.blogit.untils.EmailUntil;
 import com.finnal.blogit.untils.Utility;
@@ -46,8 +47,11 @@ public class AuthenticationAPI {
     @Autowired
     private EmailUntil emailUntil;
 
+    @Autowired
+    private IEmailService emailService;
+
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest){
+    public String login(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
@@ -61,21 +65,14 @@ public class AuthenticationAPI {
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request, HttpServletRequest servletRequest) throws APIException, UnsupportedEncodingException, MessagingException {
         Optional<UserAccountEntity> userAccountEntity = userAccountService.findByUsername(request.getEmail());
-        StringBuilder message = new StringBuilder();
-        if(userAccountEntity.isPresent()){
+        if (userAccountEntity.isPresent()) {
             throw new ItemExitedException("Email is existed");
         }
-        if(!request.getConfirmPass().equals(request.getPassword())){
+        if (!request.getConfirmPass().equals(request.getPassword())) {
             throw new ItemCannotEmptyException("Confirm password not match");
         }
         UserAccountEntity userAccount = userAccountService.registryAccount(request);
-        String link = Utility.getSiteURL(servletRequest) +"/confirmAccount?token=" + userAccount.getToken();
-        String subject = "Confirm Account";
-        message.append("<h3>Hello</h3>");
-        message.append("<p>You are receiving this email because we received a creation account request.</p>");
-        message.append("<p>Follow this link to confirm your account");
-        message.append(" <a href='"+link+"'>link to confirm account</a></p>");
-        emailUntil.sendEmailNotification(userAccount.getEmail(),subject,message.toString());
+        emailService.confirmAccount(servletRequest, userAccount);
         return new ResponseEntity<>(new RegisterResponse(userAccount.getEmail()), HttpStatus.OK);
     }
 
@@ -83,77 +80,70 @@ public class AuthenticationAPI {
     public ResponseEntity<MessageDTO> resetPassword(@RequestBody ResetPasswordRequest request, HttpServletRequest servletRequest) throws APIException, UnsupportedEncodingException, MessagingException {
         Optional<UserAccountEntity> accountEntityOp = userAccountService.findByEmailAndStatus(request.getEmail(), AccountStatus.ENABLE);
         String token = RandomString.make(45);
-        String link = Utility.getSiteURL(servletRequest) +"/resetPassword?token=" + token;
-        StringBuilder message = new StringBuilder();
-        String subject = "Reset Password";
-        if(!accountEntityOp.isPresent()){
+        if (!accountEntityOp.isPresent()) {
             throw new ItemNotFoundException("Email invalid");
         }
         UserAccountEntity userAccountEntity = accountEntityOp.get();
-        message.append("<h3>Hello</h3>");
-        message.append("<p>You are receiving this email because we received a password reset request for your account.</p>");
-        message.append("<p>Follow this link to reset your account");
-        message.append(" <a href='"+link+"'>link to reset password</a></p>");
-        userAccountService.updateResetToken(userAccountEntity,token);
-        emailUntil.sendEmailNotification(request.getEmail(),subject,message.toString());
-        return new ResponseEntity<>(new MessageDTO("Send success"),HttpStatus.OK);
+        userAccountService.updateResetToken(userAccountEntity, token);
+        emailService.resetPassword(servletRequest, userAccountEntity, token);
+        return new ResponseEntity<>(new MessageDTO("Send success"), HttpStatus.OK);
     }
 
     @PutMapping("/resetPassword")
-    public ResponseEntity<MessageDTO> updatePassword(@RequestBody ResetPasswordRequest request) throws APIException{
+    public ResponseEntity<MessageDTO> updatePassword(@RequestBody ResetPasswordRequest request) throws APIException {
         Optional<UserAccountEntity> accountEntity = userAccountService.findById(request.getId());
         UserAccountEntity entity;
-        if(!accountEntity.isPresent()){
+        if (!accountEntity.isPresent()) {
             throw new ItemCanNotModifyException("Cannot change password now. Please try later.");
         }
-        if(!request.getNewPassword().equals(request.getConfirmPassword())){
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
             throw new ItemCannotEmptyException("Confirm password not match.");
         }
-        if(request.getToken()==null || Strings.isEmpty(request.getToken())){
+        if (request.getToken() == null || Strings.isEmpty(request.getToken())) {
             throw new ItemCanNotModifyException("Cannot change password now. Please try again.");
         }
-        if(!request.getNewPassword().equals(request.getConfirmPassword())){
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
             throw new ItemCannotEmptyException("Confirm password is not match.");
         }
         entity = accountEntity.get();
-        if(!entity.getToken().equals(request.getToken())){
+        if (!entity.getToken().equals(request.getToken())) {
             throw new ItemCanNotModifyException("Cannot change password now. Please try again.");
         }
         entity.setPassword(encoder.encode(request.getNewPassword()));
         entity.setToken(null);
         userAccountService.save(entity);
-        return new ResponseEntity<>(new MessageDTO("Reset Successfully"),HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Reset Successfully"), HttpStatus.OK);
     }
 
     @PutMapping("/changePassword")
-    public ResponseEntity<MessageDTO> changePassword(@RequestBody ChangePasswordRequest request) throws APIException{
+    public ResponseEntity<MessageDTO> changePassword(@RequestBody ChangePasswordRequest request) throws APIException {
         CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if(userDetail == null){
+        if (userDetail == null) {
             throw new ItemNotFoundException("User not found");
         }
         Optional<UserAccountEntity> accountEntity = userAccountService.findById(userDetail.getId());
         UserAccountEntity entity;
-        if(!accountEntity.isPresent()){
+        if (!accountEntity.isPresent()) {
             throw new ItemNotFoundException("Not Found User");
         }
-        if(request.getCurrentPassword() == null || Strings.isEmpty(request.getCurrentPassword())){
+        if (request.getCurrentPassword() == null || Strings.isEmpty(request.getCurrentPassword())) {
             throw new ItemCannotEmptyException("Please input complete information");
         }
-        if(request.getNewPassword() == null || Strings.isEmpty(request.getNewPassword())){
+        if (request.getNewPassword() == null || Strings.isEmpty(request.getNewPassword())) {
             throw new ItemCannotEmptyException("Please input complete information");
         }
-        if(request.getConfirmPassword() == null || Strings.isEmpty(request.getConfirmPassword())){
+        if (request.getConfirmPassword() == null || Strings.isEmpty(request.getConfirmPassword())) {
             throw new ItemCannotEmptyException("Please input complete information");
         }
-        if(!request.getConfirmPassword().equals(request.getNewPassword())){
+        if (!request.getConfirmPassword().equals(request.getNewPassword())) {
             throw new ItemCannotEmptyException("Confirm password not match");
         }
         entity = accountEntity.get();
-        if(!encoder.matches(request.getCurrentPassword(),entity.getPassword())){
+        if (!encoder.matches(request.getCurrentPassword(), entity.getPassword())) {
             throw new ItemCannotEmptyException("Current password not correct");
         }
         entity.setPassword(encoder.encode(request.getNewPassword()));
         userAccountService.save(entity);
-        return new ResponseEntity<>(new MessageDTO("Update success"),HttpStatus.OK);
+        return new ResponseEntity<>(new MessageDTO("Update success"), HttpStatus.OK);
     }
 }

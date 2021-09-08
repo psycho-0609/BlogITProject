@@ -36,14 +36,8 @@ public class HomeController {
 
     @GetMapping({"/home","/"})
     public String home(Model model){
-        List<CustomArticleDTO> articleNews = articleService.findByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
-        if(articleNews.size() > 4){
-            articleNews = articleNews.stream().limit(4L).collect(Collectors.toList());
-        }
-        List<ArticleEntity> articlePopular = articleService.getForPopular();
-        if(articlePopular.size() > 4){
-            articlePopular = articlePopular.stream().limit(4L).collect(Collectors.toList());
-        }
+        List<ArticleEntity> articleNews = articleService.findAllOrderNewsLimit();
+        List<ArticleEntity> articlePopular = articleService.findAllOrderPopularLimit();
         List<ArticleEntity> articleFav = articleService.getAllOderByFavCount(ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
         if(articleFav.size() > 4){
             articleFav = articleFav.stream().limit(4).collect(Collectors.toList());

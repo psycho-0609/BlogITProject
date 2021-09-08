@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IHistoryArticleService {
-    void insert(Long hisId,Long articleId);
+    void insert(Long accountId,Long articleId);
     void delete(Long id);
     void deleteAll();
-    Long countAllByHistoryId(Long id);
+    Long countAllByAccountId(Long id);
     Optional<HistoryArticleEntity> findById(Long id);
     List<GetHistoryFlowDate> getHistoryArticleFlowDate(Long id);
     List<GetHistoryFlowDate> getAllForSearch(Long id, String title);

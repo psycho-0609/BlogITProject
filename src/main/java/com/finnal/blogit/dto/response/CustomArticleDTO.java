@@ -1,5 +1,6 @@
 package com.finnal.blogit.dto.response;
 
+import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.entity.enumtype.ArticleNew;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
@@ -83,6 +84,6 @@ public class CustomArticleDTO {
 
     public String getImagePath() {
         if(imagePath == null|| id == null) return "/img/logo.png";
-        return "/imgBackArticle/" + id + "/" + imagePath;
+        return Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/fileArticle/" + id +"/" + imagePath;
     }
 }

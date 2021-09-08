@@ -30,19 +30,11 @@ $(document).ready(function () {
     }
 
     $("#btnApply").click(function () {
-        let data = {};
-        data["base64"] = "";
-        data["fileName"] = "";
         let file = $("#file")[0].files[0];
         if (file !== undefined) {
-            $("#imageEmptyMess").text("");
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                data["base64"] = e.target.result;
-                data["fileName"] = file.name;
-                updateImage(data)
-            };
-            reader.readAsDataURL(file);
+            let formData = new FormData();
+            formData.append("file",file);
+            updateImage(formData)
         } else {
             $("#imageEmptyMess").text("Please select image");
         }
@@ -54,8 +46,9 @@ $(document).ready(function () {
         $.ajax({
             url: "/api/user/image",
             type: "put",
-            contentType: "application/json",
-            data: JSON.stringify(data),
+            contentType: false,
+            processData:false,
+            data: data,
             dataType: 'json'
         }).done(function () {
             $("#processing").removeClass("active");

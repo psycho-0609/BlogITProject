@@ -24,4 +24,5 @@ public class FavoriteEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private UserAccountEntity userAccount;
+
 }

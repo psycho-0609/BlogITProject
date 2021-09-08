@@ -54,8 +54,8 @@
                     </li>
                     <li class="el-submenu-title">
                         <a th:href="@{/user/readLater/posts}" class="el-link">
-                            <i class="fas fa-clock"></i>
-                            <span>Read Later</span>
+                            <i class="fas fa-bookmark"></i>
+                            <span>My Bookmark</span>
                         </a>
                     </li>
                     <li class="el-submenu-title">
@@ -94,8 +94,8 @@
                     <div th:if="${articles.size() > 0}" th:each="article:${articles}"  class="card card-content mb-0">
                         <div class="card-body p-0 card-original">
                             <p class="card-original-cate" style="color: red">[[${article.topic.name}]]</p>
-                            <h5 class="card-title card-original-title"><a th:href="@{'/posts/'+ ${article.id}}">[[${article.title}]]</a></h5>
-
+                            <h5 th:if="${article.published == 2 || article.status == 2}" class="card-title card-original-title"><a th:href="@{'/user/posts/'+ ${article.id}}">[[${article.title}]]</a></h5>
+                            <h5 th:if="${article.published == 1 && article.status == 1}" class="card-title card-original-title"><a th:href="@{'/posts/'+ ${article.id}}">[[${article.title}]]</a></h5>
                             <div th:if="${article.published == 1}" class="card-original-author card-edit">
                                 <span style="padding-top: .5rem"><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
                             </div>

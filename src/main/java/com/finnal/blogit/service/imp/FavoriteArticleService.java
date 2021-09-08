@@ -2,6 +2,7 @@ package com.finnal.blogit.service.imp;
 
 import com.finnal.blogit.dto.response.GetFavArticle;
 import com.finnal.blogit.entity.FavoriteArticleEntity;
+import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.repository.ArticleRepository;
 import com.finnal.blogit.repository.FavoriteRepository;
 import com.finnal.blogit.repository.FavouriteArticleRepository;
@@ -27,16 +28,16 @@ public class FavoriteArticleService implements IFavoriteArticleService {
     private FavouriteArticleRepository favouriteArticleRepository;
 
     @Override
-    public FavoriteArticleEntity create(Long favId, Long articleId) {
+    public FavoriteArticleEntity create(Long accountId, Long articleId) {
         FavoriteArticleEntity entity = new FavoriteArticleEntity();
-        entity.setFavoriteEntity(favoriteRepository.findById(favId).get());
+        entity.setAccount(new UserAccountEntity(accountId));
         entity.setArticleEntity(articleRepository.findById(articleId).get());
         return favouriteArticleRepository.save(entity);
     }
 
     @Override
-    public Optional<FavoriteArticleEntity> findByFavIdAndArticleId(Long favId, Long articleId) {
-        return favouriteArticleRepository.findByFavoriteEntity_IdAndArticleEntity_Id(favId,articleId);
+    public Optional<FavoriteArticleEntity> findByAccountIdAndArticleId(Long favId, Long articleId) {
+        return favouriteArticleRepository.findByAccount_IdAndArticleEntity_Id(favId,articleId);
     }
 
     @Override

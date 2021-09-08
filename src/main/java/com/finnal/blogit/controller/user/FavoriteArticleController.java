@@ -30,9 +30,9 @@ public class FavoriteArticleController {
             throw new WebException();
         }
         if(title != null && !Strings.isEmpty(title)){
-            model.addAttribute("favorites",favoriteArticleService.findForSearch(userDetail.getFavoriteId(), title));
+            model.addAttribute("favorites",favoriteArticleService.findForSearch(userDetail.getId(), title));
         }else{
-            model.addAttribute("favorites",favoriteArticleService.getByFavId(userDetail.getFavoriteId()));
+            model.addAttribute("favorites",favoriteArticleService.getByFavId(userDetail.getId()));
         }
         model.addAttribute("topics",topicService.findAll());
         return "user/favArticles";

@@ -1,7 +1,7 @@
 package com.finnal.blogit.service.imp;
 
-import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.dto.response.*;
+import com.finnal.blogit.entity.TopicEntity;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.dto.request.ArticleRequest;
 import com.finnal.blogit.entity.ArticleEntity;
@@ -12,10 +12,12 @@ import com.finnal.blogit.repository.ArticleRepository;
 import com.finnal.blogit.repository.TopicRepository;
 import com.finnal.blogit.repository.UserAccountRepository;
 import com.finnal.blogit.service.inter.IArticleService;
+import com.finnal.blogit.service.inter.UploadFileService;
 import com.finnal.blogit.untils.UploadFileUtils;
 import com.finnal.blogit.user.UserInfor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,10 @@ public class ArticleService implements IArticleService {
 
     @Autowired
     private UserAccountRepository accountRepository;
+
+    @Autowired
+    @Qualifier("uploadFileArticle")
+    private UploadFileService uploadFileService;
 
     @Autowired
     private TopicRepository topicRepository;
@@ -76,31 +82,32 @@ public class ArticleService implements IArticleService {
 
     @Override
     @Transactional
-    public ArticleEntity insertArticle(ArticleRequest articleEntity) {
+    public ArticleEntity insertArticle(ArticleRequest request) throws IOException {
         ArticleEntity entity = new ArticleEntity();
-        entity.setContent(articleEntity.getContent());
-        entity.setTitle(articleEntity.getTitle());
-        entity.setImage(articleEntity.getFile());
+        entity.setContent(request.getContent());
+        entity.setTitle(request.getTitle());
+        if (request.getImage() != null && !request.getImage().getOriginalFilename().equals("")) {
+            entity.setImage(request.getImage().getOriginalFilename());
+        }
+        if (request.getVideo() != null && !request.getVideo().getOriginalFilename().equals("")) {
+            entity.setVideoFile(request.getVideo().getOriginalFilename());
+        }
         entity.setNews(ArticleNew.ENABLE);
-        entity.setStatus(ArticleStatus.fromValue(articleEntity.getStatus()));
+        entity.setStatus(ArticleStatus.fromValue(request.getStatus()));
         entity.setPublished(ArticlePublished.DISABLE);
         entity.setCountView(0L);
-        entity.setShortDescription(articleEntity.getShortDescription());
-        entity.setTopic(topicRepository.findById(articleEntity.getTopicId()).get());
+        entity.setShortDescription(request.getShortDescription());
+        entity.setTopic(new TopicEntity(request.getTopicId()));
         entity.setCreatedDate(LocalDateTime.now());
         entity.setModifiedDate(LocalDateTime.now());
         UserAccountEntity userAccountEntity = accountRepository.findByEmail(UserInfor.getPrincipal().getUsername()).get();
         entity.setUserAccount(userAccountEntity);
         ArticleEntity articleSaved = articleRepository.save(entity);
-        if (articleEntity.getBase64() != null && articleEntity.getFile() != null) {
-            if (!articleEntity.getFile().equals("") && !articleEntity.getBase64().equals("")) {
-                byte[] decodeBase64 = Base64.getDecoder().decode(articleEntity.getBase64().getBytes());
-                try {
-                    fileUtils.writeOrUpdate(articleSaved.getId(), decodeBase64, articleSaved.getImage(), Constant.DIR_IMG_BACK_ARTICLE);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        if (request.getImage() != null && !Strings.isEmpty(request.getImage().getOriginalFilename())) {
+            uploadFileService.save(entity.getId(), request.getImage());
+        }
+        if (request.getVideo() != null && !Strings.isEmpty(request.getVideo().getOriginalFilename())) {
+            uploadFileService.save(entity.getId(), request.getVideo());
         }
         return articleSaved;
     }
@@ -116,32 +123,40 @@ public class ArticleService implements IArticleService {
 
     @Override
     @Transactional
-    public ArticleEntity update(ArticleRequest articleRequest) {
+    public ArticleEntity update(ArticleRequest request) {
         String img;
-        ArticleEntity currentEntity = articleRepository.findById(articleRequest.getId()).get();
+        String video;
+        ArticleEntity currentEntity = articleRepository.findById(request.getId()).get();
         img = currentEntity.getImage();
-        currentEntity.setTitle(articleRequest.getTitle());
-        currentEntity.setContent(articleRequest.getContent());
-        currentEntity.setShortDescription(articleRequest.getShortDescription());
-        currentEntity.setTopic(topicRepository.findById(articleRequest.getTopicId()).get());
-        currentEntity.setStatus(ArticleStatus.fromValue(articleRequest.getStatus()));
+        video = currentEntity.getVideoFile();
+        currentEntity.setTitle(request.getTitle());
+        currentEntity.setContent(request.getContent());
+        currentEntity.setShortDescription(request.getShortDescription());
+        currentEntity.setTopic(new TopicEntity(request.getTopicId()));
+        currentEntity.setStatus(ArticleStatus.fromValue(request.getStatus()));
         currentEntity.setModifiedDate(LocalDateTime.now());
-        if (articleRequest.getBase64() != null && articleRequest.getFile() != null) {
-            if (!articleRequest.getFile().equals("") && !articleRequest.getBase64().equals("")) {
-                currentEntity.setImage(articleRequest.getFile());
-                byte[] decodeBase64 = Base64.getDecoder().decode(articleRequest.getBase64().getBytes());
-                try {
-                    fileUtils.writeOrUpdate(currentEntity.getId(), decodeBase64, articleRequest.getFile(), Constant.DIR_IMG_BACK_ARTICLE);
-                    if (img != null && Strings.isEmpty(img)) {
-                        String deleteDir = Constant.DIR_IMG_BACK_ARTICLE + currentEntity.getId() + "/" + img;
-                        fileUtils.deleteFile(deleteDir);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (request.getVideo() != null && !request.getVideo().getOriginalFilename().equals("")) {
+            currentEntity.setVideoFile(request.getVideo().getOriginalFilename());
+            try {
+                uploadFileService.save(currentEntity.getId(), request.getVideo());
+                if (video != null && !Strings.isEmpty(video)) {
+                    uploadFileService.delete(currentEntity.getId(), video);
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-
+        if (request.getImage() != null && !request.getImage().getOriginalFilename().equals("")) {
+            currentEntity.setImage(request.getImage().getOriginalFilename());
+            try {
+                uploadFileService.save(currentEntity.getId(), request.getImage());
+                if (img != null && !Strings.isEmpty(img)) {
+                    uploadFileService.delete(currentEntity.getId(), img);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         return articleRepository.save(currentEntity);
     }
 
@@ -152,9 +167,9 @@ public class ArticleService implements IArticleService {
 
     @Override
     @Transactional
-    public void deleteArticle(Long id) {
+    public void deleteArticle(Long id) throws IOException {
         articleRepository.deleteById(id);
-        fileUtils.deleteFile(Constant.DIR_IMG_BACK_ARTICLE + id);
+        uploadFileService.deleteAllById(id);
     }
 
 
@@ -206,7 +221,7 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    public List<ArticleEntity> getForPopular() {
+    public List<CustomArticleDTO> getForPopular() {
         return articleRepository.findForPopular();
     }
 
@@ -243,12 +258,13 @@ public class ArticleService implements IArticleService {
     @Override
     public List<StatisticCustomDTO> getForStatistic() {
         Integer currentMonth = LocalDateTime.now().getMonthValue();
-        List<Integer> listMonth = getListMonth(currentMonth);
+        Integer currentYear = LocalDateTime.now().getYear();
+        Map<Integer, Integer> mapMonth = getListMonth(currentMonth, currentYear);
         List<StatisticCustomDTO> statistics = new ArrayList<>();
-        for (Integer month : listMonth) {
+        for (Map.Entry<Integer, Integer> entry : mapMonth.entrySet()) {
             StatisticCustomDTO statistic = new StatisticCustomDTO();
-            statistic.setMonth(LIST_MONTH[month - 1].substring(0, 3));
-            statistic.setAmount(articleRepository.countByMonth(month));
+            statistic.setMonth(LIST_MONTH[entry.getKey() - 1].substring(0, 3));
+            statistic.setAmount(articleRepository.countByMonth(entry.getKey(), entry.getValue()));
             statistics.add(statistic);
         }
         return statistics;
@@ -259,12 +275,13 @@ public class ArticleService implements IArticleService {
         List<CustomTopicDTO> topics = topicRepository.getAll();
         List<StatisticPieChartCustom> list = new ArrayList<>();
         int month = LocalDateTime.now().getMonthValue();
-        Long totalArticle = articleRepository.countByMonth(month);
+        Integer year = LocalDateTime.now().getYear();
+        Long totalArticle = articleRepository.countByMonth(month, year);
         String rgb;
         for (CustomTopicDTO topic : topics) {
             rgb = "rgb(" + randomRGB() + ", " + randomRGB() + ", " + randomRGB() + ")";
             StatisticPieChartCustom statistic = new StatisticPieChartCustom();
-            statistic.setPercent(Float.valueOf(articleRepository.countAllByTopicAndMonth(month, topic.getId())) / totalArticle * 100);
+            statistic.setPercent(Float.valueOf(articleRepository.countAllByTopicAndMonth(month, year, topic.getId())) / totalArticle * 100);
             statistic.setTopic(topic);
             statistic.setColor(rgb);
             list.add(statistic);
@@ -282,22 +299,51 @@ public class ArticleService implements IArticleService {
         return articleRepository.getStatisticAuthor();
     }
 
-    private List<Integer> getListMonth(Integer currentMonth) {
-        List<Integer> list = new ArrayList<>();
+    @Override
+    public List<ArticleEntity> findAllByTopicIdForRelease(Integer topicId, Long articleId) {
+        return articleRepository.findAllByTopicIdForRelease(topicId, articleId);
+    }
+
+    @Override
+    public List<ArticleEntity> findAllOrderNewsLimit() {
+        return articleRepository.findAllOrderNewsLimit();
+    }
+
+    @Override
+    public List<ArticleEntity> findAllOrderPopularLimit() {
+        return articleRepository.findAllOrderPopularLimit();
+    }
+
+    @Override
+    public List<CustomArticleDTO> getListNewestPost() {
+        return articleRepository.getListNewestPost();
+    }
+
+    @Override
+    public List<CustomArticleDTO> getListFavoritePost() {
+        return articleRepository.getListFavPost();
+    }
+
+    private Map<Integer, Integer> getListMonth(Integer currentMonth, Integer currentYear) {
+        Map<Integer, Integer> mapMonth = new HashMap<>();
         for (int i = 6; i > 0; i--) {
             if (currentMonth - i >= 0) {
-                list.add(currentMonth - i + 1);
+                mapMonth.put(currentMonth - i + 1, currentYear);
             } else {
-                list.add(currentMonth - i + 12 + 1);
+                mapMonth.put(currentMonth - i + 12 + 1, currentYear - 1);
             }
         }
-        return list;
+        return mapMonth;
     }
 
     private Integer randomRGB() {
         Random random = new Random();
         return random.nextInt((255) + 1);
     }
+
+//    private String getPath(Long id, String name){
+//        return Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/fileArticle/" + id + "/" + name;
+//    }
 
 
 }

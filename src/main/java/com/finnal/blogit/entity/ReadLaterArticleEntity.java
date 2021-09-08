@@ -21,6 +21,10 @@ public class ReadLaterArticleEntity {
     private ReadLaterEntity readLaterEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private UserAccountEntity account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private ArticleEntity articleEntity;
 

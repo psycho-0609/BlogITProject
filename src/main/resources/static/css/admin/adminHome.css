@@ -11309,3 +11309,29 @@ body.sidebar-toggled footer.sticky-footer {
   display:none;
   z-index: 2000;
 }
+
+#notificationCenter{
+  max-height: 16rem;
+  overflow: auto;
+}
+.notification-header-box{
+  align-items: center;
+  padding: .5rem;
+  justify-content: space-between;
+  background-color: #4e73df;
+  border: 1px solid #4e73df;
+  color: #fff;
+  display: flex;
+}
+.notification-header-box h6{
+  font-weight: bold;
+  font-size: .9rem;
+  margin: 0;
+}
+.notification-header-box button{
+  background: no-repeat;
+  font-size: .7rem;
+  color: white;
+  border: none;
+  outline: none;
+}

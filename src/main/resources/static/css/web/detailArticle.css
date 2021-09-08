@@ -112,3 +112,74 @@
     background: none;
     border: none;
 }
+
+
+.btn-group-left{
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    top: 140px;
+    align-items: center;
+    margin-top: 4.9rem;
+
+}
+.btn-group-left button{
+    border: 1px solid rgb(197, 197, 197);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: none;
+    margin-bottom: 1rem;
+    color: gray;
+}
+.btn-group-left button i{
+    font-size: 1.2rem;
+
+}
+.btn-group-box{
+    margin-right: 2rem;
+}
+@media (max-width:998px) {
+    .btn-group-box{
+        border-top:1px solid rgb(193, 193, 193) ;
+        padding: .5rem 0;
+        background: white;
+        z-index: 1000;
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-right:0;
+
+    }
+    .btn-group-left{
+
+        margin: auto;
+        width: 50%;
+        justify-content: space-between;
+        flex-direction: row;
+    }
+    .btn-group-left button{
+        margin-bottom: 0;
+    }
+}
+.rep-to-user{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(216 216 216);
+    border-radius: 3px;
+    padding: .2rem 0 .2rem .2rem;
+    margin-bottom: .5rem;
+}
+.rep-to-user p{
+    margin: 0;
+    font-size: .8rem;
+}
+.btn-cancel-rep-user{
+    background: none;
+    border: none;
+    cursor: pointer;
+}

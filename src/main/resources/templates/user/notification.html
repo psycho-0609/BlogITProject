@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Notification</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/userPage.css}">
+    <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+    <link rel="stylesheet" th:href="@{/css/web/notificationDetail.css}">
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+
+<main class="">
+    <div class="notification-main">
+        <div class="notification-container">
+            <div class="header-notification">
+                <h4>Notification</h4>
+                <div class="dropdown dropleft">
+                    <button class="btn-action" style="outline: none;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" type="button" id="markAsRead">Mark as read all</a>
+                        <a class="dropdown-item" type="button" id="deleteAll">Delete All</a>
+                    </div>
+                </div>
+            </div>
+            <div class="notification-box" id="notificationBox">
+                <div class="notification-item">
+                    <a href="" class="notification-detail">
+                        <div class="mr-3">
+                            <div class="icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                        </div>
+                        <div class="notify-infor">
+                            <div class="date"></div>
+                            <div>
+                                <p><b>Anh Tran</b> have submitted an post</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div>
+                        <button class="btn-action btn-delete-notification"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/menuUserPage.js}"></script>
+<script th:src="@{/js/web/user/notificationUserPage.js}"></script>
+</body>
+</html>

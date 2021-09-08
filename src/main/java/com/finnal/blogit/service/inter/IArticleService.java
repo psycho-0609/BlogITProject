@@ -6,17 +6,18 @@ import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public interface IArticleService {
     List<ArticleEntity> findAll();
     List<CustomArticleDTO> findAllApi();
-    ArticleEntity insertArticle(ArticleRequest articleEntity);
+    ArticleEntity insertArticle(ArticleRequest articleEntity) throws IOException;
     ArticleEntity findOne(Long id);
     ArticleEntity update(ArticleRequest articleRequest);
     Optional<ArticleEntity> findById(Long id);
-    void deleteArticle(Long id);
+    void deleteArticle(Long id) throws IOException;
     void plusCountView(ArticleEntity articleEntity);
     ArticleEntity save(ArticleEntity articleEntity);
     List<CustomArticleDTO> findAllByPublishedStatusAndAccount(ArticlePublished published, Long id, ArticleStatus status);
@@ -26,7 +27,7 @@ public interface IArticleService {
     List<CustomArticleDTO> findAllByTopicId(Integer id);
     Long totalCountView(List<Long> ids);
     List<ArticleEntity> findByPrioritize();
-    List<ArticleEntity> getForPopular();
+    List<CustomArticleDTO> getForPopular();
     List<CustomArticleDTO> findByStatus(ArticleStatus status);
     Optional<ArticleCustomDTO> getById(Long id);
     Optional<ArticleEntity> findByPrioritize(Integer number);
@@ -37,6 +38,12 @@ public interface IArticleService {
     List<StatisticPieChartCustom> getStatisticPercent();
     boolean isExistedById(Long id);
     List<StatisticAuthor> getStatisticAuthor();
+    List<ArticleEntity> findAllByTopicIdForRelease(Integer topicId, Long articleId);
+    List<ArticleEntity> findAllOrderNewsLimit();
+    List<ArticleEntity> findAllOrderPopularLimit();
+
+    List<CustomArticleDTO> getListNewestPost();
+    List<CustomArticleDTO> getListFavoritePost();
 
 
 

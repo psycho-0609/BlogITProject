@@ -32,11 +32,11 @@ $(document).ready(function (){
         let data={
             articleId:articleId
         }
-        saveReadLater(data);
+        saveBookMark(data);
     })
 
-    function saveReadLater(data){
-        $("#processing").addClass("active");
+    function saveBookMark(data){
+        // $("#processing").addClass("active");
         $.ajax({
             url:"/api/user/readLater/create",
             method:"post",
@@ -45,10 +45,34 @@ $(document).ready(function (){
             dataType: 'json'
         }).done(function (res){
             $("#processing").removeClass("active");
-            success(" Saved to Read Later");
+            // success(" Saved Bookmark Success");
+            $(".book-mark").css("color","#ffffff")
+            $(".book-mark").css("background","#5488c7")
+            $(".book-mark").attr("id",res.id);
+            $("#bookMarkCount").html("<i class=\"fas fa-bookmark\"></i>" +res.totalBookMark);
         }).fail(function (res){
             $("#processing").removeClass("active");
             error(" " +res.responseJSON.message);
+        })
+    }
+
+    function deleteBookMark(id) {
+        // $("#processing").addClass("active");
+        $.ajax({
+            url: "/api/user/readLater/delete/" + id,
+            method: "delete",
+            dataType: 'json'
+        }).done(function (res) {
+            $(".book-mark").css("color","gray")
+            $(".book-mark").css("background","none")
+            $(".book-mark").attr("id",0);
+            $("#processing").removeClass("active");
+            // success(" Delete successfully");
+            $("#bookMarkCount").html("<i class=\"fas fa-bookmark\"></i>" +res.totalBookMark);
+        }).fail(function (res) {
+            $("#processing").removeClass("active");
+
+            // error(" " + res.responseJSON.message);
         })
     }
 
@@ -64,8 +88,19 @@ $(document).ready(function (){
         }
     })
 
+    $(".book-mark").click(function (){
+        let data={
+            articleId:articleId
+        }
+        let id = parseInt($(this).attr("id"));
+        if(id !== 0){
+            deleteBookMark(id);
+        }else if(id === 0){
+            saveBookMark(data);
+        }
+    })
     function crateFav(data){
-        $("#processing").addClass("active");
+        // $("#processing").addClass("active");
         $.ajax({
             url:"/api/user/favorite/create",
             method:"post",
@@ -74,9 +109,10 @@ $(document).ready(function (){
             dataType: 'json'
         }).done(function (res){
             $("#processing").removeClass("active");
-            $(".btn-favorite").css("color","deeppink")
+            $(".btn-favorite").css("color","#ffffff")
+            $(".btn-favorite").css("background","deeppink")
             $(".btn-favorite").attr("id",res.id);
-            $("#favCount").text(res.countFav);
+            $("#favCount").html("<i class=\"fas fa-heart\"></i>"+res.countFav);
         }).fail(function(){
             $("#processing").removeClass("active");
             console.log("fail")
@@ -84,7 +120,7 @@ $(document).ready(function (){
     }
 
     function deleteFav(data){
-        $("#processing").addClass("active");
+        // $("#processing").addClass("active");
         $.ajax({
             url:"/api/user/favorite/delete/"+data,
             method:"delete",
@@ -92,8 +128,9 @@ $(document).ready(function (){
         }).done(function (res){
             $("#processing").removeClass("active");
             $(".btn-favorite").css("color","gray")
+            $(".btn-favorite").css("background","none")
             $(".btn-favorite").attr("id",0);
-            $("#favCount").text(res.countFav);
+            $("#favCount").html("<i class=\"fas fa-heart\"></i>"+res.countFav);
         }).fail(function(){
             $("#processing").removeClass("active");
             console.log("fail")

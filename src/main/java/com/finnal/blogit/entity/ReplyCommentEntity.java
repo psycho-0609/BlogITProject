@@ -25,4 +25,8 @@ public class ReplyCommentEntity {
     @ManyToOne
     @JoinColumn(name = "account_id")
     private UserAccountEntity account;
+
+    @OneToOne
+    @JoinColumn(name = "rep_account_id")
+    private UserAccountEntity repAccount;
 }

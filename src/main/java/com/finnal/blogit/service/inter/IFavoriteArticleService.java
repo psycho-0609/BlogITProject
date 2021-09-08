@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface IFavoriteArticleService {
 
-    FavoriteArticleEntity create(Long favId, Long articleId);
+    FavoriteArticleEntity create(Long accountId, Long articleId);
 
-    Optional<FavoriteArticleEntity> findByFavIdAndArticleId(Long favId, Long articleId);
+    Optional<FavoriteArticleEntity> findByAccountIdAndArticleId(Long accountId, Long articleId);
     Optional<FavoriteArticleEntity> findById(Long id);
     Long countByArticleId(Long id);
     void deleteById(Long id);

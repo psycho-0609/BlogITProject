@@ -1,5 +1,6 @@
 package com.finnal.blogit.service.imp;
 
+import com.finnal.blogit.dto.response.ReplyCommentDTO;
 import com.finnal.blogit.entity.ReplyCommentEntity;
 import com.finnal.blogit.repository.ReplyCommentRepository;
 import com.finnal.blogit.service.inter.IReplyCommentService;
@@ -22,6 +23,11 @@ public class ReplyCommentService implements IReplyCommentService {
     @Override
     public Optional<ReplyCommentEntity> findById(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    public Optional<ReplyCommentDTO> findOneById(Long id) {
+        return repository.getOneById(id);
     }
 
     @Override

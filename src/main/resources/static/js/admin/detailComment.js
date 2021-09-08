@@ -1,6 +1,6 @@
 $(document).ready(function (){
     let fail = "<i class=\"fas fa-times\"></i> ";
-    let messSuccess = "<i class=\"fas fa-check\"></i>";
+    let messSuccess = "<i class=\"fas fa-check\"></i> ";
     let errorTimeout;
     let successTimeOut;
     function clearTime() {
@@ -157,7 +157,13 @@ $(document).ready(function (){
     }
 
     function writeReply(el){
-        let res = " <div style=\"padding-left: 3.5rem\" class=\"reply-comment wrap-comment\"\n" +
+        let content = "";
+        if (el.replyAccount != null) {
+            content = "<p class='mb-1 reply-content'><a href='/author/" + el.replyAccount.id + "'>"+el.replyAccount.firstName +" " + el.replyAccount.lastName + "</a> " + el.content + "</p>"
+        }else{
+            content =" <p class='mb-1 reply-content'>" + el.content + "</p>";
+        }
+        let res = " <div style=\"padding-left: 3.5rem; margin-bottom: 1rem\" class=\"reply-comment wrap-comment\"\n" +
             "                                    >\n" +
             "                                    <div class=\"main-content-reply-comment\">\n" +
             "                                        <div class='infor-reader'>\n" +
@@ -171,7 +177,7 @@ $(document).ready(function (){
             "                                            </div>\n" +
             "                                        </div>\n" +
             "                                        <div style=\"padding-left: 3.5rem\">\n" +
-            "                                            <p class='mb-1 reply-content'> " + el.content + "</p>\n" +
+                                                        content +
             "                                        </div>\n" +
             "                                    </div>\n" +
             "                                    <div class=\"btn-box\">\n" +

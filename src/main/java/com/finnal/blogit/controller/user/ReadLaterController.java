@@ -30,9 +30,9 @@ public class ReadLaterController {
             throw new WebException();
         }
         if(title != null && !Strings.isEmpty(title)){
-            model.addAttribute("lists",readLaterService.findForSearch(userDetail.getReadLaterId(), title));
+            model.addAttribute("lists",readLaterService.findForSearch(userDetail.getId(), title));
         }else{
-            model.addAttribute("lists",readLaterService.findAllByReadLaterId(userDetail.getReadLaterId()));
+            model.addAttribute("lists",readLaterService.findAllByAccountId(userDetail.getId()));
         }
         model.addAttribute("topics",topicService.findAll());
         return "user/readLater";

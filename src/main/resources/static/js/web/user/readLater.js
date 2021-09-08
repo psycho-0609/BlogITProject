@@ -96,7 +96,7 @@ $(document).ready(function (){
             "                                </div>\n" +
             "                                <div class=\"col-md-7\">\n" +
             "                                    <div class=\"card-body card-original\">\n" +
-            "                                        <p class='card-original-cate'><a href=''>" + el.article.topic.name+"</a>\n" +
+            "                                        <p class='card-original-cate'><a  href='/posts/topic/"+ el.article.topic.id +"'>" + el.article.topic.name+"</a>\n" +
             "                                        </p>\n" +
             "                                        <h5 class='card-title card-original-title'><a\n" +
             "                                                href='/posts/" + el.article.id +"'>" + el.article.title + "</a></h5>\n" +

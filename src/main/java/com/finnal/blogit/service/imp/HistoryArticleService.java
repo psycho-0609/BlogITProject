@@ -3,6 +3,7 @@ package com.finnal.blogit.service.imp;
 import com.finnal.blogit.dto.response.GetHistoryFlowDate;
 import com.finnal.blogit.dto.response.HistoryArticleDTO;
 import com.finnal.blogit.entity.HistoryArticleEntity;
+import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.repository.ArticleRepository;
 import com.finnal.blogit.repository.HistoryArticleRepository;
 import com.finnal.blogit.repository.HistoryRepository;
@@ -33,15 +34,15 @@ public class HistoryArticleService implements IHistoryArticleService {
     private ArticleRepository articleRepository;
 
     @Override
-    public void insert(Long hisId, Long articleId) {
-        Optional<HistoryArticleEntity> historyArticleOp = historyArticleRepository.findByHistoryEntity_IdAndArticleEntity_IdAndCratedDate(hisId, articleId, new Date());
+    public void insert(Long accountId, Long articleId) {
+        Optional<HistoryArticleEntity> historyArticleOp = historyArticleRepository.findByAccount_IdAndArticleEntity_IdAndCratedDate(accountId, articleId, new Date());
         HistoryArticleEntity historyArticleEntity;
         if (historyArticleOp.isPresent()) {
             historyArticleEntity = historyArticleOp.get();
         } else {
             historyArticleEntity = new HistoryArticleEntity();
             historyArticleEntity.setArticleEntity(articleRepository.findById(articleId).get());
-            historyArticleEntity.setHistoryEntity(historyRepository.findById(hisId).get());
+            historyArticleEntity.setAccount(new UserAccountEntity(accountId));
         }
         historyArticleEntity.setCratedDate(new Date());
         historyArticleEntity.setTimeWatch(LocalDateTime.now());
@@ -57,12 +58,12 @@ public class HistoryArticleService implements IHistoryArticleService {
     @Transactional
     public void deleteAll() {
         CustomUserDetail customUserDetail = UserInfor.getPrincipal();
-        historyArticleRepository.deleteAllByHistoryEntity_Id(customUserDetail.getHistoryId());
+        historyArticleRepository.deleteAllByAccount_Id(customUserDetail.getId());
     }
 
     @Override
-    public Long countAllByHistoryId(Long id) {
-        return historyArticleRepository.countAllByHistoryEntityId(id);
+    public Long countAllByAccountId(Long id) {
+        return historyArticleRepository.countAllByAccountId(id);
     }
 
     @Override
@@ -72,7 +73,7 @@ public class HistoryArticleService implements IHistoryArticleService {
 
     @Override
     public List<GetHistoryFlowDate> getHistoryArticleFlowDate(Long id) {
-        List<HistoryArticleDTO> historyLists = historyArticleRepository.findAllByHistoryEntityId(id);
+        List<HistoryArticleDTO> historyLists = historyArticleRepository.findAllByAccountId(id);
         return getListHistoryArticle(historyLists);
     }
 
@@ -85,12 +86,12 @@ public class HistoryArticleService implements IHistoryArticleService {
     private List<GetHistoryFlowDate> getListHistoryArticle(List<HistoryArticleDTO> historyLists) {
         List<Date> listDate = historyLists.stream().map(HistoryArticleDTO::getCreatedDate).distinct().collect(Collectors.toList());
         List<GetHistoryFlowDate> lists = new ArrayList<>();
-        for (Date date : listDate) {
+        listDate.forEach(date -> {
             GetHistoryFlowDate el = new GetHistoryFlowDate();
             el.setDate(date);
             el.setHistoryArticle(historyLists.stream().filter(item -> item.getCreatedDate().equals(date)).collect(Collectors.toList()));
             lists.add(el);
-        }
+        });
         return lists;
     }
 

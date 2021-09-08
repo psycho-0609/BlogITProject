@@ -1,4 +1,4 @@
-package com.finnal.blogit.controller;
+package com.finnal.blogit.controller.admin;
 
 import com.finnal.blogit.dto.response.ArticleCustomDTO;
 import com.finnal.blogit.dto.response.GetListArticleReport;

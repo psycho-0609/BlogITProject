@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -11,6 +11,11 @@
         <link rel="stylesheet" th:href="@{/css/loading.css}">
         <link rel="stylesheet" th:href="@{/css/sweetAlert.css}">
         <link rel="shortcut icon" th:href="@{/img/logo.jpg}" type="image/x-icon">
+        <script th:src="@{/js/jquery.js}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script sec:authorize="hasAuthority('ADMIN')" th:src="@{/js/admin/notificationAdmin.js}"></script>
+        <script sec:authorize="hasAuthority('USER')" th:src="@{/js/web/user/notificationUser.js}"></script>
     </th:block>
 </head>
 <body>

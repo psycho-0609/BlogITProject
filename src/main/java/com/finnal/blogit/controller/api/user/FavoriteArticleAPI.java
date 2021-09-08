@@ -31,11 +31,11 @@ public class FavoriteArticleAPI {
     @PostMapping("/create")
     public ResponseEntity<FavResponseDTO> create(@RequestBody HisFavLaterRequest requestData) throws APIException {
         CustomUserDetail userDetail = UserInfor.getPrincipal();
-        Optional<FavoriteArticleEntity> entity = favoriteArticleService.findByFavIdAndArticleId(userDetail.getFavoriteId(),requestData.getArticleId());
+        Optional<FavoriteArticleEntity> entity = favoriteArticleService.findByAccountIdAndArticleId(userDetail.getId(),requestData.getArticleId());
         if(entity.isPresent()){
             throw new ItemNotFoundException("Fav da ton tai");
         }
-        FavoriteArticleEntity favoriteSaved = favoriteArticleService.create(userDetail.getFavoriteId(),requestData.getArticleId());
+        FavoriteArticleEntity favoriteSaved = favoriteArticleService.create(userDetail.getId(),requestData.getArticleId());
         Long countFav = favoriteArticleService.countByArticleId(requestData.getArticleId());
         return new ResponseEntity<>(new FavResponseDTO(favoriteSaved.getId(),1,countFav), HttpStatus.OK);
     }
@@ -44,7 +44,7 @@ public class FavoriteArticleAPI {
     public ResponseEntity<FavResponseDTO> delete(@PathVariable Long id) throws APIException {
         FavoriteArticleEntity favorite = favoriteArticleService.findById(id).orElseThrow(()-> new ItemNotFoundException("Fav not found"));
 
-        if(UserInfor.getPrincipal().getFavoriteId().intValue() != favorite.getFavoriteEntity().getId().intValue()){
+        if(UserInfor.getPrincipal().getId().intValue() != favorite.getAccount().getId().intValue()){
             throw new ItemCanNotModifyException("You can not modify");
         }
         favoriteArticleService.deleteById(id);
@@ -57,7 +57,7 @@ public class FavoriteArticleAPI {
         if(userDetail == null){
             throw new ItemNotFoundException("User not found");
         }
-        List<GetFavArticle> lists = favoriteArticleService.getByFavId(userDetail.getFavoriteId());
+        List<GetFavArticle> lists = favoriteArticleService.getByFavId(userDetail.getId());
         if(title != null && !title.equals("")){
             lists = lists.stream().filter(el -> el.getArticle().getTitle().contains(title)).collect(Collectors.toList());
         }
@@ -70,7 +70,7 @@ public class FavoriteArticleAPI {
         if(userDetail == null){
             throw new WebException();
         }
-        favoriteArticleService.deleteAllByFavId(userDetail.getFavoriteId());
+        favoriteArticleService.deleteAllByFavId(userDetail.getId());
         return new ResponseEntity<>(new MessageDTO("Delete Successlly"), HttpStatus.OK);
     }
 }

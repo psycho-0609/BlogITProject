@@ -26,6 +26,10 @@ $(document).ready(function () {
         $("#dropdownMenuProduct").slideToggle();
     })
 
+    $("#btnDropdownMenuPosts").click(function (){
+        $("#dropdownMenuPosts").slideToggle();
+    })
+
 
 
 

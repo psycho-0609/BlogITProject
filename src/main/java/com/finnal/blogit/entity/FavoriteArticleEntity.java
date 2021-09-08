@@ -25,6 +25,10 @@ public class FavoriteArticleEntity {
     @JoinColumn(name = "favorite_id")
     private FavoriteEntity favoriteEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private UserAccountEntity account;
+
     @Temporal(TemporalType.DATE)
     private Date createdDate;
 

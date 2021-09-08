@@ -57,8 +57,8 @@
                     </li>
                     <li class="el-submenu-title">
                         <a th:href="@{/user/readLater/posts}" class="el-link">
-                            <i class="fas fa-clock"></i>
-                            <span>Read Later</span>
+                            <i class="fas fa-bookmark"></i>
+                            <span>My Bookmark</span>
                         </a>
                     </li>
                     <li class="el-submenu-title">
@@ -108,7 +108,7 @@
                                 <div class="col-md-7">
 
                                     <div class="card-body card-original">
-                                        <p class='card-original-cate'><a href=''
+                                        <p class='card-original-cate'><a th:href="@{'/posts/topic/'+${fav.article.topic.id}}"
                                                                          th:text="${fav.article.topic.name}"></a>
                                         </p>
                                         <h5 class='card-title card-original-title'><a
@@ -127,11 +127,7 @@
                                                 </button>
                                                 <div class='dropdown-menu drop-menu' style='padding: 0;'
                                                      aria-labelledby='dropdownMenu'>
-                                                    <a class='dropdown-item btn-add-read-later'
-                                                       style='font-size: .8rem;'
-                                                       th:id="${'readLate_'+fav.article.id}" type="button">Add to
-                                                        Read later</a>
-                                                    <hr style='margin: 0;'>
+<!--                                                    <hr style='margin: 0;'>-->
                                                     <a class='dropdown-item btn-delete-fav' style='font-size: .8rem;'
                                                        th:id="${'delete_'+fav.id}" type="button">Delete</a>
                                                 </div>

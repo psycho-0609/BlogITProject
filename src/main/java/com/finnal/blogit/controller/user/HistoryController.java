@@ -31,9 +31,9 @@ public class HistoryController {
             throw new WebException();
         }
         if(title != null && !Strings.isEmpty(title)){
-            model.addAttribute("histories",historyArticleService.getAllForSearch(userDetail.getHistoryId(), title));
+            model.addAttribute("histories",historyArticleService.getAllForSearch(userDetail.getId(), title));
         }else{
-            model.addAttribute("histories",historyArticleService.getHistoryArticleFlowDate(userDetail.getHistoryId()));
+            model.addAttribute("histories",historyArticleService.getHistoryArticleFlowDate(userDetail.getId()));
         }
         model.addAttribute("topics",topicService.findAll());
         return "user/history";

@@ -72,8 +72,12 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
     @Query("select a from ArticleEntity as a where a.published = 1 and a.status = 1 and a.prioritize >= 1 and a.prioritize <= 4 order by a.prioritize asc")
     List<ArticleEntity> findAllByPrioritize();
 
-    @Query("select a from ArticleEntity as a where a.published = 1 and a.status = 1 order by a.countView desc")
-    List<ArticleEntity> findForPopular();
+    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
+            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
+            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
+            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
+            "from ArticleEntity as a where a.published = 1 and a.status = 1 order by a.countView desc")
+    List<CustomArticleDTO> findForPopular();
 
     @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
             "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
@@ -107,15 +111,38 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
     @Query("select count(a) from ArticleEntity a where a.status = 1 and a.published = 1")
     Long countAllByStatusAndPublished();
 
-    @Query(value = "select count(*) FROM article AS a where month(a.created_date) = :month and a.published = 1 and a.status = 1", nativeQuery = true)
-    Long countByMonth(Integer month);
+    @Query(value = "select count(*) FROM article AS a where month(a.published_date) = :month and year(a.published_date) = :year and a.published = 1 and a.status = 1", nativeQuery = true)
+    Long countByMonth(@Param("month") Integer month, @Param("year") Integer year);
 
-    @Query(value = "SELECT count(*) FROM article as a inner join blogit.topic as t on a.topic_id = t.id where a.published = 1 and a.status = 1 and month(a.published_date) = :month and t.id = :topicId", nativeQuery = true)
-    Long countAllByTopicAndMonth(@Param("month") Integer month, @Param("topicId") Integer id);
+    @Query(value = "SELECT count(*) FROM article as a inner join blogit.topic as t on a.topic_id = t.id where a.published = 1 and a.status = 1 and month(a.published_date) = :month and year (a.published_date) = :year and t.id = :topicId", nativeQuery = true)
+    Long countAllByTopicAndMonth(@Param("month") Integer month, @Param("year") Integer year, @Param("topicId") Integer id);
 
     @Query(value = "select a.user_account_id, count(*) total from article as a where month(a.created_date) between 6 and 8 and a.published = 1 and a.status = 1 group by a.user_account_id",nativeQuery = true)
     List<StatisticAuthor> getStatisticAuthor();
-    
+
+    @Query(value = "select * from article as a where a.topic_Id = :topicId and a.id <> :articleId order by a.published_date desc limit 4", nativeQuery = true)
+    List<ArticleEntity> findAllByTopicIdForRelease(@Param("topicId") Integer topicId, @Param("articleId") Long articleId);
+
+    @Query(value = "select * from article as a where a.status = 1 and a.published = 1 order by a.published_date desc limit 4 ", nativeQuery = true)
+    List<ArticleEntity> findAllOrderNewsLimit();
+
+    @Query(value = "select * from article as a where a.status = 1 and a.published = 1 order by a.count_view desc limit 4 ", nativeQuery = true)
+    List<ArticleEntity> findAllOrderPopularLimit();
+
+    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
+            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
+            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
+            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
+            "from ArticleEntity as a where a.published = 1 and a.status = 1 order by a.publishedDate desc")
+    List<CustomArticleDTO> getListNewestPost();
+
+    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
+            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
+            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
+            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
+            "from ArticleEntity as a where a.published = 1 and a.status = 1 order by a.favoriteArticle.size desc")
+    List<CustomArticleDTO> getListFavPost();
+
 
 
 }

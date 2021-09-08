@@ -13,12 +13,12 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 
     @Query("select new com.finnal.blogit.dto.response.CommentDTO(c.id, c.content, c.createdDate, c.article.id, " +
             "c.account.id, c.account.email, c.account.status, c.account.userDetailEntity.id, c.account.userDetailEntity.firstName," +
-            "c.account.userDetailEntity.lastName, c.account.userDetailEntity.thumbnail) from CommentEntity c where c.article.id =:id order by c.createdDate desc")
+            "c.account.userDetailEntity.lastName, c.account.userDetailEntity.thumbnail) from CommentEntity c where c.article.id =:id order by c.createdDate asc ")
     List<CommentDTO> getAllByArticleId(@Param("id") Long articleId);
 
-    @Query("select new com.finnal.blogit.dto.response.ListArticleComment(c.article.id, count (c)) from CommentEntity c group by c.article.id order by c.article.createdDate desc ")
+    @Query("select new com.finnal.blogit.dto.response.ListArticleComment(c.article.id, count (c)) from CommentEntity c group by c.article.id order by c.article.createdDate asc ")
     List<ListArticleComment> countComment();
 
-    @Query("select new com.finnal.blogit.dto.response.ListArticleComment(c.article.id, count (c)) from CommentEntity c where c.article.title like %:title% group by c.article.id order by c.article.createdDate desc ")
+    @Query("select new com.finnal.blogit.dto.response.ListArticleComment(c.article.id, count (c)) from CommentEntity c where c.article.title like %:title% group by c.article.id order by c.article.createdDate asc ")
     List<ListArticleComment> getAllByLikeTitle(@Param("title") String title);
 }

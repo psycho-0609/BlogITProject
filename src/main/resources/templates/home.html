@@ -32,20 +32,7 @@
                                     [[${articlePrioritize.get(0).userAccount.userDetailEntity.firstName}]]
                                     [[${articlePrioritize.get(0).userAccount.userDetailEntity.lastName}]]
                                 </a>
-                                <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                    <button style='outline: none;' class='btn-drop-menu' type='button'
-                                            id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                            aria-expanded='false'>
-                                        <i class='fas fa-ellipsis-h'></i>
-                                    </button>
-                                    <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                         aria-labelledby='dropdownMenu'>
-                                        <a class='dropdown-item btn-add-read-later'
-                                           style='font-size: .8rem;'
-                                           th:id="${'readLate_'+ articlePrioritize.get(3).id}" type="button">Add to
-                                            Read later</a>
-                                    </div>
-                                </div>
+<!--                                button-->
                             </div>
                             <p class="content-card ">[[${articlePrioritize.get(0).shortDescription}]]</p>
                         </div>
@@ -76,20 +63,7 @@
                                         [[${articlePrioritize.get(1).userAccount.userDetailEntity.firstName}]]
                                         [[${articlePrioritize.get(1).userAccount.userDetailEntity.lastName}]]
                                     </a>
-                                    <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                        <button style='outline: none;' class='btn-drop-menu' type='button'
-                                                id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                                aria-expanded='false'>
-                                            <i class='fas fa-ellipsis-h'></i>
-                                        </button>
-                                        <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                             aria-labelledby='dropdownMenu'>
-                                            <a class='dropdown-item btn-add-read-later'
-                                               style='font-size: .8rem;'
-                                               th:id="${'readLate_'+ articlePrioritize.get(1).id}" type="button">Add to
-                                                Read later</a>
-                                        </div>
-                                    </div>
+
                                 </div>
                                 <p class="card-sm-short">
                                     [[${articlePrioritize.get(1).shortDescription}]]
@@ -119,20 +93,7 @@
                                         [[${articlePrioritize.get(2).userAccount.userDetailEntity.firstName}]]
                                         [[${articlePrioritize.get(2).userAccount.userDetailEntity.lastName}]]
                                     </a>
-                                    <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                        <button style='outline: none;' class='btn-drop-menu' type='button'
-                                                id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                                aria-expanded='false'>
-                                            <i class='fas fa-ellipsis-h'></i>
-                                        </button>
-                                        <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                             aria-labelledby='dropdownMenu'>
-                                            <a class='dropdown-item btn-add-read-later'
-                                               style='font-size: .8rem;'
-                                               th:id="${'readLate_'+ articlePrioritize.get(2).id}" type="button">Add to
-                                                Read later</a>
-                                        </div>
-                                    </div>
+
                                 </div>
                                 <p class="card-sm-short">
                                     [[${articlePrioritize.get(2).shortDescription}]]
@@ -162,20 +123,7 @@
                                         [[${articlePrioritize.get(3).userAccount.userDetailEntity.firstName}]]
                                         [[${articlePrioritize.get(3).userAccount.userDetailEntity.lastName}]]
                                     </a>
-                                    <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                        <button style='outline: none;' class='btn-drop-menu' type='button'
-                                                id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                                aria-expanded='false'>
-                                            <i class='fas fa-ellipsis-h'></i>
-                                        </button>
-                                        <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                             aria-labelledby='dropdownMenu'>
-                                            <a class='dropdown-item btn-add-read-later'
-                                               style='font-size: .8rem;'
-                                               th:id="${'readLate_'+ articlePrioritize.get(3).id}" type="button">Add to
-                                                Read later</a>
-                                        </div>
-                                    </div>
+
                                 </div>
                                 <p class="card-sm-short">
                                     [[${articlePrioritize.get(3).shortDescription}]]
@@ -215,24 +163,10 @@
                                             <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
                                             <a th:href="@{'/author/'+${article.userAccount.id}}"><span class=""><i
                                                     class="fas fa-user"></i></span>
-                                                [[${article.userAccount.userDetail.firstName}]]
-                                                [[${article.userAccount.userDetail.lastName}]]
+                                                [[${article.userAccount.userDetailEntity.firstName}]]
+                                                [[${article.userAccount.userDetailEntity.lastName}]]
                                             </a>
-                                            <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                                <button style='outline: none;' class='btn-drop-menu' type='button'
-                                                        id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                                        aria-expanded='false'>
-                                                    <i class='fas fa-ellipsis-h'></i>
-                                                </button>
-                                                <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                                     aria-labelledby='dropdownMenu'>
-                                                    <a class='dropdown-item btn-add-read-later'
-                                                       style='font-size: .8rem;'
-                                                       th:id="${'readLate_'+ article.id}"
-                                                       type="button">Add to
-                                                        Read later</a>
-                                                </div>
-                                            </div>
+
                                         </div>
                                         <p class="card-original-short">
                                             [[${article.shortDescription}]]
@@ -323,21 +257,21 @@
                                     [[${article.userAccount.userDetailEntity.firstName}]]
                                     [[${article.userAccount.userDetailEntity.lastName}]]
                                 </a>
-                                <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                    <button style='outline: none;' class='btn-drop-menu' type='button'
-                                            id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                            aria-expanded='false'>
-                                        <i class='fas fa-ellipsis-h'></i>
-                                    </button>
-                                    <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                         aria-labelledby='dropdownMenu'>
-                                        <a class='dropdown-item btn-add-read-later'
-                                           style='font-size: .8rem;'
-                                           th:id="${'readLate_'+ article.id}"
-                                           type="button">Add to
-                                            Read later</a>
-                                    </div>
-                                </div>
+<!--                                <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>-->
+<!--                                    <button style='outline: none;' class='btn-drop-menu' type='button'-->
+<!--                                            id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'-->
+<!--                                            aria-expanded='false'>-->
+<!--                                        <i class='fas fa-ellipsis-h'></i>-->
+<!--                                    </button>-->
+<!--                                    <div class='dropdown-menu drop-menu' style='padding: 0;'-->
+<!--                                         aria-labelledby='dropdownMenu'>-->
+<!--                                        <a class='dropdown-item btn-add-read-later'-->
+<!--                                           style='font-size: .8rem;'-->
+<!--                                           th:id="${'readLate_'+ article.id}"-->
+<!--                                           type="button">Add to-->
+<!--                                            Read later</a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
                             </div>
                             <p class="card-fav-shortDes">[[${article.shortDescription}]]</p>
                         </div>

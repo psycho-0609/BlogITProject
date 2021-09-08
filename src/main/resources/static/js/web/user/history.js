@@ -130,15 +130,15 @@ $(document).ready(function () {
         let item = "<div class='card card-content'>\n" +
             "                            <div class='row no-gutters'>\n" +
             "                                <div class='col-md-5'>\n" +
-            "                                    <a href=''> <img src='" + urlImg + "' ></a>\n" +
+            "                                    <a href='/posts/"+ el.article.id +"'> <img src='" + urlImg + "' ></a>\n" +
             "                                </div>\n" +
             "                                <div class='col-md-7'>\n" +
             "\n" +
             "                                    <div class='card-body card-original'>\n" +
-            "                                        <p class='card-original-cate'><a href=''>" + el.article.topic.name + "</a>\n" +
+            "                                        <p class='card-original-cate'><a href='/posts/topic/"+ el.article.topic.id +"'>" + el.article.topic.name + "</a>\n" +
             "                                        </p>\n" +
             "                                        <h5 class='card-title card-original-title'><a\n" +
-            "                                                href=''>" + el.article.title + "</a></h5>\n" +
+            "                                                 href='/posts/"+ el.article.id +"'>" + el.article.title + "</a></h5>\n" +
             "                                        <div class='card-original-author'>\n" +
             "                                            <span><i class='fas fa-calendar-day'></i> " + publicDate + "</span>\n" +
             "                                            <a href='/author/"+el.article.userAccount.userDetail.id +"'><span class=''><i class='fas fa-user'></i></span>\n" +
@@ -177,7 +177,23 @@ $(document).ready(function () {
 
     function formatDate(data) {
         let date = new Date(data);
-        let formatted_date = date.getDay() + "-" + date.getMonth() + "-" + date.getFullYear() + " " + date.getHours()+":"+date.getMinutes();
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+        if (day < 10) {
+            day = "0" + day;
+        }
+        if (month < 10) {
+            month = "0" + month;
+        }
+        if (hour < 10) {
+            hour = "0" + hour;
+        }
+        if (minute < 10) {
+            minute = "0" + minute;
+        }
+        let formatted_date = date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute;
         return formatted_date;
     }
 

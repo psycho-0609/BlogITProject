@@ -24,12 +24,12 @@ public class TestAPI {
     private UserAccountRepository repository;
 
     @GetMapping("/statisticAuthor")
-    public ResponseEntity<List<StatisticAuthor>> getStatisticAuthor(){
+    public ResponseEntity<List<StatisticAuthor>> getStatisticAuthor() {
         return new ResponseEntity<>(service.getStatisticAuthor(), HttpStatus.OK);
     }
 
-        @GetMapping("/getUser")
-    public ResponseEntity<List<UserInforDto>> getAllUser(){
+    @GetMapping("/getUser")
+    public ResponseEntity<List<UserInforDto>> getAllUser() {
         return new ResponseEntity<>(repository.getAllInforUser(), HttpStatus.OK);
     }
 }

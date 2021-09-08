@@ -58,20 +58,7 @@
                                                 [[${article.userAccount.userDetail.firstName}]]
                                                 [[${article.userAccount.userDetail.lastName}]]
                                             </a>
-                                            <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                                <button style='outline: none;' class='btn-drop-menu' type='button'
-                                                        id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                                        aria-expanded='false'>
-                                                    <i class='fas fa-ellipsis-h'></i>
-                                                </button>
-                                                <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                                     aria-labelledby='dropdownMenu'>
-                                                    <a class='dropdown-item btn-add-read-later'
-                                                       style='font-size: .8rem;'
-                                                       th:id="${'readLate_'+article.id}" type="button">Add to
-                                                        Read later</a>
-                                                </div>
-                                            </div>
+
                                         </div>
                                         <p class="card-original-short">[[${article.shortDescription}]]
                                         </p>
@@ -82,7 +69,13 @@
                         </div>
 
                     </div>
+                    <div>
+                        <ul class="pagination" id="pagination"></ul>
+                        <form th:action='@{${#httpServletRequest.servletPath}}' id="formSubmit">
+                            <input type="hidden" value="" id="page" name="page"/>
+                        </form>
 
+                    </div>
                 </div>
                 <div class="col-lg-3 col-md-12 col-sm-12 position-relative mb-4">
                     <div class="" id="cateBox">
@@ -98,11 +91,34 @@
                     </div>
                 </div>
             </div>
+
         </section>
     </div>
 </main>
 <div th:replace="common/footer :: footer"/>
 <script th:src="@{/js/web/cate.js}"></script>
 <script th:src="@{/js/web/readLaterAjax.js}"></script>
+<script>
+    $(document).ready(function (){
+
+    })
+    var url_string = window.location.href; //window.location.href
+    var url = new URL(url_string);
+    var c = url.searchParams.get("page");
+    var totalPages = 5;
+    var currentPage = 1;
+    $('#pagination').twbsPagination({
+        totalPages: 5,
+        visiblePages: 1,
+        startPage: currentPage,
+        onPageClick: function (event, page) {
+            if (currentPage != page) {
+                $('#page').val(page);
+                $('#formSubmit').submit();
+            }
+        }
+    });
+
+</script>
 </body>
 </html>

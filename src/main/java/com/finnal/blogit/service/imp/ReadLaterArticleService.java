@@ -2,6 +2,7 @@ package com.finnal.blogit.service.imp;
 
 import com.finnal.blogit.dto.response.GetListReadLater;
 import com.finnal.blogit.entity.ReadLaterArticleEntity;
+import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.repository.ArticleRepository;
 import com.finnal.blogit.repository.ReadLaterArticleRepository;
 import com.finnal.blogit.repository.ReadLaterRepository;
@@ -27,14 +28,14 @@ public class ReadLaterArticleService implements IReadLaterArticleService {
     private ReadLaterRepository readLaterRepository;
 
     @Override
-    public ReadLaterArticleEntity create(Long readLaterId, Long articleId) {
+    public ReadLaterArticleEntity create(Long accountId, Long articleId) {
         ReadLaterArticleEntity entity;
-        Optional<ReadLaterArticleEntity> readLaterArticleOp = readLaterArticleRepository.findByReadLaterEntity_IdAndArticleEntity_Id(readLaterId, articleId);
+        Optional<ReadLaterArticleEntity> readLaterArticleOp = readLaterArticleRepository.findByAccount_IdAndArticleEntity_Id(accountId, articleId);
         if (readLaterArticleOp.isPresent()) {
             entity = readLaterArticleOp.get();
         } else {
             entity = new ReadLaterArticleEntity();
-            entity.setReadLaterEntity(readLaterRepository.findById(readLaterId).get());
+            entity.setAccount(new UserAccountEntity(accountId));
             entity.setArticleEntity(articleRepository.findById(articleId).get());
         }
         entity.setCreatedDate(LocalDateTime.now());
@@ -42,8 +43,8 @@ public class ReadLaterArticleService implements IReadLaterArticleService {
     }
 
     @Override
-    public Optional<ReadLaterArticleEntity> findByReadLaterIdAndArticleId(Long readLaterId, Long articleId) {
-        return readLaterArticleRepository.findByReadLaterEntity_IdAndArticleEntity_Id(readLaterId, articleId);
+    public Optional<ReadLaterArticleEntity> findByAccountIdAndArticleId(Long accountId, Long articleId) {
+        return readLaterArticleRepository.findByAccount_IdAndArticleEntity_Id(accountId, articleId);
     }
 
     @Override
@@ -67,14 +68,19 @@ public class ReadLaterArticleService implements IReadLaterArticleService {
     }
 
     @Override
-    public List<GetListReadLater> findAllByReadLaterId(Long id) {
-        return readLaterArticleRepository.getListReadLaterByReadLaterId(id);
+    public List<GetListReadLater> findAllByAccountId(Long id) {
+        return readLaterArticleRepository.getListReadLaterByAccountId(id);
     }
 
     @Override
     public List<GetListReadLater> findForSearch(Long id, String title) {
-        return readLaterArticleRepository.getListReadLaterByReadLaterId(id)
+        return readLaterArticleRepository.getListReadLaterByAccountId(id)
                 .stream().filter(el -> el.getArticle().getTitle().contains(title))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long countAllByArticleId(Long id) {
+        return readLaterArticleRepository.countByArticleEntityId(id);
     }
 }

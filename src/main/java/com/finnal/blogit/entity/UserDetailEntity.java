@@ -1,5 +1,6 @@
 package com.finnal.blogit.entity;
 
+import com.finnal.blogit.constant.Constant;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,6 @@ public class UserDetailEntity {
 
     @Transient
     public String getImagePath(){
-        return this.thumbnail == null || thumbnail.equals("") ? "/img/defaultUserImg.jpg":"/imgUser/"+id+"/"+thumbnail;
+        return this.thumbnail == null || thumbnail.equals("") ? "/img/defaultUserImg.jpg": Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/avatarUser/" + id +"/" + thumbnail;
     }
 }

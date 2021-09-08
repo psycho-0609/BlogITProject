@@ -1,4 +1,4 @@
-$(document).ready(function (){
+$(document).ready(function () {
     var editor = CKEDITOR
         .replace(
             'content',
@@ -32,50 +32,45 @@ $(document).ready(function (){
     let fail = "<i class=\"fas fa-times\"></i> ";
     let messSuccess = "<i class=\"fas fa-check\"></i>";
 
-    function validateData(){
+    function validateData() {
         let count = 0;
-        if($("#title").val() === "" || $("#title").val() === undefined){
+        if ($("#title").val() === "" || $("#title").val() === undefined) {
             $("#errorTitle").text(messTitleEmpty);
-        }else{
+        } else {
             $("#errorTitle").text("");
             count++;
-            console.log(count);
         }
 
-        if($("#status").val() === "" || $("#status").val() === undefined){
+        if ($("#status").val() === "" || $("#status").val() === undefined) {
             $("#errorStatus").val(messStatusEmpty);
-        }else{
+        } else {
             $("#errorStatus").val("");
             count++;
-            console.log(count);
         }
 
-        if($("#topic").val() === "" || $("#topic").val() === undefined){
+        if ($("#topic").val() === "" || $("#topic").val() === undefined) {
             $("#errorTopic").text(messTopicEmpty);
-        }else{
+        } else {
             $("#errorTopic").text("");
             count++;
-            console.log(count);
         }
 
-        if ($("#shortDescription").val() === "" || $("#shortDescription").val() === undefined){
+        if ($("#shortDescription").val() === "" || $("#shortDescription").val() === undefined) {
             $("#errorShortDes").text(messShortDesEmpty);
-        }else{
+        } else {
             $("#errorShortDes").text("");
             count++;
-            console.log(count);
         }
 
-        if(editor.getData() === "" || editor.getData() === undefined){
+        if (editor.getData() === "" || editor.getData() === undefined) {
             $("#errorContent").text(messContentEmpty);
-        }else{
+        } else {
             $("#errorContent").text("");
             count++;
-            console.log(count);
         }
 
         console.log(count);
-        if(count === 5){
+        if (count === 5) {
             return true;
         }
         return false;
@@ -85,41 +80,61 @@ $(document).ready(function (){
     $("#formSubmit").on('submit', function (e) {
         e.preventDefault();
         let data = {};
-        let id = $("#id").val();
-        console.log(id);
-
         let formData = $("#formSubmit").serializeArray();
-        console.log(formData);
         $.each(formData, function (i, v) {
             data["" + v.name + ""] = v.value;
         });
-        let file = $("#file")[0].files[0];
-        data["base64"] = "";
-        data["file"] = "";
         data["content"] = editor.getData();
-        if (file !== undefined) {
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                data["base64"] = e.target.result;
-                data["file"] = file.name;
-                processData(data)
-            };
-            reader.readAsDataURL(file);
-        } else {
-            processData(data);
+        validateData(data);
+        let form = new FormData();
+        let imgFile = $("#file")[0].files[0];
+        let videoFile = $("#fileVideo")[0].files[0];
+        let id = $("#id").val();
+        form.append("id", id);
+        form.append("shortDescription", data.shortDescription);
+        form.append("title", data.title);
+        form.append("content", data.content);
+        form.append("status", data.status);
+        form.append("topicId", data.topicId);
+        if (imgFile !== undefined) {
+            form.append("image", imgFile);
         }
+        if (videoFile !== undefined) {
+            form.append("video", videoFile);
+        }
+        console.log(form);
+        if(validateData() === true){
+            processData(id, form);
+        }
+
+        // console.log(id);
+
+
+        // data["base64"] = "";
+        // data["file"] = "";
+        // data["content"] = editor.getData();
+        // if (file !== undefined) {
+        //     let reader = new FileReader();
+        //     reader.onload = function (e) {
+        //         data["base64"] = e.target.result;
+        //         data["file"] = file.name;
+        //         processData(data)
+        //     };
+        //     reader.readAsDataURL(file);
+        // } else {
+        //     processData(data);
+        // }
 
 
     })
 
-    function processData(data) {
-        console.log(validateData(data))
-        if(validateData(data) === true){
-            if (data.id !== "") {
-                updateArticle(data);
-            } else {
-                uploadArticle(data);
-            }
+    function processData(id,form) {
+        // console.log(validateData(data))
+
+        if(id !== "" && id !== undefined && id !== null){
+            updateArticle(form);
+        }else{
+            uploadArticle(form);
         }
 
     }
@@ -130,9 +145,10 @@ $(document).ready(function (){
         $.ajax({
             url: "/api/user/posts/add",
             type: "post",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            dataType: 'json'
+            contentType: false,
+            data: data,
+            dataType: 'json',
+            processData:false,
 
         }).done(function (response) {
             $("#processing").removeClass("active");
@@ -155,9 +171,10 @@ $(document).ready(function (){
         $.ajax({
             url: "/api/user/posts/update",
             type: "put",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            dataType: 'json'
+            contentType: false,
+            data: data,
+            dataType: 'json',
+            processData:false
 
         }).done(function (response) {
             $("#processing").removeClass("active");
@@ -170,15 +187,18 @@ $(document).ready(function (){
         })
 
     }
+
     let errorTimeout;
     let successTimeOut;
+
     function clearTime() {
         clearTimeout(errorTimeout);
         clearTimeout(successTimeOut);
         $("#success").fadeOut();
         $("#fail").fadeOut();
     }
-    function errorMessage(message){
+
+    function errorMessage(message) {
         clearTime();
         $("#fail").html(fail + message)
         $("#fail").fadeIn();
@@ -186,7 +206,8 @@ $(document).ready(function (){
             $("#fail").fadeOut(3000);
         }, 1500)
     }
-    function success(message){
+
+    function success(message) {
         clearTime();
         $("#success").html(messSuccess + message)
         $("#success").fadeIn();

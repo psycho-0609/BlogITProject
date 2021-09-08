@@ -33,9 +33,9 @@ public class UserDetailService implements UserDetailsService {
         GrantedAuthority authorities = new SimpleGrantedAuthority(entity.getRole().getName());
 
         CustomUserDetail customUserDetail = new CustomUserDetail(entity.getEmail(),entity.getPassword(),true,true,true,true, Collections.singleton((SimpleGrantedAuthority) authorities));
-        customUserDetail.setHistoryId(entity.getHistory().getId());
-        customUserDetail.setFavoriteId(entity.getFavoriteArticle().getId());
-        customUserDetail.setReadLaterId(entity.getReadLater().getId());
+//        customUserDetail.setHistoryId(entity.getHistory().getId());
+//        customUserDetail.setFavoriteId(entity.getFavoriteArticle().getId());
+//        customUserDetail.setReadLaterId(entity.getReadLater().getId());
         customUserDetail.setUserDetail(entity.getUserDetailEntity().getId());
         customUserDetail.setId(entity.getId());
         if(entity.getRole().getName().equals("ADMIN")){

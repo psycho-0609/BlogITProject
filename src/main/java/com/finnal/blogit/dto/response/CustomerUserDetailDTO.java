@@ -1,5 +1,6 @@
 package com.finnal.blogit.dto.response;
 
+import com.finnal.blogit.constant.Constant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class CustomerUserDetailDTO {
     private String thumbnail;
 
     public String getThumbnail() {
-        return thumbnail == null || Strings.isEmpty(thumbnail) ? "/img/defaultUserImg.jpg":"/imgUser/"+id+"/"+thumbnail;
+        return thumbnail == null || Strings.isEmpty(thumbnail) ? "/img/defaultUserImg.jpg": Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/avatarUser/" + id +"/" + thumbnail;
     }
 
     public void setThumbnail(String thumbnail) {

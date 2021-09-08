@@ -1,5 +1,6 @@
 package com.finnal.blogit.controller.api.user;
 
+import com.finnal.blogit.dto.response.BookmarkResponse;
 import com.finnal.blogit.dto.response.FavReadResponse;
 import com.finnal.blogit.dto.response.GetListReadLater;
 import com.finnal.blogit.dto.response.MessageDTO;
@@ -30,28 +31,29 @@ public class ReadLaterArticleAPI {
     private IArticleService articleService;
 
     @PostMapping("/create")
-    public ResponseEntity<FavReadResponse> create(@RequestBody HisFavLaterRequest requestData) throws APIException {
+    public ResponseEntity<BookmarkResponse> create(@RequestBody HisFavLaterRequest requestData) throws APIException {
         CustomUserDetail customUserDetail = UserInfor.getPrincipal();
         if(!articleService.findById(requestData.getArticleId()).isPresent()){
             throw new ItemNotFoundException("Article not found");
         }
-        ReadLaterArticleEntity entity = readLaterArticleService.create(customUserDetail.getReadLaterId(), requestData.getArticleId());
-        return new ResponseEntity<>(new FavReadResponse(entity.getId(),1),HttpStatus.OK);
+        ReadLaterArticleEntity entity = readLaterArticleService.create(customUserDetail.getId(), requestData.getArticleId());
+        BookmarkResponse response = new BookmarkResponse(entity.getId(), 1, readLaterArticleService.countAllByArticleId(requestData.getArticleId()));
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<MessageDTO> delete(@PathVariable Long id) throws APIException{
+    public ResponseEntity<BookmarkResponse> delete(@PathVariable Long id) throws APIException{
         ReadLaterArticleEntity entity = readLaterArticleService.findById(id).orElseThrow(()-> new ItemNotFoundException("Not found read later"));
-        if(!entity.getReadLaterEntity().getId().equals(UserInfor.getPrincipal().getReadLaterId())){
+        if(!entity.getAccount().getId().equals(UserInfor.getPrincipal().getId())){
             throw new ItemCanNotModifyException("You cannot modify this read later");
         }
         readLaterArticleService.delete(entity.getId());
-        return new ResponseEntity<>(new MessageDTO("Success"),HttpStatus.OK);
+        return new ResponseEntity<>(new BookmarkResponse(entity.getId(),1, readLaterArticleService.countAllByArticleId(entity.getArticleEntity().getId())),HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteAll")
     public ResponseEntity<MessageDTO> deleteAll() throws APIException{
-        if(readLaterArticleService.countItemByReadLaterId(UserInfor.getPrincipal().getReadLaterId()) <0){
+        if(readLaterArticleService.countItemByReadLaterId(UserInfor.getPrincipal().getId()) <0){
             throw new ItemNotFoundException("Not found any article in reader to delete");
         }
         readLaterArticleService.deleteAll();
@@ -64,7 +66,7 @@ public class ReadLaterArticleAPI {
         if(userDetail == null){
             throw new ItemNotFoundException("Not found user");
         }
-        List<GetListReadLater> lists = readLaterArticleService.findAllByReadLaterId(userDetail.getReadLaterId());
+        List<GetListReadLater> lists = readLaterArticleService.findAllByAccountId(userDetail.getId());
         if(title != null && !title.equals("")){
             lists = lists.stream().filter(el -> el.getArticle().getTitle().contains(title)).collect(Collectors.toList());
         }

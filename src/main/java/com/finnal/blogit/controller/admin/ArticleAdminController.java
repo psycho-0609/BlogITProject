@@ -4,14 +4,12 @@ import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.dto.response.CustomArticleDTO;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.FavoriteArticleEntity;
+import com.finnal.blogit.entity.ReadLaterArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticleNew;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
 import com.finnal.blogit.exception.web.WebException;
-import com.finnal.blogit.service.inter.IArticleService;
-import com.finnal.blogit.service.inter.IFavoriteArticleService;
-import com.finnal.blogit.service.inter.IReportService;
-import com.finnal.blogit.service.inter.ITopicService;
+import com.finnal.blogit.service.inter.*;
 import com.finnal.blogit.user.CustomUserDetail;
 import com.finnal.blogit.user.UserInfor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,9 @@ public class ArticleAdminController {
     @Autowired
     private ITopicService topicService;
 
+    @Autowired
+    private IReadLaterArticleService rlService;
+
     @GetMapping("/published")
     public String publishedPosts(Model model){
         model.addAttribute("articles",articleService.findByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC));
@@ -65,24 +66,26 @@ public class ArticleAdminController {
     public String detailPosts(@PathVariable("id") Long id,Model model) throws WebException{
         ArticleEntity article = articleService.findById(id).orElseThrow(WebException::new);
         CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if(!article.getStatus().equals(ArticleStatus.PUBLIC)){
-            throw new WebException();
-        }
-        if (userDetail != null) {
-            FavoriteArticleEntity favoriteArticle = null;
-            Optional<FavoriteArticleEntity> favOp = favoriteArticleService.findByFavIdAndArticleId(userDetail.getFavoriteId(), id);
-            if (favOp.isPresent()) {
-                favoriteArticle = favOp.get();
-            }
-            model.addAttribute("favStatus", favoriteArticle);
-        }
+//        if(!article.getStatus().equals(ArticleStatus.PUBLIC)){
+//            throw new WebException();
+//        }
+//        if (userDetail != null) {
+//            FavoriteArticleEntity favoriteArticle = null;
+//            Optional<FavoriteArticleEntity> favOp = favoriteArticleService.findByAccountIdAndArticleId(userDetail.getId(), id);
+//            if (favOp.isPresent()) {
+//                favoriteArticle = favOp.get();
+//            }
+//            model.addAttribute("favStatus", favoriteArticle);
+//            Optional<ReadLaterArticleEntity> rlOp = rlService.findByAccountIdAndArticleId(userDetail.getId(), id);
+//            rlOp.ifPresent(readLaterArticleEntity -> model.addAttribute("bookMark", readLaterArticleEntity));
+//        }
         if(article.getNews().equals(ArticleNew.ENABLE)){
             article.setNews(ArticleNew.DISABLE);
             article = articleService.save(article);
         }
         model.addAttribute("article", article);
         model.addAttribute("topics", topicService.findAll());
-        model.addAttribute("reports", reportService.findAll());
-        return "article/detailArticle";
+//        model.addAttribute("reports", reportService.findAll());
+        return "adminPage/article/detailArticleAdmin";
     }
 }

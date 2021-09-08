@@ -52,6 +52,36 @@
     </div>
 </section>
 
+<section>
+
+    <!-- Modal -->
+    <div class="modal fade " id="modalUploadVideo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-position">
+            <div class="modal-content style-modal">
+
+                <div class="modal-body">
+                    <div class="img-body">
+                        <video width="100%" id="videoPreview" controls>
+                        </video>
+                    </div>
+                    <div class="input-file-box">
+                        <input type="file" id="fileVideo" class="style-input-file" />
+                        <label for="fileVideo" class="btn-3">
+                            <span class="title-btn">Upload Video</span>
+                        </label>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-secondary" id="btnCancelVideo">Cancel</button>
+                        <button class="btn btn-primary" id="btnApplyVideo">Apply</button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <div class="container">
     <div class="form-post">
@@ -64,9 +94,14 @@
             </div>
 
             <div class="row form-group button-group">
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <button type="button" class="btn btn-secondary" id="btnModalImg" data-target="#modalUploadImg">
                         Select Image
+                    </button>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-secondary" id="btnModalVideo" data-target="#modalUploadVideo">
+                        Select Video
                     </button>
                 </div>
                 <div class="col-md-4" >

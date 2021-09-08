@@ -31,7 +31,7 @@ public class HistoryArticleAPI {
         if(userDetail == null){
             throw new ItemNotFoundException("Not found user");
         }
-        if(!historyArticleEntity.getHistoryEntity().getId().equals(userDetail.getHistoryId())){
+        if(!historyArticleEntity.getAccount().getId().equals(userDetail.getId())){
             throw new ItemCanNotModifyException("Can not delete");
         }
         historyArticleService.delete(id);
@@ -40,7 +40,7 @@ public class HistoryArticleAPI {
 
     @DeleteMapping("/deleteAll")
     public ResponseEntity<MessageDTO> deleteAll() throws APIException {
-        if(historyArticleService.countAllByHistoryId(UserInfor.getPrincipal().getHistoryId()) <= 0){
+        if(historyArticleService.countAllByAccountId(UserInfor.getPrincipal().getId()) <= 0){
             throw new ItemNotFoundException("Not found any article in history to delete");
         }
         historyArticleService.deleteAll();
@@ -65,9 +65,9 @@ public class HistoryArticleAPI {
         }
         if(title != null && !title.equals("")){
 
-            return new ResponseEntity<>(historyArticleService.getAllForSearch(userDetail.getHistoryId(), title), HttpStatus.OK);
+            return new ResponseEntity<>(historyArticleService.getAllForSearch(userDetail.getId(), title), HttpStatus.OK);
         }
-        return new ResponseEntity<>(historyArticleService.getHistoryArticleFlowDate(userDetail.getHistoryId()), HttpStatus.OK);
+        return new ResponseEntity<>(historyArticleService.getHistoryArticleFlowDate(userDetail.getId()), HttpStatus.OK);
     }
 
 

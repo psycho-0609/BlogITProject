@@ -242,7 +242,7 @@ $(document).ready(function () {
             "              <td style=\"width: 30rem\"><a href='/admin/post/" + el.id + "'>" + el.title + "</a>\n" +
             "                                    </td>\n" +
             "                                    <td>" + el.topic.name + "</td>\n" +
-            "                                    <td><a href='/author/" + el.userAccount.id + "'>\n" + el.userAccount.userDetail.firstName + el.userAccount.userDetail.lastName +
+            "                                    <td><a href='/author/" + el.userAccount.id + "'>\n" + el.userAccount.userDetail.firstName + " " + el.userAccount.userDetail.lastName +
             "                                    </a></td>\n" + lastEditDate +
             "                                    <td>" + published + "</td>\n" +
             "                                    <td class=\"text-center\" style=\"width: 10rem\">\n" +

@@ -8,12 +8,12 @@ import java.util.Optional;
 
 public interface IReadLaterArticleService {
     ReadLaterArticleEntity create(Long readLaterId, Long articleId);
-    Optional<ReadLaterArticleEntity> findByReadLaterIdAndArticleId(Long readLaterId, Long articleId);
+    Optional<ReadLaterArticleEntity> findByAccountIdAndArticleId(Long accountId, Long articleId);
     Optional<ReadLaterArticleEntity> findById(Long id);
     void delete(Long id);
     void deleteAll();
     Long countItemByReadLaterId(Long id);
-    List<GetListReadLater> findAllByReadLaterId(Long id);
+    List<GetListReadLater> findAllByAccountId(Long id);
     List<GetListReadLater> findForSearch(Long id, String title);
-
+    Long countAllByArticleId(Long id);
 }

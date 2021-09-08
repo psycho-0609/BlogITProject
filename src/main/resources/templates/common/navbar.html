@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/common/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/customboostrap.css}">
 </head>
 <body>
 <div th:fragment="navbar">
@@ -33,9 +35,12 @@
                     <div class="visual">
                         <a id="btn-login" type="button" th:href="@{/user/profile}">
                             <div class="avatar-box">
-                                <div class="avatar-user"><img th:src="${session.user.userDetail.thumbnail}" alt=""></div>
+                                <div class="avatar-user"><img th:src="${session.user.userDetail.thumbnail}" alt="">
+                                </div>
                                 <div class="d-flex align-items-center text-white">
-                                    <div>[[${session.user.userDetail.firstName}]] [[${session.user.userDetail.lastName}]]</div>
+                                    <div>[[${session.user.userDetail.firstName}]]
+                                        [[${session.user.userDetail.lastName}]]
+                                    </div>
                                 </div>
                             </div>
                         </a>
@@ -46,14 +51,29 @@
 
                         <a th:href="@{/home}" class="active-nav"><span><i class="fas fa-home nav-left-icon"></i></span>Home</a>
                     </div>
-                    <div class="navbar-left-item">
-
-                        <a th:href="@{/posts}"><span><i class="far fa-newspaper nav-left-icon"></i></span>Posts</a>
-                    </div>
                     <div>
                         <div class="navbar-left-item">
 
-                            <a type="button" class=""  id="btnDropdownMenuProduct">
+                            <a type="button" class="" id="btnDropdownMenuPosts">
+                                <span style="margin-right: 1.3rem"><i class="far    fa-newspaper nav-left-icon"></i></span>
+                                <span style="font-size: 1rem; margin: 0">Posts</span>
+                                <span class="btn-dropdown" style="margin-left: 6.3rem;"><i class="fas fa-angle-down"></i></span>
+                            </a>
+                        </div>
+                        <div id="dropdownMenuPosts" class="dropdown-menu-product">
+                            <a href="/posts/newest">Newest</a>
+                            <a href="/posts/popular">Popular</a>
+                            <a href="/posts/favorite">Favorite</a>
+                        </div>
+                    </div>
+                    <!--                    <div class="navbar-left-item">-->
+
+                    <!--                        <a th:href="@{/posts}"><span><i class="far fa-newspaper nav-left-icon"></i></span>Posts</a>-->
+                    <!--                    </div>-->
+                    <div>
+                        <div class="navbar-left-item">
+
+                            <a type="button" class="" id="btnDropdownMenuProduct">
                                 <span style="margin-right: 1.3rem"><i class="fas fa-list nav-left-icon"></i></span>
                                 <span style="font-size: 1rem; margin: 0">Category</span>
                                 <span class="btn-dropdown"><i class="fas fa-angle-down"></i></span>
@@ -66,21 +86,26 @@
 
                     <th:block sec:authorize="isAuthenticated()">
                         <div class="navbar-left-item">
-                            <a th:href="@{/user/posts/newPost}"><span><i class="fas fa-pencil-alt nav-left-icon"></i></span>Create Post</a>
+                            <a th:href="@{/user/posts/newPost}"><span><i
+                                    class="fas fa-pencil-alt nav-left-icon"></i></span>Create Post</a>
                         </div>
                         <div class="navbar-left-item">
                             <a th:href="@{/user/profile}"><span><i class="fas fa-id-card nav-left-icon"></i></span>Profile</a>
                         </div>
                         <div class="navbar-left-item">
-                            <a th:href="@{/user/posts/public}"><span><i class="fas fa-file-alt nav-left-icon"></i></span>My Content</a>
+                            <a th:href="@{/user/posts/public}"><span><i
+                                    class="fas fa-file-alt nav-left-icon"></i></span>My Content</a>
                         </div>
                         <div sec:authorize="hasAuthority('ADMIN')" class="navbar-left-item">
                             <a th:href="@{/admin}"><span><i class="fas fa-shield-alt"></i></span>Admin Page</a>
                         </div>
-                            <hr>
+                        <hr>
                         <div class="navbar-left-item">
                             <form th:action="@{/logout}" method="post">
-                                <button type="submit" style="background: none; outline: none; border: none; color: rgb(90, 90, 90)"><span><i class="fas fa-sign-out-alt nav-left-icon"></i></span>Logout</button>
+                                <button type="submit"
+                                        style="background: none; outline: none; border: none; color: rgb(90, 90, 90)">
+                                    <span><i class="fas fa-sign-out-alt nav-left-icon"></i></span>Logout
+                                </button>
                             </form>
                         </div>
                     </th:block>
@@ -103,7 +128,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <a class="navbar-brand" th:href="@{/home}"><img style="width: 70px;" th:src="@{/img/logo.jpg}"
-                                                               alt=""></a>
+                                                                alt=""></a>
                 <div class="header-nav-card">
                     <button class="btn-search" id="btnSearchNav" type="button" style="outline: none"><span><i
                             class="fa fa-search" aria-hidden="true"></i></span></button>
@@ -116,10 +141,20 @@
                         <input type="text" name="title" class="w-100 form-control" placeholder="Search">
                     </form>
                 </div>
-                <div class="collapse navbar-collapse main-menu" id="navbarNav">
+                <div class=" topbar collapse navbar-collapse main-menu" id="navbarNav">
                     <div class="navbar-nav navbar-menu">
                         <div class="nav-item"><a th:href="@{/home}">Home</a></div>
-                        <div class="nav-item"><a th:href="@{/posts}">Posts</a></div>
+                        <div class="nav-item dropdown ">
+                            <a class="dropdown-toggle" href="#" id="navbarDropdownMenuPost" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Posts
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuPost">
+                                <a class="dropdown-item" href="/posts/newest">Newest</a>
+                                <a class="dropdown-item" href="/posts/popular">Popular</a>
+                                <a class="dropdown-item" href="/posts/favorite">Favoriate</a>
+                            </div>
+                        </div>
                         <div class="nav-item dropdown ">
                             <a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -142,23 +177,55 @@
                     <ul class="navbar-nav navbar-icon m-auto">
                         <th:block sec:authorize="isAuthenticated()">
                             <li class="nav-item">
-                                <a class="nav-link" th:href="@{/user/posts/newPost}" style="cursor: pointer"><span><i class="fas fa-pencil-alt" style="font-size: 1.3rem"></i></span></a>
+                                <a class="nav-link nav-bar-item"  th:href="@{/user/posts/newPost}" style="cursor: pointer;margin-right: 0"><span><i
+                                        class="fas fa-pencil-alt" style="font-size: 1.3rem"></i></span></a>
+                            </li>
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <a class="nav-link nav-bar-item" href="#" id="alertsDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-bell fa-fw"></i>
+                                    <!-- Counter - Alerts -->
+                                    <span class="badge badge-danger badge-counter" id="counterNew"></span>
+                                </a>
+                                <!-- Dropdown - Alerts -->
+                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                     aria-labelledby="alertsDropdown" >
+                                    <div class="notification-header-box">
+                                        <h6 class="" id="titleNotification">
+                                            Notification Center
+                                        </h6>
+                                        <button type="button" id="btnMarkAll">Mark all as read</button>
+                                    </div>
+                                   
+                                    <div id="notificationCenter"></div>
+
+                                    <a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item text-center small btn-all-notify text-gray-500" th:href="@{/admin/notification}">Show All Alerts</a>
+                                    <a sec:authorize="hasAuthority('USER')" class="dropdown-item text-center small btn-all-notify text-gray-500" th:href="@{/user/notification}">Show All Alerts</a>
+                                </div>
                             </li>
 
                             <li class="nav-item user-infor-box">
-                                <div class="dropdown">
-                                    <a class="user"  role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                <div class="dropdown" style="">
+                                    <a class="user" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
                                         <img th:src="${session.user.userDetail.thumbnail}" alt="">
 
                                     </a>
                                     <div class="dropdown-menu user-menu" aria-labelledby="dropdownMenuLink">
-                                        <a class="dropdown-item nav-link-user" th:href="@{/user/profile}"><span class="icon-nav-left"><i class="fas fa-id-card"></i></span>Profile</a>
-                                        <a class="dropdown-item nav-link-user" th:href="@{/user/posts/public}"><span class="icon-nav-left"><i class="fas fa-file-alt"></i></span>My Content</a>
-                                        <a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item nav-link-user" th:href="@{/admin}"><span class="icon-nav-left"><i class="fas fa-shield-alt"></i></span>Admin Page</a>
+                                        <a class="dropdown-item nav-link-user" th:href="@{/user/profile}"><span
+                                                class="icon-nav-left"><i class="fas fa-id-card"></i></span>Profile</a>
+                                        <a class="dropdown-item nav-link-user" th:href="@{/user/posts/public}"><span
+                                                class="icon-nav-left"><i class="fas fa-file-alt"></i></span>My
+                                            Content</a>
+                                        <a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item nav-link-user"
+                                           th:href="@{/admin}"><span class="icon-nav-left"><i
+                                                class="fas fa-shield-alt"></i></span>Admin Page</a>
                                         <div class="line-user-nav"></div>
                                         <form th:action="@{/logout}" method="post">
-                                            <button class="dropdown-item btn-logout" style="outline: none" type="submit"><span class="icon-nav-left"><i class="fas fa-sign-out-alt"></i></span>Logout</button>
+                                            <button class="dropdown-item btn-logout" style="outline: none"
+                                                    type="submit"><span class="icon-nav-left"><i
+                                                    class="fas fa-sign-out-alt"></i></span>Logout
+                                            </button>
                                         </form>
 
                                     </div>
@@ -169,7 +236,8 @@
                         </th:block>
                         <th:block sec:authorize="!isAuthenticated()">
                             <li class="nav-item">
-                                <a class="nav-link" type="button" th:href="@{/login}"><span><i class="fas fa-sign-in-alt"></i> Sign In/Sign
+                                <a class="nav-link" type="button" th:href="@{/login}"><span><i
+                                        class="fas fa-sign-in-alt"></i> Sign In/Sign
                                    up</span></a>
                             </li>
                         </th:block>
@@ -195,12 +263,8 @@
 
 </div>
 
-
-
-<script th:src="@{/js/jquery.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script th:src="@{/js/common/navbar.js}"></script>
-
 </body>
 </html>

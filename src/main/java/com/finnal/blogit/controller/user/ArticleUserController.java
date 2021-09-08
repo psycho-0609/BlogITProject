@@ -31,6 +31,7 @@ public class ArticleUserController {
     private IArticleService articleService;
 
 
+
     @GetMapping("/newPost")
     public String addPosts(Model model){
         model.addAttribute("title","New post");
@@ -39,9 +40,20 @@ public class ArticleUserController {
         return "user/add-post";
     }
 
+    @GetMapping("/{id}")
+    public String detailPost(@PathVariable("id") Long id, Model model) throws WebException{
+        ArticleEntity article = articleService.findById(id).orElseThrow(WebException::new);
+        if(!UserInfor.getPrincipal().getId().equals(article.getUserAccount().getId())){
+            throw new WebException();
+        }
+        model.addAttribute("topics", topicService.findAll());
+        model.addAttribute("article", article);
+        return "article/detailArticle";
+    }
+
     @GetMapping("/edit/{id}")
     public String editPost(@PathVariable("id") Long id, Model model) throws WebException {
-        ArticleEntity entity = articleService.findById(id).orElseThrow(() -> new WebException());
+        ArticleEntity entity = articleService.findById(id).orElseThrow(WebException::new);
         if (UserInfor.getPrincipal().getId().intValue() != entity.getUserAccount().getId().intValue()) {
             throw new WebException();
         }

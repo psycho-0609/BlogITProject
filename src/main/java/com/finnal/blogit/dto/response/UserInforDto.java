@@ -1,6 +1,7 @@
 package com.finnal.blogit.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.finnal.blogit.constant.Constant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,6 +16,6 @@ public class UserInforDto {
     private Long userDetailId;
 
     public String getThumbnail() {
-        return thumbnail == null ? "/img/defaultUserImg.jpg":"/imgUser/"+userDetailId+"/"+thumbnail;
+        return thumbnail == null ? "/img/defaultUserImg.jpg": Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/avatarUser/" + userDetailId +"/" + thumbnail;
     }
 }

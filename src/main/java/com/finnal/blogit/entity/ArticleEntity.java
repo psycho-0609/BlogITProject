@@ -1,5 +1,6 @@
 package com.finnal.blogit.entity;
 
+import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.entity.enumtype.ArticleNew;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
@@ -8,6 +9,7 @@ import com.finnal.blogit.entity.enumtype.converter.ArticlePublishedConverter;
 import com.finnal.blogit.entity.enumtype.converter.ArticleStatusConverter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -94,11 +96,17 @@ public class ArticleEntity {
 
     @Transient
     public String getImagePath(){
-        if(image == null|| id==null) return null;
-        return "/imgBackArticle/" + id + "/" + image;
+        if(image == null|| id == null) return null;
+        return Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/fileArticle/" + id + "/" + image;
     }
 
     public ArticleEntity(Long id) {
         this.id = id;
+    }
+
+    @Transient
+    public String getVideoPath(){
+        if(videoFile == null || Strings.isEmpty(videoFile) || id == null) return null;
+        return Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/fileArticle/" + id + "/" + videoFile;
     }
 }

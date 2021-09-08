@@ -12,22 +12,42 @@ import java.util.List;
 import java.util.Optional;
 
 public interface HistoryArticleRepository extends JpaRepository<HistoryArticleEntity,Long> {
-    void deleteAllByHistoryEntity_Id(Long id);
-    Optional<HistoryArticleEntity> findByHistoryEntity_IdAndArticleEntity_IdAndCratedDate(Long hisId, Long articleId, Date date);
-    Long countAllByHistoryEntityId(Long id);
+//    void deleteAllByHistoryEntity_Id(Long id);
+    void deleteAllByAccount_Id(Long id);
+
+//    Optional<HistoryArticleEntity> findByHistoryEntity_IdAndArticleEntity_IdAndCratedDate(Long hisId, Long articleId, Date date);
+
+    Optional<HistoryArticleEntity> findByAccount_IdAndArticleEntity_IdAndCratedDate(Long hisId, Long articleId, Date date);
+//    Long countAllByHistoryEntityId(Long id);
+
+    Long countAllByAccountId(Long id);
+
+//    @Query("select new com.finnal.blogit.dto.response.HistoryArticleDTO(h.id, h.cratedDate, h.articleEntity.id, h.articleEntity.title, h.articleEntity.published," +
+//            "h.articleEntity.news, h.articleEntity.status, h.articleEntity.countView, h.articleEntity.image, h.articleEntity.shortDescription," +
+//            "h.articleEntity.createdDate, h.articleEntity.publishedDate, h.articleEntity.modifiedDate, h.articleEntity.prioritize, h.articleEntity.topic.id, h.articleEntity.topic.name," +
+//            "h.articleEntity.userAccount.id, h.articleEntity.userAccount.email, h.articleEntity.userAccount.userDetailEntity.id, h.articleEntity.userAccount.userDetailEntity.firstName, h.articleEntity.userAccount.userDetailEntity.lastName," +
+//            "h.articleEntity.userAccount.userDetailEntity.thumbnail) from HistoryArticleEntity as h where h.historyEntity.id =:id order by h.timeWatch desc")
+//    List<HistoryArticleDTO> findAllByHistoryEntityId(@Param("id") Long id);
+//
+//    @Query("select new com.finnal.blogit.dto.response.HistoryArticleDTO(h.id, h.cratedDate, h.articleEntity.id, h.articleEntity.title, h.articleEntity.published," +
+//            "h.articleEntity.news, h.articleEntity.status, h.articleEntity.countView, h.articleEntity.image, h.articleEntity.shortDescription," +
+//            "h.articleEntity.createdDate, h.articleEntity.publishedDate, h.articleEntity.modifiedDate,h.articleEntity.prioritize, h.articleEntity.topic.id, h.articleEntity.topic.name," +
+//            "h.articleEntity.userAccount.id, h.articleEntity.userAccount.email, h.articleEntity.userAccount.userDetailEntity.id, h.articleEntity.userAccount.userDetailEntity.firstName, h.articleEntity.userAccount.userDetailEntity.lastName," +
+//            "h.articleEntity.userAccount.userDetailEntity.thumbnail) from HistoryArticleEntity as h where h.historyEntity.id =:id and h.articleEntity.title like %:title% order by h.timeWatch desc")
+//    List<HistoryArticleDTO> findAllForSearch(@Param("id") Long id, @Param("title") String title);
 
     @Query("select new com.finnal.blogit.dto.response.HistoryArticleDTO(h.id, h.cratedDate, h.articleEntity.id, h.articleEntity.title, h.articleEntity.published," +
             "h.articleEntity.news, h.articleEntity.status, h.articleEntity.countView, h.articleEntity.image, h.articleEntity.shortDescription," +
             "h.articleEntity.createdDate, h.articleEntity.publishedDate, h.articleEntity.modifiedDate, h.articleEntity.prioritize, h.articleEntity.topic.id, h.articleEntity.topic.name," +
             "h.articleEntity.userAccount.id, h.articleEntity.userAccount.email, h.articleEntity.userAccount.userDetailEntity.id, h.articleEntity.userAccount.userDetailEntity.firstName, h.articleEntity.userAccount.userDetailEntity.lastName," +
-            "h.articleEntity.userAccount.userDetailEntity.thumbnail) from HistoryArticleEntity as h where h.historyEntity.id =:id order by h.timeWatch desc")
-    List<HistoryArticleDTO> findAllByHistoryEntityId(@Param("id") Long id);
+            "h.articleEntity.userAccount.userDetailEntity.thumbnail) from HistoryArticleEntity as h where h.account.id =:id order by h.timeWatch desc")
+    List<HistoryArticleDTO> findAllByAccountId(@Param("id") Long id);
 
     @Query("select new com.finnal.blogit.dto.response.HistoryArticleDTO(h.id, h.cratedDate, h.articleEntity.id, h.articleEntity.title, h.articleEntity.published," +
             "h.articleEntity.news, h.articleEntity.status, h.articleEntity.countView, h.articleEntity.image, h.articleEntity.shortDescription," +
             "h.articleEntity.createdDate, h.articleEntity.publishedDate, h.articleEntity.modifiedDate,h.articleEntity.prioritize, h.articleEntity.topic.id, h.articleEntity.topic.name," +
             "h.articleEntity.userAccount.id, h.articleEntity.userAccount.email, h.articleEntity.userAccount.userDetailEntity.id, h.articleEntity.userAccount.userDetailEntity.firstName, h.articleEntity.userAccount.userDetailEntity.lastName," +
-            "h.articleEntity.userAccount.userDetailEntity.thumbnail) from HistoryArticleEntity as h where h.historyEntity.id =:id and h.articleEntity.title like %:title% order by h.timeWatch desc")
+            "h.articleEntity.userAccount.userDetailEntity.thumbnail) from HistoryArticleEntity as h where h.account.id =:id and h.articleEntity.title like %:title% order by h.timeWatch desc")
     List<HistoryArticleDTO> findAllForSearch(@Param("id") Long id, @Param("title") String title);
 
 

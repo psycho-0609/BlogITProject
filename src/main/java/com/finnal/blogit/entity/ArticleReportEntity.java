@@ -29,4 +29,8 @@ public class ArticleReportEntity {
 
     @Convert(converter = ArticleReportNewsConverter.class)
     private ArticleReportNews news;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private UserAccountEntity userAccount;
 }

@@ -140,6 +140,7 @@ $(document).ready(function () {
     function write(el) {
         let published = "";
         let lastEdit = "";
+        let url ="";
         if (el.modifiedDate == null) {
             lastEdit = formatDate(el.createdDate);
         } else {
@@ -152,11 +153,15 @@ $(document).ready(function () {
                 "     <span style='padding-top: .5rem'><i class='fas fa-calendar-day'></i> " + formatDate(el.publishedDate) + "</span>\n" +
                 "</div>\n"
         }
-
+        if(el.published === 1 && el.status === 1){
+            url = "/posts/"
+        }else{
+            url = "/user/posts/"
+        }
         let item = "<div id='mainContentPosts' class='card card-content mb-0'>\n" +
             "                        <div class='card-body p-0 card-original'>\n" +
             "                            <p class='card-original-cate' style='color: red'>" + el.topic.name + " </p>\n" +
-            "                            <h5 class='card-title card-original-title'><a href='/posts/" + el.id + "'>" + el.title + "</a></h5>\n" + published +
+            "                            <h5 class='card-title card-original-title'><a href='" + url + el.id + "'>" + el.title + "</a></h5>\n" + published +
             "                            <div class='d-flex mt-3'>\n" +
             "                                    <p style='color:grey; margin-right: 1rem;margin-bottom: 0'>Last edit: " + lastEdit + "</p>\n" +
             "                                <div class='dropdown'>\n" +
@@ -182,7 +187,23 @@ $(document).ready(function () {
 
     function formatDate(data) {
         let date = new Date(data);
-        let formatted_date = date.getDay() + "-" + date.getMonth() + "-" + date.getFullYear() + " " + date.getHours()+":"+date.getMinutes();
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+        if (day < 10) {
+            day = "0" + day;
+        }
+        if (month < 10) {
+            month = "0" + month;
+        }
+        if (hour < 10) {
+            hour = "0" + hour;
+        }
+        if (minute < 10) {
+            minute = "0" + minute;
+        }
+        let formatted_date = date.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minute;
         return formatted_date;
     }
 

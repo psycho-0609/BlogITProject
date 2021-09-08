@@ -2,6 +2,7 @@ package com.finnal.blogit.controller.api.user;
 
 import com.finnal.blogit.dto.request.ReplyCommentRequest;
 import com.finnal.blogit.dto.response.MessageDTO;
+import com.finnal.blogit.dto.response.ReplyCommentDTO;
 import com.finnal.blogit.entity.CommentEntity;
 import com.finnal.blogit.entity.ReplyCommentEntity;
 import com.finnal.blogit.entity.UserAccountEntity;
@@ -11,6 +12,7 @@ import com.finnal.blogit.exception.api.ItemCannotEmptyException;
 import com.finnal.blogit.exception.api.ItemNotFoundException;
 import com.finnal.blogit.service.inter.ICommentService;
 import com.finnal.blogit.service.inter.IReplyCommentService;
+import com.finnal.blogit.service.inter.IUserAccountService;
 import com.finnal.blogit.user.CustomUserDetail;
 import com.finnal.blogit.user.UserInfor;
 import org.apache.logging.log4j.util.Strings;
@@ -30,6 +32,9 @@ public class ReplyComment {
 
     @Autowired
     private ICommentService cService;
+
+    @Autowired
+    private IUserAccountService accountService;
 
     @PostMapping("/create")
     public ResponseEntity<MessageDTO> create(@RequestBody ReplyCommentRequest request) throws APIException{
@@ -51,8 +56,18 @@ public class ReplyComment {
 
     }
 
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<ReplyCommentDTO> getOneById(@PathVariable("id") Long id) throws APIException{
+        CustomUserDetail userDetail = UserInfor.getPrincipal();
+        ReplyCommentDTO replyComment = service.findOneById(id).orElseThrow(()->new ItemNotFoundException("Reply is not found"));
+        if(!replyComment.getAccount().getId().equals(userDetail.getId())){
+            throw new ItemNotFoundException("Reply is not found");
+        }
+        return new ResponseEntity<>(replyComment, HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete/{id}")
-    private ResponseEntity<MessageDTO> delete(@PathVariable("id") Long id) throws APIException{
+    public ResponseEntity<MessageDTO> delete(@PathVariable("id") Long id) throws APIException{
         CustomUserDetail userDetail = UserInfor.getPrincipal();
         ReplyCommentEntity entity = service.findById(id).orElseThrow(()-> new ItemNotFoundException("Comment not found"));
         if(!entity.getAccount().getId().equals(userDetail.getId())){
@@ -71,6 +86,11 @@ public class ReplyComment {
         if(!cService.existsById(request.getCommentId())){
             throw new ItemNotFoundException("Comment to reply not found");
         }
+        if(request.getRepAccountId() != null){
+            if(!accountService.existsById(request.getRepAccountId())){
+                throw new ItemNotFoundException("User to reply not found");
+            }
+        }
     }
     private void validateDataToUpdate(ReplyCommentRequest request) throws APIException {
         if(request.getContent() == null || Strings.isEmpty(request.getContent())){
@@ -84,7 +104,12 @@ public class ReplyComment {
             entity.setComment(new CommentEntity(request.getCommentId()));
             entity.setCreatedDate(LocalDateTime.now());
         }
+        if(request.getRepAccountId() != null){
+            entity.setRepAccount(new UserAccountEntity(request.getRepAccountId()));
+        }else{
+            entity.setRepAccount(null);
+        }
         entity.setContent(request.getContent());
-
     }
+
 }

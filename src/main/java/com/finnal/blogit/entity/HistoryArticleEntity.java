@@ -26,6 +26,10 @@ public class HistoryArticleEntity {
     @JoinColumn(name = "history_id")
     private HistoryEntity historyEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private UserAccountEntity account;
+
     @Column
     @Temporal(TemporalType.DATE)
     private Date cratedDate;
