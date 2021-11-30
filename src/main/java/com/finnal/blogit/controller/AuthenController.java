@@ -37,7 +37,7 @@ public class AuthenController {
 
     @GetMapping("/confirmAccount")
     public String confirmAccount(@RequestParam("token") String token) throws WebException{
-        UserAccountEntity entity = userAccountService.findByToken(token).orElseThrow(()-> new WebException());
+        UserAccountEntity entity = userAccountService.findByToken(token).orElseThrow(WebException::new);
         entity.setToken(null);
         entity.setStatus(AccountStatus.ENABLE);
         userAccountService.save(entity);

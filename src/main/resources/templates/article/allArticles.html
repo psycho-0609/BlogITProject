@@ -28,6 +28,10 @@
         .drop-menu a{
             padding: .5rem 1rem !important;
         }
+        .activePagi{
+            color: white;
+            background: blue;
+        }
     </style>
 </head>
 <body>
@@ -37,9 +41,9 @@
         <section>
             <div class="row">
                 <div class=" col-lg-9 col-md-12 col-sm-12">
-                    <p th:if="${articles.size() <=0 }" class="pt-4" style="color: grey; font-weight: bold; text-align: center">There is nothing here!</p>
-                    <div th:if="${articles.size()>0}" class="card-box-item">
-                        <div class="card card-content" th:each="article:${articles}">
+                    <p th:if="${paginationArticle.articles.size() <=0 }" class="pt-4" style="color: grey; font-weight: bold; text-align: center">There is nothing here!</p>
+                    <div th:if="${paginationArticle.articles.size()>0}" class="card-box-item">
+                        <div class="card card-content" th:each="article:${paginationArticle.articles}">
                             <div class="row no-gutters">
                                 <div class="col-md-5">
                                     <a th:href="@{'/posts/'+${article.id}}"><img th:src="${article.imagePath}"
@@ -48,13 +52,13 @@
                                 <div class="col-md-7">
                                     <div class="card-body card-original">
                                         <p class="card-original-cate"><a
-                                                th:href="@{'/posts/topic/'+${article.topic.id}}">[[${article.topic.name}]]</a>
+                                                th:href="@{'/posts/topic/'+${article.topic.id}+'?page=1'}">[[${article.topic.name}]]</a>
                                         </p>
                                         <h5 class="card-title card-original-title"><a
                                                 th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a></h5>
                                         <div class="card-original-author">
                                             <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                            <a th:href="@{'/author/'+${article.userAccount.id}}"><span class=""><i class="fas fa-user"></i></span>
+                                            <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}"><span class=""><i class="fas fa-user"></i></span>
                                                 [[${article.userAccount.userDetail.firstName}]]
                                                 [[${article.userAccount.userDetail.lastName}]]
                                             </a>
@@ -69,8 +73,11 @@
                         </div>
 
                     </div>
-                    <div>
-                        <ul class="pagination" id="pagination"></ul>
+                    <div class="d-flex justify-content-center mb-4">
+                        <div th:if="${paginationArticle.totalPage > 10}">
+                            <ul class="pagination" id="pagination"></ul>
+                        </div>
+
                         <form th:action='@{${#httpServletRequest.servletPath}}' id="formSubmit">
                             <input type="hidden" value="" id="page" name="page"/>
                         </form>
@@ -84,7 +91,7 @@
                         </div>
                         <div class="blog-category-filter">
                             <ul class="list-category">
-                                <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id}}"><span><i
+                                <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id} +'?page=1'}"><span><i
                                         class="fas fa-angle-right"></i></span> [[${topic.name}]]</a></li>
                             </ul>
                         </div>
@@ -105,19 +112,21 @@
     var url_string = window.location.href; //window.location.href
     var url = new URL(url_string);
     var c = url.searchParams.get("page");
-    var totalPages = 5;
-    var currentPage = 1;
+    var totalPages = [[${paginationArticle.totalPage}]];
+    var currentPage = c;
+
     $('#pagination').twbsPagination({
-        totalPages: 5,
-        visiblePages: 1,
-        startPage: currentPage,
+        totalPages: parseInt(totalPages),
+        visiblePages: 5,
+        startPage: parseInt(currentPage),
         onPageClick: function (event, page) {
-            if (currentPage != page) {
+            if (parseInt(currentPage) != page) {
                 $('#page').val(page);
                 $('#formSubmit').submit();
             }
         }
     });
+
 
 </script>
 </body>

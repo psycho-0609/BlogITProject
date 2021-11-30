@@ -4,6 +4,7 @@ import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.constant.MessageConstant;
 import com.finnal.blogit.dto.request.ReportRequest;
 import com.finnal.blogit.dto.response.ArticleReportResponse;
+import com.finnal.blogit.dto.response.UserInforAccountDTO;
 import com.finnal.blogit.dto.response.UserInforDto;
 import com.finnal.blogit.entity.*;
 import com.finnal.blogit.entity.enumtype.ArticleReportNews;
@@ -48,7 +49,7 @@ public class ArticleReportWebAPI {
 
     @PostMapping("/create")
     public ResponseEntity<ArticleReportResponse> create(@RequestBody ReportRequest request, HttpSession session) throws APIException {
-        Long accountId = ((UserInforDto) session.getAttribute(Constant.USER)).getId();
+        Long accountId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
         validateData(request);
         ArticleEntity articleEntity = articleService.findById(request.getArticleId()).orElseThrow(()-> new ItemNotFoundException("Article not found"));
         ReportEntity reportEntity = reportService.findById(request.getTypeReportId()).orElseThrow(()-> new ItemNotFoundException("Type report not found"));

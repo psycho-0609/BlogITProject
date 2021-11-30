@@ -8,6 +8,8 @@ import com.finnal.blogit.dto.response.StatisticAuthor;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,8 +20,6 @@ import java.util.Optional;
 
 public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
 
-//    @Query("select new com.ckfinder.demo.dto.response.CustomArticleDTO() from")
-//    List<CustomArticleDTO> find();
     List<ArticleEntity> findAllByStatusAndPublishedAndUserAccountId(ArticleStatus status, ArticlePublished published, Long id);
     List<ArticleEntity> findAllByStatusAndUserAccountId(ArticleStatus status,Long id);
 
@@ -30,41 +30,12 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
             "from ArticleEntity as a where a.published = :published and a.userAccount.id = :id and a.status = :status order by a.modifiedDate desc, a.createdDate desc")
     List<CustomArticleDTO> findAllByPublishedStatusAndUserAccountId( @Param("published") ArticlePublished published, @Param("id") Long id, @Param("status") ArticleStatus status);
 
-
-    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
-            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
-            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
-            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
-            "from ArticleEntity as a where a.userAccount.id = :id order by a.modifiedDate desc, a.createdDate desc ")
-    List<CustomArticleDTO> findAllByAccountId(@Param("id") Long id);
-
     @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
             "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
             "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
             "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
             "from ArticleEntity as a where a.id = :id")
     CustomArticleDTO findByArticleId(@Param("id") Long id);
-
-    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
-            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
-            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
-            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
-            "from ArticleEntity as a where a.title like %:title% and a.published = :published and a.userAccount.id = :id and a.status = :status order by a.modifiedDate desc, a.createdDate desc")
-    List<CustomArticleDTO> findAllForSearch( @Param("published") ArticlePublished published, @Param("id") Long id, @Param("status") ArticleStatus status, @Param("title") String title);
-
-    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
-            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
-            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
-            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
-            "from ArticleEntity as a where a.published = :published and a.status = :status order by a.modifiedDate desc, a.createdDate desc")
-    List<CustomArticleDTO> findAllByPublishedAndStatus(@Param("published") ArticlePublished published, @Param("status") ArticleStatus status);
-
-    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
-            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
-            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
-            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
-            "from ArticleEntity as a where a.published = :published and a.status = :status and a.topic.id =:topicId order by a.publishedDate desc")
-    List<CustomArticleDTO> findByTopicId(@Param("published") ArticlePublished published, @Param("status") ArticleStatus status, @Param("topicId") Integer id);
 
     @Query("select sum(a.countView)  from ArticleEntity as a where a.id in :ids")
     Long totalCountView(@Param("ids") List<Long> listId);
@@ -79,13 +50,6 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
             "from ArticleEntity as a where a.published = 1 and a.status = 1 order by a.countView desc")
     List<CustomArticleDTO> findForPopular();
 
-    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
-            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
-            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
-            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
-            "from ArticleEntity as a where a.status = :status order by a.modifiedDate desc")
-    List<CustomArticleDTO> findByStatus(@Param("status") ArticleStatus status);
-
     @Query("select new com.finnal.blogit.dto.response.ArticleCustomDTO(a.id, a.title, a.published, a.prioritize) from ArticleEntity as a where a.id =:id")
     Optional<ArticleCustomDTO> getById(@Param("id") Long id);
 
@@ -98,14 +62,11 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
             "from ArticleEntity as a where a.published = :published and a.status = :status order by a.publishedDate desc")
     List<CustomArticleDTO> findAllByPublishedAndStatusForWeb(@Param("published") ArticlePublished published, @Param("status") ArticleStatus status);
 
-    @Query("select a from ArticleEntity as a where a.published = :published and a.status = :status order by a.favoriteArticle.size desc")
-    List<ArticleEntity> getAllOderByFavCount(@Param("published") ArticlePublished published, @Param("status") ArticleStatus status);
-
     @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
             "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
             "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
             "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
-            "from ArticleEntity as a where a.id in (:ids)")
+            "from ArticleEntity as a where a.id in (:ids) order by a.createdDate desc ")
     List<CustomArticleDTO> getListArticle(@Param("ids") List<Long> ids);
 
     @Query("select count(a) from ArticleEntity a where a.status = 1 and a.published = 1")
@@ -129,20 +90,52 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity,Long> {
     @Query(value = "select * from article as a where a.status = 1 and a.published = 1 order by a.count_view desc limit 4 ", nativeQuery = true)
     List<ArticleEntity> findAllOrderPopularLimit();
 
-    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
-            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
-            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
-            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
-            "from ArticleEntity as a where a.published = 1 and a.status = 1 order by a.publishedDate desc")
-    List<CustomArticleDTO> getListNewestPost();
+    @Query(value = "select * from article as a where a.status = 1 and a.published = 1 order by a.avg_rate desc limit 4 ", nativeQuery = true)
+    List<ArticleEntity> findAllOrderRateLimit();
 
-    @Query("select new com.finnal.blogit.dto.response.CustomArticleDTO(a.id, a.title, a.published, a.news, a.status, a.countView," +
-            "a.image,a.shortDescription,a.createdDate, a.publishedDate, a.modifiedDate, a.prioritize," +
-            "a.topic.id, a.topic.name, a.userAccount.id, a.userAccount.email, a.userAccount.userDetailEntity.id," +
-            "a.userAccount.userDetailEntity.firstName, a.userAccount.userDetailEntity.lastName, a.userAccount.userDetailEntity.thumbnail)" +
-            "from ArticleEntity as a where a.published = 1 and a.status = 1 order by a.favoriteArticle.size desc")
-    List<CustomArticleDTO> getListFavPost();
+    @Query("select a.id from ArticleEntity a where a.published =:published and a.status = :status")
+    Page<Long> getListIdPagination(Pageable pageable, @Param("published") ArticlePublished published, @Param("status") ArticleStatus status);
 
+    @Query("select count (a) from ArticleEntity a where a.published =:published and a.status = :status and a.title like %:title%")
+    Long countArticleEntitiesByPublishedAndStatus(@Param("published") ArticlePublished published, @Param("status") ArticleStatus status, @Param("title") String title);
+    @Query("select a.id from ArticleEntity a where a.published = 1 and a.status = 1 and a.topic.id = :topicId")
+    Page<Long> getListIdByTopicForPagi(Pageable pageable, @Param("topicId") Integer topicId);
+
+    @Query("select count(a)  from ArticleEntity as a where a.published = 1 and a.status = 1 and a.topic.id = :id")
+    Long countArticleEntitiesByTopicId(@Param("id") Integer id);
+
+    @Query("select a.id from ArticleEntity a where a.published = :published and a.status = :status and a.title like %:title%")
+    Page<Long> getListIdByTitleForPagi(Pageable pageable, @Param("title") String title,@Param("published") ArticlePublished published,@Param("status") ArticleStatus status);
+
+    @Query("select count(a)  from ArticleEntity as a where a.published = :published and a.status = :status and a.title like %:title%")
+    Long countArticleByTitle(@Param("title") String title, @Param("published") ArticlePublished published,@Param("status") ArticleStatus status);
+
+    @Query("select a.id from ArticleEntity a where a.title like %:title% and a.published =:published and a.status =:status and  a.userAccount.id = :userId")
+    Page<Long> findListIdByPublishedAndStatusOfUser(Pageable pageable, @Param("title") String title, @Param("published") ArticlePublished published, @Param("status") ArticleStatus status, @Param("userId") Long userId);
+
+    @Query("select a.id from ArticleEntity a where a.title like %:title% and a.userAccount.id = :userId and a.status = 2")
+    Page<Long> findListIdPrivateOfUser(Pageable pageable, @Param("title") String title, @Param("userId") Long userId);
+
+    @Query("select count(a) from ArticleEntity a where a.status =:status and a.userAccount.id =:userId and a.title like %:title%")
+    Long countAllByStatusAndUserAccountId(@Param("status") ArticleStatus status,@Param("userId") Long userId, @Param("title") String title);
+
+    @Query("select count(a) from ArticleEntity a where a.status =:status and a.published = :published and a.userAccount.id =:userId and a.title like %:title%")
+    Long countAllByStatusAndPublishedAndUserAccountId(@Param("status") ArticleStatus status, @Param("published") ArticlePublished published, @Param("userId") Long userId, @Param("title") String title);
+
+    @Query("select a.id from ArticleEntity a where a.status =:status and a.title like %:title%")
+    Page<Long> getListIdByStatusAndTitleForPagi(Pageable pageable, @Param("status") ArticleStatus status,@Param("title") String title);
+
+    @Query("select count(a) from ArticleEntity a where a.status = :status and a.title like %:title%")
+    Long countAllByStatusAndTAndTitleLike(@Param("status") ArticleStatus status, @Param("title") String title);
+
+    @Query("select a.id from ArticleEntity a inner join ArticleReportEntity ar on a.id = ar.articleEntity.id and a.status = 1 order by ar.createdDate desc")
+    Page<Long> getListIdForReport(Pageable pageable);
+
+    @Query("select count(a) from ArticleEntity a inner join ArticleReportEntity ar on a.id = ar.articleEntity.id and a.status = 1")
+    Long countAllForReport();
+
+    @Query("select count(a) from ArticleEntity a inner join CommentEntity c on a.id = c.article.id and a.status = 1 and a.title like %:title%")
+    Long countAllForComment(@Param("title") String title);
 
 
 }

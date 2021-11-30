@@ -1,25 +1,27 @@
 package com.finnal.blogit.controller.admin;
 
 import com.finnal.blogit.constant.Constant;
-import com.finnal.blogit.dto.response.CustomArticleDTO;
+import com.finnal.blogit.dto.response.PaginationArticleDTO;
 import com.finnal.blogit.entity.ArticleEntity;
-import com.finnal.blogit.entity.FavoriteArticleEntity;
-import com.finnal.blogit.entity.ReadLaterArticleEntity;
 import com.finnal.blogit.entity.enumtype.ArticleNew;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
 import com.finnal.blogit.exception.web.WebException;
 import com.finnal.blogit.service.inter.*;
+import com.finnal.blogit.untils.Utility;
 import com.finnal.blogit.user.CustomUserDetail;
 import com.finnal.blogit.user.UserInfor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -39,25 +41,70 @@ public class ArticleAdminController {
     private ITopicService topicService;
 
     @Autowired
-    private IReadLaterArticleService rlService;
+    private IBookMarkService rlService;
 
     @GetMapping("/published")
-    public String publishedPosts(Model model){
-        model.addAttribute("articles",articleService.findByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC));
+    public String publishedPosts(Model model, @RequestParam("page") Integer page, @RequestParam(value = "title", required = false) String title) throws WebException {
+        if(page - 1 < 0){
+            throw new WebException();
+        }
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        Sort sort = Sort.by("createdDate").descending();
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+        Page<Long> ids;
+        if(title != null){
+            ids = articleService.getIdByTitleForPagi(pageable, title, ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countArticleByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC, title)));
+        }else{
+            ids = articleService.getIdByTitleForPagi(pageable, "", ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countArticleByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC, "")));
+        }
+        pagination.setArticles(articleService.getListArticleByListId(ids.getContent()));
+        model.addAttribute("pagination", pagination);
         model.addAttribute("type", Constant.PUBLISHED);
         return "adminPage/article/published";
     }
 
     @GetMapping("/unapproved")
-    public String unapproved(Model model){
-        model.addAttribute("articles",articleService.findByPublishedAndStatus(ArticlePublished.DISABLE, ArticleStatus.PUBLIC));
+    public String unapproved(Model model, @RequestParam("page") Integer page, @RequestParam(value = "title", required = false) String title) throws WebException {
+        if(page - 1 < 0){
+            throw new WebException();
+        }
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        Sort sort = Sort.by("createdDate").descending();
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+        Page<Long> ids;
+        if(title != null){
+            ids = articleService.getIdByTitleForPagi(pageable, title, ArticlePublished.DISABLE, ArticleStatus.PUBLIC);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countArticleByPublishedAndStatus(ArticlePublished.DISABLE, ArticleStatus.PUBLIC, title)));
+        }else{
+            ids = articleService.getIdByTitleForPagi(pageable, "", ArticlePublished.DISABLE, ArticleStatus.PUBLIC);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countArticleByPublishedAndStatus(ArticlePublished.DISABLE, ArticleStatus.PUBLIC, "")));
+        }
+        pagination.setArticles(articleService.getListArticleByListId(ids.getContent()));
+        model.addAttribute("pagination", pagination);
         model.addAttribute("type", Constant.UNLISTED);
         return "adminPage/article/unapproved";
     }
 
     @GetMapping("/allPosts")
-    public String allPosts(Model model){
-        model.addAttribute("articles",articleService.findByStatus(ArticleStatus.PUBLIC));
+    public String allPosts(Model model, @RequestParam("page") Integer page, @RequestParam(value = "title", required = false) String title) throws WebException {
+        if(page - 1 < 0){
+            throw new WebException();
+        }
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        Sort sort = Sort.by("createdDate").descending();
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+        Page<Long> ids;
+        if(title != null){
+            ids = articleService.getListIdByStatusAndTitleForPagi(pageable, ArticleStatus.PUBLIC, title);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countAllByStatusAndTAndTitleLike(ArticleStatus.PUBLIC, title)));
+        }else{
+            ids = articleService.getListIdByStatusAndTitleForPagi(pageable, ArticleStatus.PUBLIC, "");
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countAllByStatusAndTAndTitleLike(ArticleStatus.PUBLIC, "")));
+        }
+        pagination.setArticles(articleService.getListArticleByListId(ids.getContent()));
+        model.addAttribute("pagination", pagination);
         model.addAttribute("type", Constant.ALL);
         return "adminPage/article/allArticle";
     }

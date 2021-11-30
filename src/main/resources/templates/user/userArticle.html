@@ -24,15 +24,15 @@
                         <div class="sm-menu-box" id="menuSm">
                             <ul class="sm-menu">
                                 <li class="el-smmenu-title">
-                                    <a th:href="@{/user/posts/public}" class="el-sm-menu">
+                                    <a th:href="@{/user/posts/public?page=1}" class="el-sm-menu">
                                         <i class="fas fa-globe-asia"></i>
                                         Public
                                     </a>
-                                    <a th:href="@{/user/posts/private}" class="el-sm-menu">
+                                    <a th:href="@{/user/posts/private?page=1}" class="el-sm-menu">
                                         <i class="fas fa-lock"></i>
                                         Private
                                     </a>
-                                    <a th:href="@{/user/posts/unapproved}" class="el-sm-menu">
+                                    <a th:href="@{/user/posts/unapproved?page=1}" class="el-sm-menu">
                                         <i class="fas fa-hourglass-half"></i>
                                         Unapproved
                                     </a>
@@ -46,14 +46,14 @@
                             <span>History</span>
                         </a>
                     </li>
+<!--                    <li class="el-submenu-title">-->
+<!--                        <a th:href="@{/user/favorite/posts}" class="el-link">-->
+<!--                            <i class="fas fa-heart"></i>-->
+<!--                            <span>Favorite</span>-->
+<!--                        </a>-->
+<!--                    </li>-->
                     <li class="el-submenu-title">
-                        <a th:href="@{/user/favorite/posts}" class="el-link">
-                            <i class="fas fa-heart"></i>
-                            <span>Favorite</span>
-                        </a>
-                    </li>
-                    <li class="el-submenu-title">
-                        <a th:href="@{/user/readLater/posts}" class="el-link">
+                        <a th:href="@{/user/bookmark/posts?page=1}" class="el-link">
                             <i class="fas fa-bookmark"></i>
                             <span>My Bookmark</span>
                         </a>
@@ -82,7 +82,8 @@
                 <div>
                     <form th:action="@{${#httpServletRequest.requestURI}}" method="get">
                         <div class="input-group mb-3">
-                            <input type="search" class="form-control inputSearch" id="title" name="title" th:value="${#httpServletRequest.getParameter('title')}" placeholder="Search">
+                            <input type="search" class="form-control inputSearch"  name="title" th:value="${#httpServletRequest.getParameter('title')}" placeholder="Search">
+                            <input type="text" class="form-control d-none"  name="page" th:value="${#httpServletRequest.getParameter('page')}" placeholder="Search">
                             <div class="input-group-append">
                                 <button class="input-group-text btn-input-search" style="outline: none;"
                                         type="submit" id="basic-addon2"><i class="fas fa-search"></i></button>
@@ -91,7 +92,7 @@
                     </form>
                 </div>
                 <div class="main-content" id="mainContentPosts">
-                    <div th:if="${articles.size() > 0}" th:each="article:${articles}"  class="card card-content mb-0">
+                    <div th:if="${pagination.articles.size() > 0}" th:each="article:${pagination.articles}"  class="card card-content mb-0">
                         <div class="card-body p-0 card-original">
                             <p class="card-original-cate" style="color: red">[[${article.topic.name}]]</p>
                             <h5 th:if="${article.published == 2 || article.status == 2}" class="card-title card-original-title"><a th:href="@{'/user/posts/'+ ${article.id}}">[[${article.title}]]</a></h5>
@@ -123,7 +124,18 @@
                         </div>
                         <hr>
                     </div>
-                    <div th:if="${articles.size() <=0 }" class="mt-4">
+                    <div  class="d-flex justify-content-center mb-4">
+                        <div th:if="${pagination.totalPage >= 2}">
+                            <ul class="pagination" id="pagination"></ul>
+                        </div>
+
+                        <form th:action='@{${#httpServletRequest.servletPath}}' id="formSubmit">
+                            <input type="hidden" value="" id="page" name="page"/>
+                            <input type="hidden" id="title" name="title">
+                        </form>
+
+                    </div>
+                    <div th:if="${pagination.articles.size() <=0 }" class="mt-4">
                         <p style="color: grey; font-weight: bold; text-align: center">There is nothing here!</p>
                     </div>
 
@@ -136,5 +148,27 @@
 <div th:replace="common/footer :: footer"/>
 <script th:src="@{/js/web/menuUserPage.js}"></script>
 <script th:src="@{/js/web/user/userPost.js}"></script>
+<script>
+    var url_string = window.location.href; //window.location.href
+    var url = new URL(url_string);
+    var c = url.searchParams.get("page");
+    var totalPages = [[${pagination.totalPage}]];
+    var currentPage = c;
+    var title = url.searchParams.get("title");
+
+
+    $('#pagination').twbsPagination({
+        totalPages: parseInt(totalPages),
+        visiblePages: 5,
+        startPage: parseInt(currentPage),
+        onPageClick: function (event, page) {
+            if (parseInt(currentPage) != page) {
+                $('#page').val(page);
+                $("#title").val(title)
+                $('#formSubmit').submit();
+            }
+        }
+    });
+</script>
 </body>
 </html>

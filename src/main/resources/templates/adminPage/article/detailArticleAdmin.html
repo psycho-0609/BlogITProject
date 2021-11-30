@@ -92,11 +92,11 @@
                 <div class="article-infor">
 
                     <div class="article-author">
-                        <a th:href="@{'/author/'+${article.userAccount.id}}" class="article-img-author">
+                        <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}" class="article-img-author">
                             <img th:src="${article.userAccount.userDetailEntity.getImagePath()}" alt="">
                         </a>
                         <div class="article-name-author">
-                            <a th:href="@{'/author/'+${article.userAccount.id}}">[[${article.userAccount.userDetailEntity.firstName}]]
+                            <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}">[[${article.userAccount.userDetailEntity.firstName}]]
                                 [[${article.userAccount.userDetailEntity.lastName}]]</a>
                             <p class="article-published">[[${#temporals.format(article.publishedDate,'yyyy-MM-dd
                                 HH:mm')}]]</p>

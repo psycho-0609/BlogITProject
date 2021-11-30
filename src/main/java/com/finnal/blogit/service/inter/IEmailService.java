@@ -7,13 +7,14 @@ import com.finnal.blogit.entity.UserAccountEntity;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.List;
 
 public interface IEmailService {
 
-     void approvedPost(ArticleEntity entity, String topic, HttpServletRequest servletRequest) throws UnsupportedEncodingException, MessagingException;
+     void approvedPost(ArticleEntity entity, String topic, HttpServletRequest servletRequest) throws UnsupportedEncodingException, MessagingException, ParseException;
      void rejectPost(ArticleEntity entity, String topic, HttpServletRequest servletRequest) throws UnsupportedEncodingException, MessagingException;
-     void newPostSubmitted(ArticleEntity entity, String topic, List<String> emails, HttpServletRequest servletRequest) throws UnsupportedEncodingException, MessagingException;
+     void newPostSubmitted(ArticleEntity entity, String topic, List<String> emails, HttpServletRequest servletRequest) throws UnsupportedEncodingException, MessagingException, ParseException;
      void resetPassword(HttpServletRequest request, UserAccountEntity entity, String token) throws UnsupportedEncodingException, MessagingException;
      void confirmAccount(HttpServletRequest request, UserAccountEntity entity) throws UnsupportedEncodingException, MessagingException;
 }

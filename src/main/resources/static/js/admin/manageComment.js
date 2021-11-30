@@ -40,7 +40,7 @@ $(document).ready(function () {
         let res = "<tr>\n" +
             "                                    <td>" + el.article.id + "</td>\n" +
             "                                    <td><a href='/admin/comment/detail?postId=" + el.article.id + "'>" + el.article.title + "</a> </td>\n" +
-            "                                    <td><a href='/author/" + el.article.userAccount.id + "'>" + el.article.userAccount.userDetail.firstName + " " + el.article.userAccount.userDetail.lastName + "</a></td>\n" +
+            "                                    <td><a href='/author/" + el.article.userAccount.id + "?page=1'>" + el.article.userAccount.userDetail.firstName + " " + el.article.userAccount.userDetail.lastName + "</a></td>\n" +
             "                                    <td>" + el.totalComment + "</td>\n" +
             "                                    <td style=\"width: 10rem\" class=\"text-center\">\n" +
             "                                        <a href='/admin/comment/detail?postId=" + el.article.id + "' class=\"btn btn-warning btn-edit\">Detail</a>\n" +

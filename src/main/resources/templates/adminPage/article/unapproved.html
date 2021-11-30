@@ -74,20 +74,6 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
-                <!-- Topbar Search -->
-                <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                               aria-label="Search" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
@@ -134,77 +120,7 @@
                             </div>
                             <div id="notificationCenter"></div>
 
-                            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                        </div>
-                    </li>
-
-                    <!-- Nav Item - Messages -->
-                    <li class="nav-item dropdown no-arrow mx-1">
-                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-envelope fa-fw"></i>
-                            <!-- Counter - Messages -->
-                            <span class="badge badge-danger badge-counter">7</span>
-                        </a>
-                        <!-- Dropdown - Messages -->
-                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="messagesDropdown">
-                            <h6 class="dropdown-header">
-                                Message Center
-                            </h6>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                         alt="...">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div class="font-weight-bold">
-                                    <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                        problem I've been having.
-                                    </div>
-                                    <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                         alt="...">
-                                    <div class="status-indicator"></div>
-                                </div>
-                                <div>
-                                    <div class="text-truncate">I have the photos that you ordered last month, how
-                                        would you like them sent to you?
-                                    </div>
-                                    <div class="small text-gray-500">Jae Chun · 1d</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                         alt="...">
-                                    <div class="status-indicator bg-warning"></div>
-                                </div>
-                                <div>
-                                    <div class="text-truncate">Last month's report looks great, I am very happy with
-                                        the progress so far, keep up the good work!
-                                    </div>
-                                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                         alt="...">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div>
-                                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                        told me that people say this to all dogs, even if they aren't good...
-                                    </div>
-                                    <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                            <a class="dropdown-item text-center small text-gray-500" href="/admin/notification">Show All Alerts</a>
                         </div>
                     </li>
 
@@ -256,7 +172,12 @@
                         <h6 class="m-0 font-weight-bold text-primary">Unlisted Posts</h6>
                     </div>
                     <div class="form-group m-auto">
-                        <input placeholder="Search" type="text" id="keySearch" class="form-control input-search" name="title">
+                        <form th:action="@{${#httpServletRequest.requestURI}}" method="get">
+                            <input placeholder="Search" type="text" id="keySearch" class="form-control input-search"
+                                   name="title">
+                            <input type="text" class="form-control d-none"  name="page" th:value="${#httpServletRequest.getParameter('page')}" placeholder="Search">
+                            <button type="submit" class="d-none"></button>
+                        </form>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -271,22 +192,21 @@
                                 </tr>
                                 </thead>
                                 <tbody id="mainDataBox">
-                                <tr th:if="${articles.size() > 0}" th:each="article:${articles}" th:class="${article.news == 1 ? 'news':''}">
+                                <tr th:if="${pagination.articles.size() > 0}" th:each="article:${pagination.articles}" th:class="${article.news == 1 ? 'news':''}">
                                     <td style="width: 30rem"><a th:href="@{'/admin/post/'+${article.id}}">[[${article.title}]]</a>
                                     </td>
                                     <td>[[${article.topic.name}]]</td>
-                                    <td><a th:href="@{'/author/'+${article.userAccount.id}}">
+                                    <td><a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}">
                                         [[${article.userAccount.userDetail.firstName}]]
                                         [[${article.userAccount.userDetail.lastName}]]
                                     </a></td>
-                                    <td th:if="${article.modifiedDate == null}">[[${#temporals.format(article.createdDate,'yyyy-MM-dd HH:mm')}]]</td>
-                                    <td th:if="${article.modifiedDate != null}">[[${#temporals.format(article.modifiedDate,'yyyy-MM-dd HH:mm')}]]</td>
+                                    <td>[[${#temporals.format(article.modifiedDate,'yyyy-MM-dd HH:mm')}]]</td>
                                     <td style="width: 10rem" class="text-center">
                                         <button type="button" th:id="${'edit_'+article.id}" class="btn btn-warning btn-edit mb-2">Edit</button>
                                         <button type="button" th:id="${'delete_'+article.id}" class="btn btn-danger btn-delete mb-2">Delete</button>
                                     </td>
                                 </tr>
-                                <tr th:if="${articles.size() <= 0}">
+                                <tr th:if="${pagination.articles.size() <= 0}">
                                     <td colspan="5">
                                         <p style='color: grey; font-weight: bold; text-align: center'>There is nothing here!</p>
                                     </td>

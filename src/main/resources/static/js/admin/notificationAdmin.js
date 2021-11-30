@@ -108,7 +108,7 @@ $(document).ready(function () {
     function readAll(){
         $.ajax({
             url:"/api/admin/notification/readAll",
-            method:"post",
+            method:"put",
             dataType:"json"
         }).done(function (){
             ajaxGetAllNotification();

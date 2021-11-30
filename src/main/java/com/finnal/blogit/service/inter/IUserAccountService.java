@@ -5,6 +5,8 @@ import com.finnal.blogit.dto.response.UserInforDto;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.dto.request.RegisterRequest;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,5 +30,10 @@ public interface IUserAccountService {
     List<UserInforDto> getAllUserByName(String name);
     Optional<UserInforDto> findUserById(Long id);
     List<UserInforDto> getInforAdmin();
+    Page<Long> getListIdForPagi(Pageable pageable, String email);
+    List<CustomUserAccount> getAllByListId(List<Long> ids);
+    Long countAllAccount(String email);
+
+
 
 }

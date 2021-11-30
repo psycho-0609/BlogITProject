@@ -10,6 +10,8 @@ import com.finnal.blogit.service.inter.IUserAccountService;
 import com.finnal.blogit.repository.*;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,15 +31,6 @@ public class UserAccountService implements IUserAccountService {
 
     @Autowired
     private RoleRepository repository;
-
-    @Autowired
-    private FavoriteRepository favoriteRepository;
-
-    @Autowired
-    private HistoryRepository historyRepository;
-
-    @Autowired
-    private ReadLaterRepository readLaterRepository;
 
     @Autowired
     private UserDetailRepository userDetailRepository;
@@ -153,5 +146,18 @@ public class UserAccountService implements IUserAccountService {
         return userAccountRepository.getInforAdmin();
     }
 
+    @Override
+    public Page<Long> getListIdForPagi(Pageable pageable, String email) {
+        return userAccountRepository.getListIdForPagi(pageable, email);
+    }
 
+    @Override
+    public List<CustomUserAccount> getAllByListId(List<Long> ids) {
+        return userAccountRepository.getAllByListId(ids);
+    }
+
+    @Override
+    public Long countAllAccount(String email) {
+        return userAccountRepository.countAllAccount(email);
+    }
 }

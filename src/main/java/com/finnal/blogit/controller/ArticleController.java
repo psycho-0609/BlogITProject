@@ -1,9 +1,9 @@
 package com.finnal.blogit.controller;
 
-import com.finnal.blogit.dto.response.GetListArticleDTO;
+import com.finnal.blogit.dto.response.PaginationArticleDTO;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.FavoriteArticleEntity;
-import com.finnal.blogit.entity.ReadLaterArticleEntity;
+import com.finnal.blogit.entity.BookMarkEntity;
 import com.finnal.blogit.entity.TopicEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
 import com.finnal.blogit.entity.enumtype.ArticleStatus;
@@ -12,11 +12,16 @@ import com.finnal.blogit.service.inter.*;
 import com.finnal.blogit.user.CustomUserDetail;
 import com.finnal.blogit.user.UserInfor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +48,7 @@ public class ArticleController {
     private IFavoriteArticleService favoriteArticleService;
 
     @Autowired
-    private IReadLaterArticleService rlService;
+    private IBookMarkService rlService;
 
     @Autowired
     private ICommentService commentService;
@@ -58,26 +63,47 @@ public class ArticleController {
     }
 
     @GetMapping("/topic/{topicId}")
-    public String findByTopicId(@PathVariable("topicId") Integer id, Model model) throws WebException {
+    public String findByTopicId(@PathVariable("topicId") Integer id, Model model, @RequestParam("page") Integer page) throws WebException {
         TopicEntity entity = topicService.findById(id).orElseThrow(WebException::new);
+        Sort sort = Sort.by("publishedDate").descending();
+        Pageable pageable = PageRequest.of(page-1, 10,sort);
+        Page<Long> items = articleService.getIdOrderByTopicForPagi(pageable, id);
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        pagination.setArticles(articleService.getListArticleByListId(items.getContent()));
+        Long totalArticle  = articleService.countArticleByTopic(id);
+        pagination.setTotalPage(getTotalPage(totalArticle));
         model.addAttribute("title",entity.getName());
-        model.addAttribute("articles",articleService.findAllByTopicId(entity.getId()));
+        model.addAttribute("paginationArticle", pagination);
         model.addAttribute("topics", topicService.findAll());
         return "article/allArticles";
     }
 
     @GetMapping("/newest")
-    public String newestPost(Model model){
+    public String newestPost(Model model, @RequestParam("page") Integer page){
+        Sort sort = Sort.by("publishedDate").descending();
+        Pageable pageable = PageRequest.of(page-1, 10,sort);
+        Page<Long> items = articleService.getIdForPanination(pageable, ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        pagination.setArticles(articleService.getListArticleByListId(items.getContent()));
+        Long totalArticle  = articleService.countArticleByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC,"");
+        pagination.setTotalPage(getTotalPage(totalArticle));
         model.addAttribute("title","NEWEST");
-        model.addAttribute("articles", articleService.getListNewestPost());
+        model.addAttribute("paginationArticle", pagination);
         model.addAttribute("topics", topicService.findAll());
         return "article/allArticles";
     }
 
     @GetMapping("/popular")
-    public String popularPost(Model model){
+    public String popularPost(Model model, @RequestParam("page") Integer page){
+        Sort sort = Sort.by("countView").descending();
+        Pageable pageable = PageRequest.of(page-1, 10,sort);
+        Page<Long> items = articleService.getIdForPanination(pageable, ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        pagination.setArticles(articleService.getListArticleByListId(items.getContent()));
+        Long totalArticle  = articleService.countArticleByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC, "");
+        pagination.setTotalPage(getTotalPage(totalArticle));
         model.addAttribute("title","POPULAR");
-        model.addAttribute("articles", articleService.getForPopular());
+        model.addAttribute("paginationArticle", pagination);
         model.addAttribute("topics", topicService.findAll());
         return "article/allArticles";
     }
@@ -85,7 +111,22 @@ public class ArticleController {
     @GetMapping("/favorite")
     public String favoritePost(Model model){
         model.addAttribute("title","FAVORITE");
-        model.addAttribute("articles", articleService.getListFavoritePost());
+//        model.addAttribute("articles", articleService.ge());
+        model.addAttribute("topics", topicService.findAll());
+        return "article/allArticles";
+    }
+
+    @GetMapping("/rating")
+    public String ratingPost(Model model, @RequestParam("page") Integer page){
+        Sort sort = Sort.by("avgRate").descending();
+        Pageable pageable = PageRequest.of(page-1, 10, sort);
+        Page<Long> items = articleService.getIdForPanination(pageable, ArticlePublished.ENABLE, ArticleStatus.PUBLIC);
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        pagination.setArticles(articleService.getListArticleByListId(items.getContent()));
+        Long totalArticle  = articleService.countArticleByPublishedAndStatus(ArticlePublished.ENABLE, ArticleStatus.PUBLIC, "");
+        pagination.setTotalPage(getTotalPage(totalArticle));
+        model.addAttribute("title","RATING");
+        model.addAttribute("paginationArticle", pagination);
         model.addAttribute("topics", topicService.findAll());
         return "article/allArticles";
     }
@@ -109,7 +150,7 @@ public class ArticleController {
             }
             model.addAttribute("favStatus", favoriteArticle);
             model.addAttribute("favStatus", favoriteArticle);
-            Optional<ReadLaterArticleEntity> rlOp = rlService.findByAccountIdAndArticleId(userDetail.getId(), id);
+            Optional<BookMarkEntity> rlOp = rlService.findByAccountIdAndArticleId(userDetail.getId(), id);
             rlOp.ifPresent(readLaterArticleEntity -> model.addAttribute("bookMark", readLaterArticleEntity));
         }
 

@@ -100,7 +100,7 @@ $(document).ready(function () {
             method: 'delete',
             dataType: 'json'
         }).done(function (res) {
-
+            ajaxGetAllNotification();
         }).fail(function (res){
             errorMessage(res.responseJSON.message)
         })

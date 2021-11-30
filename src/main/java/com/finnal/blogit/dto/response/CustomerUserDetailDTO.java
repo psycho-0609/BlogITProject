@@ -16,7 +16,8 @@ public class CustomerUserDetailDTO {
     private String thumbnail;
 
     public String getThumbnail() {
-        return thumbnail == null || Strings.isEmpty(thumbnail) ? "/img/defaultUserImg.jpg": Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/avatarUser/" + id +"/" + thumbnail;
+//        return thumbnail == null || Strings.isEmpty(thumbnail) ? "/img/defaultUserImg.jpg": Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/avatarUser/" + id +"/" + thumbnail;
+        return thumbnail == null || Strings.isEmpty(thumbnail) ? "/img/defaultUserImg.jpg":"/imgUser/"+id+"/"+thumbnail;
     }
 
     public void setThumbnail(String thumbnail) {

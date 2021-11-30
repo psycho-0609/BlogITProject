@@ -4,6 +4,7 @@ $(document).ready(function () {
     var errorTimeout;
     var successTimeOut;
     let articleId = $("#articleId").val();
+    const keySearch = window.location.search;
 
     function error(message) {
         clearTime();
@@ -56,7 +57,7 @@ $(document).ready(function () {
 
     function getData() {
         $.ajax({
-            url: "/api/admin/report/getAll?postId=" + articleId,
+            url: "/api/admin/report/getAll" + keySearch,
             method: "get",
             type: "json"
         }).done(function (res) {

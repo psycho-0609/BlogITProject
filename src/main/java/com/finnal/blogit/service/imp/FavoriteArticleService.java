@@ -4,7 +4,6 @@ import com.finnal.blogit.dto.response.GetFavArticle;
 import com.finnal.blogit.entity.FavoriteArticleEntity;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.repository.ArticleRepository;
-import com.finnal.blogit.repository.FavoriteRepository;
 import com.finnal.blogit.repository.FavouriteArticleRepository;
 import com.finnal.blogit.service.inter.IFavoriteArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class FavoriteArticleService implements IFavoriteArticleService {
-
-    @Autowired
-    private FavoriteRepository favoriteRepository;
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -63,7 +59,7 @@ public class FavoriteArticleService implements IFavoriteArticleService {
     @Override
     @Transactional
     public void deleteAllByFavId(Long id) {
-        favouriteArticleRepository.deleteByFavoriteEntityId(id);
+//        favouriteArticleRepository.deleteByFavoriteEntityId(id);
     }
 
     @Override

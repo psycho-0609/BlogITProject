@@ -75,16 +75,19 @@ public class ArticleEntity {
     private List<HistoryArticleEntity> historyArticle;
 
     @OneToMany(mappedBy = "articleEntity", cascade = CascadeType.ALL)
-    private List<ReadLaterArticleEntity> readLaterArticle;
+    private List<BookMarkEntity> readLaterArticle;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<RateEntity> rates;
 
     @ManyToOne
     @JoinColumn(name = "topic_id")
     private TopicEntity topic;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_account_id")
     private UserAccountEntity userAccount;
 
@@ -94,10 +97,16 @@ public class ArticleEntity {
     @Column
     private Integer prioritize;
 
+    private Double avgRate;
+
+    @OneToMany(mappedBy = "article")
+    private List<RateEntity> rate;
+
     @Transient
     public String getImagePath(){
         if(image == null|| id == null) return null;
-        return Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/fileArticle/" + id + "/" + image;
+//        return Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/fileArticle/" + id + "/" + image;
+         return "/imgBackArticle/" + id + "/" + image;
     }
 
     public ArticleEntity(Long id) {

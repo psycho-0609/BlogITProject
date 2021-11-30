@@ -123,11 +123,11 @@ $(document).ready(function (){
             "                                <div class=\"wrap-comment\">\n" +
             "                                    <div class='comment-reader'>\n" +
             "                                        <div class='infor-reader'>\n" +
-            "                                            <a href='/author/" + el.account.id + "' class=\"article-img-author\">\n" +
+            "                                            <a href='/author/" + el.account.id + "?page=1' class=\"article-img-author\">\n" +
             "                                                <img src='" + el.account.userDetail.thumbnail + "' alt=''>\n" +
             "                                            </a>\n" +
             "                                            <div class='detail-reader'>\n" +
-            "                                                <a href='/author/" + el.account.id + "'>"+el.account.userDetail.firstName +"\n" +
+            "                                                <a href='/author/" + el.account.id + "?page=1'>"+el.account.userDetail.firstName +"\n" +
             "                                                    " + el.account.userDetail.lastName + "</a>\n" +
             "                                                <span style=\"font-size: .8rem\"> "+ formatDate(el.createdDate) + "</span>\n" +
             "                                            </div>\n" +
@@ -167,11 +167,11 @@ $(document).ready(function (){
             "                                    >\n" +
             "                                    <div class=\"main-content-reply-comment\">\n" +
             "                                        <div class='infor-reader'>\n" +
-            "                                            <a href='/author/" + el.account.id + "' class=\"article-img-author\">\n" +
+            "                                            <a href='/author/" + el.account.id + "?page=1' class=\"article-img-author\">\n" +
             "                                                <img src='" + el.account.userDetail.thumbnail + "' alt=''>\n" +
             "                                            </a>\n" +
             "                                            <div class='detail-reader'>\n" +
-            "                                                <a href='/author/" + el.account.id + "'>" + el.account.userDetail.firstName +"\n" +
+            "                                                <a href='/author/" + el.account.id + "?page=1'>" + el.account.userDetail.firstName +"\n" +
             "                                                    " + el.account.userDetail.lastName + "</a>\n" +
             "                                                <span style=\"font-size: .8rem\"> " + formatDate(el.createdDate) +"</span>\n" +
             "                                            </div>\n" +

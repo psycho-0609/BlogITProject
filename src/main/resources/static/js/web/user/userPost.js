@@ -123,13 +123,13 @@ $(document).ready(function () {
     function fetchData(data) {
         let res = "";
         container.html("");
-        if (data.length <= 0) {
+        if (data.articles.length <= 0) {
             res = "<div class=\"mt-4\">\n" +
                 "       <p style=\"color: grey; font-weight: bold; text-align: center\">There is nothing here!</p>\n" +
                 "  </div>"
         } else {
 
-            data.forEach(el => {
+            data.articles.forEach(el => {
                 res += write(el);
             })
         }

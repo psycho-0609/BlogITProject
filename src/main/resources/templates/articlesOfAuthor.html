@@ -27,9 +27,9 @@
         <hr>
         <div class="row pt-4">
             <div class=" col-lg-9 col-md-12 col-sm-12">
-                <th:block th:if="${articles.size() > 0}" >
+                <th:block th:if="${pagination.articles.size() > 0}" >
 
-                    <div  class="card card-content" th:each="article : ${articles}">
+                    <div  class="card card-content" th:each="article : ${pagination.articles}">
                         <div class="row no-gutters">
                             <div class="col-md-5">
                                 <a th:href="@{'/posts/'+${article.id}}"><img th:src="${article.imagePath}" alt="..."></a>
@@ -37,7 +37,7 @@
                             <div class="col-md-7">
 
                                 <div class="card-body card-original">
-                                    <p class='card-original-cate'><a th:href="@{'/posts/topic/'+${article.topic.id}}"
+                                    <p class='card-original-cate'><a th:href="@{'/posts/topic/'+${article.topic.id}+'?page=1'}"
                                                                      th:text="${article.topic.name}"></a>
                                     </p>
                                     <h5 class='card-title card-original-title'><a
@@ -48,20 +48,6 @@
                                             [[${article.userAccount.userDetail.firstName}]]
                                             [[${article.userAccount.userDetail.lastName}]]
                                         </a>
-                                        <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                            <button style='outline: none;' class='btn-drop-menu' type='button'
-                                                    id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                                    aria-expanded='false'>
-                                                <i class='fas fa-ellipsis-h'></i>
-                                            </button>
-                                            <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                                 aria-labelledby='dropdownMenu'>
-                                                <a class='dropdown-item btn-add-read-later'
-                                                   style='font-size: .8rem;'
-                                                   th:id="${'readLate_'+article.id}" type="button">Add to
-                                                    Read later</a>
-                                            </div>
-                                        </div>
 
                                     </div>
                                     <p class='card-original-short'>[[${article.shortDescription}]]</p>
@@ -72,24 +58,34 @@
                         </div>
                     </div>
                 </th:block>
-                <th:block th:if="${articles.size() <= 0}">
+                <th:block th:if="${pagination.articles.size() <= 0}">
                     <p style='color: grey; font-weight: bold; text-align: center'>There is nothing here!</p>
                 </th:block>
+                <div  class="d-flex justify-content-center mb-4">
+                    <div th:if="${pagination.totalPage >= 2}">
+                        <ul class="pagination" id="pagination"></ul>
+                    </div>
+
+                    <form th:action='@{${#httpServletRequest.servletPath}}' id="formSubmit">
+                        <input type="hidden" value="" id="page" name="page"/>
+                    </form>
+                    <input type="hidden" th:value="${pagination.totalPage}" id="totalPage">
+                </div>
 
             </div>
             <div class="col-lg-3 col-md-12 mb-4">
                 <div class="more-infor-box">
                     <div>
                         <p class="title-item">Total Posts</p>
-                        <p class="amount">[[${articles.size()}]]</p>
+                        <p class="amount">[[${totalPost}]]</p>
                     </div>
                     <div>
                         <p class="title-item">Total View</p>
                         <p class="amount">[[${totalView}]]</p>
                     </div>
                     <div>
-                        <p class="title-item">Total Favorite</p>
-                        <p class="amount">[[${totalFav}]]</p>
+                        <p class="title-item">Total Bookmark</p>
+                        <p class="amount">[[${totalBookmark}]]</p>
                     </div>
                 </div>
             </div>
@@ -99,5 +95,26 @@
 
 <div th:replace="common/footer :: footer"/>
 <script th:src="@{/js/web/readLaterAjax.js}"></script>
+<script>
+    var url_string = window.location.href; //window.location.href
+    var url = new URL(url_string);
+    var c = url.searchParams.get("page");
+    var totalPages = [[${pagination.totalPage}]];
+    var currentPage = c;
+    var title = url.searchParams.get("title");
+
+
+    $('#pagination').twbsPagination({
+        totalPages: parseInt(totalPages),
+        visiblePages: 5,
+        startPage: parseInt(currentPage),
+        onPageClick: function (event, page) {
+            if (parseInt(currentPage) != page) {
+                $('#page').val(page);
+                $('#formSubmit').submit();
+            }
+        }
+    });
+</script>
 </body>
 </html>

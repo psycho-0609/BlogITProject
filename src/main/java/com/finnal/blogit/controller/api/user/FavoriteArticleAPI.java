@@ -70,7 +70,7 @@ public class FavoriteArticleAPI {
         if(userDetail == null){
             throw new WebException();
         }
-        favoriteArticleService.deleteAllByFavId(userDetail.getId());
+//        favoriteArticleService.deleteAllByFavId(userDetail.getId());
         return new ResponseEntity<>(new MessageDTO("Delete Successlly"), HttpStatus.OK);
     }
 }

@@ -23,10 +23,6 @@ public class HistoryArticleEntity {
     private ArticleEntity articleEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "history_id")
-    private HistoryEntity historyEntity;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private UserAccountEntity account;
 

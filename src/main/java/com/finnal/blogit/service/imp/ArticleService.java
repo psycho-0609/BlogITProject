@@ -1,5 +1,6 @@
 package com.finnal.blogit.service.imp;
 
+import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.dto.response.*;
 import com.finnal.blogit.entity.TopicEntity;
 import com.finnal.blogit.entity.UserAccountEntity;
@@ -18,6 +19,8 @@ import com.finnal.blogit.user.UserInfor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,10 +35,10 @@ public class ArticleService implements IArticleService {
     private ArticleRepository articleRepository;
 
     @Autowired
-    private UploadFileUtils fileUtils;
+    private UserAccountRepository accountRepository;
 
     @Autowired
-    private UserAccountRepository accountRepository;
+    private UploadFileUtils fileUtils;
 
     @Autowired
     @Qualifier("uploadFileArticle")
@@ -52,37 +55,43 @@ public class ArticleService implements IArticleService {
         return articleRepository.findAll();
     }
 
-    @Override
-    public List<CustomArticleDTO> findAllApi() {
-        List<ArticleEntity> lists = articleRepository.findAll();
-        List<CustomArticleDTO> dtoList = new ArrayList<>();
-        for (ArticleEntity item : lists) {
-            CustomArticleDTO articleDTO = new CustomArticleDTO();
-            CustomerUserDetailDTO detailDTO = new CustomerUserDetailDTO();
-            detailDTO.setId(item.getUserAccount().getUserDetailEntity().getId());
-            detailDTO.setLastName(item.getUserAccount().getUserDetailEntity().getLastName());
-            detailDTO.setFirstName(item.getUserAccount().getUserDetailEntity().getLastName());
-            detailDTO.setThumbnail(item.getUserAccount().getUserDetailEntity().getThumbnail());
-            CustomUserAccount userAccount = new CustomUserAccount();
-            userAccount.setUserDetail(detailDTO);
-            userAccount.setId(item.getUserAccount().getId());
-            userAccount.setEmail(item.getUserAccount().getEmail());
-            articleDTO.setUserAccount(userAccount);
-            articleDTO.setId(item.getId());
-            articleDTO.setImagePath(item.getImagePath());
-            articleDTO.setCountView(item.getCountView());
-            articleDTO.setPublished(item.getPublished());
-            articleDTO.setNews(item.getNews());
-            articleDTO.setTitle(item.getTitle());
-            articleDTO.setShortDescription(item.getShortDescription());
-            dtoList.add(articleDTO);
-        }
-        return dtoList;
-    }
+
+//    @Override
+//    @Transactional
+//    public ArticleEntity insertArticle(ArticleRequest request) throws IOException {
+//        ArticleEntity entity = new ArticleEntity();
+//        entity.setContent(request.getContent());
+//        entity.setTitle(request.getTitle());
+//        if (request.getImage() != null && !request.getImage().getOriginalFilename().equals("")) {
+//            entity.setImage(request.getImage().getOriginalFilename());
+//        }
+//        if (request.getVideo() != null && !request.getVideo().getOriginalFilename().equals("")) {
+//            entity.setVideoFile(request.getVideo().getOriginalFilename());
+//        }
+//        entity.setNews(ArticleNew.ENABLE);
+//        entity.setStatus(ArticleStatus.fromValue(request.getStatus()));
+//        entity.setPublished(ArticlePublished.DISABLE);
+//        entity.setCountView(0L);
+//        entity.setAvgRate(0D);
+//        entity.setShortDescription(request.getShortDescription());
+//        entity.setTopic(new TopicEntity(request.getTopicId()));
+//        entity.setCreatedDate(LocalDateTime.now());
+//        entity.setModifiedDate(LocalDateTime.now());
+//        UserAccountEntity userAccountEntity = accountRepository.findByEmail(UserInfor.getPrincipal().getUsername()).get();
+//        entity.setUserAccount(userAccountEntity);
+//        ArticleEntity articleSaved = articleRepository.save(entity);
+//        if (request.getImage() != null && !Strings.isEmpty(request.getImage().getOriginalFilename())) {
+//            uploadFileService.save(entity.getId(), request.getImage());
+//        }
+//        if (request.getVideo() != null && !Strings.isEmpty(request.getVideo().getOriginalFilename())) {
+//            uploadFileService.save(entity.getId(), request.getVideo());
+//        }
+//        return articleSaved;
+//    }
 
     @Override
     @Transactional
-    public ArticleEntity insertArticle(ArticleRequest request) throws IOException {
+    public ArticleEntity insertArticle(ArticleRequest request, Long userId) throws IOException {
         ArticleEntity entity = new ArticleEntity();
         entity.setContent(request.getContent());
         entity.setTitle(request.getTitle());
@@ -96,19 +105,17 @@ public class ArticleService implements IArticleService {
         entity.setStatus(ArticleStatus.fromValue(request.getStatus()));
         entity.setPublished(ArticlePublished.DISABLE);
         entity.setCountView(0L);
+        entity.setAvgRate(0D);
         entity.setShortDescription(request.getShortDescription());
-        entity.setTopic(new TopicEntity(request.getTopicId()));
-        entity.setCreatedDate(LocalDateTime.now());
+        entity.setTopic(topicRepository.findById(request.getTopicId()).get());
         entity.setModifiedDate(LocalDateTime.now());
-        UserAccountEntity userAccountEntity = accountRepository.findByEmail(UserInfor.getPrincipal().getUsername()).get();
-        entity.setUserAccount(userAccountEntity);
+        entity.setUserAccount(accountRepository.findById(userId).get());
         ArticleEntity articleSaved = articleRepository.save(entity);
         if (request.getImage() != null && !Strings.isEmpty(request.getImage().getOriginalFilename())) {
-            uploadFileService.save(entity.getId(), request.getImage());
+            fileUtils.writeOrUpdate(articleSaved.getId(), request.getImage().getBytes(),
+                    request.getImage().getOriginalFilename(), Constant.DIR_IMG_BACK_ARTICLE);
         }
-        if (request.getVideo() != null && !Strings.isEmpty(request.getVideo().getOriginalFilename())) {
-            uploadFileService.save(entity.getId(), request.getVideo());
-        }
+
         return articleSaved;
     }
 
@@ -120,6 +127,45 @@ public class ArticleService implements IArticleService {
         }
         return null;
     }
+
+//    @Override
+//    @Transactional
+//    public ArticleEntity update(ArticleRequest request) {
+//        String img;
+//        String video;
+//        ArticleEntity currentEntity = articleRepository.findById(request.getId()).get();
+//        img = currentEntity.getImage();
+//        video = currentEntity.getVideoFile();
+//        currentEntity.setTitle(request.getTitle());
+//        currentEntity.setContent(request.getContent());
+//        currentEntity.setShortDescription(request.getShortDescription());
+//        currentEntity.setTopic(new TopicEntity(request.getTopicId()));
+//        currentEntity.setStatus(ArticleStatus.fromValue(request.getStatus()));
+//        currentEntity.setModifiedDate(LocalDateTime.now());
+//        if (request.getVideo() != null && !request.getVideo().getOriginalFilename().equals("")) {
+//            currentEntity.setVideoFile(request.getVideo().getOriginalFilename());
+//            try {
+//                uploadFileService.save(currentEntity.getId(), request.getVideo());
+//                if (video != null && !Strings.isEmpty(video)) {
+//                    uploadFileService.delete(currentEntity.getId(), video);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        if (request.getImage() != null && !request.getImage().getOriginalFilename().equals("")) {
+//            currentEntity.setImage(request.getImage().getOriginalFilename());
+//            try {
+//                uploadFileService.save(currentEntity.getId(), request.getImage());
+//                if (img != null && !Strings.isEmpty(img)) {
+//                    uploadFileService.delete(currentEntity.getId(), img);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return articleRepository.save(currentEntity);
+//    }
 
     @Override
     @Transactional
@@ -135,23 +181,23 @@ public class ArticleService implements IArticleService {
         currentEntity.setTopic(new TopicEntity(request.getTopicId()));
         currentEntity.setStatus(ArticleStatus.fromValue(request.getStatus()));
         currentEntity.setModifiedDate(LocalDateTime.now());
-        if (request.getVideo() != null && !request.getVideo().getOriginalFilename().equals("")) {
-            currentEntity.setVideoFile(request.getVideo().getOriginalFilename());
-            try {
-                uploadFileService.save(currentEntity.getId(), request.getVideo());
-                if (video != null && !Strings.isEmpty(video)) {
-                    uploadFileService.delete(currentEntity.getId(), video);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (request.getVideo() != null && !request.getVideo().getOriginalFilename().equals("")) {
+//            currentEntity.setVideoFile(request.getVideo().getOriginalFilename());
+//            try {
+//                uploadFileService.save(currentEntity.getId(), request.getVideo());
+//                if (video != null && !Strings.isEmpty(video)) {
+//                    uploadFileService.delete(currentEntity.getId(), video);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
         if (request.getImage() != null && !request.getImage().getOriginalFilename().equals("")) {
             currentEntity.setImage(request.getImage().getOriginalFilename());
             try {
-                uploadFileService.save(currentEntity.getId(), request.getImage());
+                fileUtils.writeOrUpdate(request.getId(), request.getImage().getBytes(), request.getImage().getOriginalFilename(), Constant.DIR_IMG_BACK_ARTICLE);
                 if (img != null && !Strings.isEmpty(img)) {
-                    uploadFileService.delete(currentEntity.getId(), img);
+                    fileUtils.deleteFile(Constant.DIR_IMG_BACK_ARTICLE + request.getImage() +"/" + img);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -165,13 +211,19 @@ public class ArticleService implements IArticleService {
         return articleRepository.findById(id);
     }
 
+//    @Override
+//    @Transactional
+//    public void deleteArticle(Long id) throws IOException {
+//        articleRepository.deleteById(id);
+//        uploadFileService.deleteAllById(id);
+//    }
+
     @Override
     @Transactional
-    public void deleteArticle(Long id) throws IOException {
+    public void deleteArticle(Long id) {
         articleRepository.deleteById(id);
-        uploadFileService.deleteAllById(id);
+        fileUtils.deleteFile(Constant.DIR_IMG_BACK_ARTICLE + id);
     }
-
 
     @Override
     public void plusCountView(ArticleEntity entity) {
@@ -190,27 +242,6 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    public List<CustomArticleDTO> findAllByAccountId(Long id) {
-
-        return articleRepository.findAllByAccountId(id);
-    }
-
-    @Override
-    public List<CustomArticleDTO> findAllForSearch(ArticlePublished published, Long id, ArticleStatus status, String title) {
-        return articleRepository.findAllForSearch(published, id, status, title);
-    }
-
-    @Override
-    public List<CustomArticleDTO> findByPublishedAndStatus(ArticlePublished published, ArticleStatus status) {
-        return articleRepository.findAllByPublishedAndStatus(published, status);
-    }
-
-    @Override
-    public List<CustomArticleDTO> findAllByTopicId(Integer id) {
-        return articleRepository.findByTopicId(ArticlePublished.ENABLE, ArticleStatus.PUBLIC, id);
-    }
-
-    @Override
     public Long totalCountView(List<Long> ids) {
         return articleRepository.totalCountView(ids);
     }
@@ -225,10 +256,6 @@ public class ArticleService implements IArticleService {
         return articleRepository.findForPopular();
     }
 
-    @Override
-    public List<CustomArticleDTO> findByStatus(ArticleStatus status) {
-        return articleRepository.findByStatus(status);
-    }
 
     @Override
     public Optional<ArticleCustomDTO> getById(Long id) {
@@ -243,11 +270,6 @@ public class ArticleService implements IArticleService {
     @Override
     public List<CustomArticleDTO> findByPublishedAndStatusForWeb(ArticlePublished published, ArticleStatus status) {
         return articleRepository.findAllByPublishedAndStatusForWeb(published, status);
-    }
-
-    @Override
-    public List<ArticleEntity> getAllOderByFavCount(ArticlePublished published, ArticleStatus status) {
-        return articleRepository.getAllOderByFavCount(published, status);
     }
 
     @Override
@@ -314,15 +336,87 @@ public class ArticleService implements IArticleService {
         return articleRepository.findAllOrderPopularLimit();
     }
 
+
     @Override
-    public List<CustomArticleDTO> getListNewestPost() {
-        return articleRepository.getListNewestPost();
+    public List<ArticleEntity> findAllOrderRateLimit() {
+        return articleRepository.findAllOrderRateLimit();
     }
 
     @Override
-    public List<CustomArticleDTO> getListFavoritePost() {
-        return articleRepository.getListFavPost();
+    public Page<Long> getIdForPanination(Pageable pageable, ArticlePublished published, ArticleStatus status) {
+        return articleRepository.getListIdPagination(pageable, published, status);
     }
+
+    @Override
+    public List<CustomArticleDTO> getListArticleByListId(List<Long> ids) {
+        return articleRepository.getListArticle(ids);
+    }
+
+    @Override
+    public Long countArticleByPublishedAndStatus(ArticlePublished published, ArticleStatus status, String title) {
+        return articleRepository.countArticleEntitiesByPublishedAndStatus(published, status, title);
+    }
+
+    @Override
+    public Page<Long> getIdOrderByTopicForPagi(Pageable pageable, Integer topicId) {
+        return articleRepository.getListIdByTopicForPagi(pageable, topicId);
+    }
+
+    @Override
+    public Long countArticleByTopic(Integer id) {
+        return articleRepository.countArticleEntitiesByTopicId(id);
+    }
+
+    @Override
+    public Page<Long> getIdByTitleForPagi(Pageable pageable, String title, ArticlePublished published, ArticleStatus status) {
+        return articleRepository.getListIdByTitleForPagi(pageable, title, published, status);
+    }
+
+    @Override
+    public Long countArticleByTitle(String title, ArticlePublished published, ArticleStatus status) {
+        return articleRepository.countArticleByTitle(title, published, status);
+    }
+
+    @Override
+    public Page<Long> getListIdPrivate(Pageable pageable, String title, Long userId) {
+        return articleRepository.findListIdPrivateOfUser(pageable, title, userId);
+    }
+
+    @Override
+    public Long countByStatusAndUserId(ArticleStatus status, Long userId, String title) {
+        return articleRepository.countAllByStatusAndUserAccountId(status, userId, title);
+    }
+
+    @Override
+    public Long countByStatusAndPublishedAndUserId(ArticleStatus status, ArticlePublished published, Long userId, String title) {
+        return articleRepository.countAllByStatusAndPublishedAndUserAccountId(status, published, userId, title);
+    }
+
+    @Override
+    public Page<Long> findListIdByPublishedAndStatusOfUser(Pageable pageable, String title, ArticleStatus status, ArticlePublished published, Long userId) {
+        return articleRepository.findListIdByPublishedAndStatusOfUser(pageable, title, published, status, userId);
+    }
+
+    @Override
+    public Page<Long> getListIdByStatusAndTitleForPagi(Pageable pageable, ArticleStatus status, String title) {
+        return articleRepository.getListIdByStatusAndTitleForPagi(pageable, status, title);
+    }
+
+    @Override
+    public Long countAllByStatusAndTAndTitleLike(ArticleStatus status, String title) {
+        return articleRepository.countAllByStatusAndTAndTitleLike(status, title);
+    }
+
+    @Override
+    public Page<Long> getListIdForReport(Pageable pageable) {
+        return articleRepository.getListIdForReport(pageable);
+    }
+
+    @Override
+    public Long countAllForReport() {
+        return articleRepository.countAllForReport();
+    }
+
 
     private Map<Integer, Integer> getListMonth(Integer currentMonth, Integer currentYear) {
         Map<Integer, Integer> mapMonth = new HashMap<>();

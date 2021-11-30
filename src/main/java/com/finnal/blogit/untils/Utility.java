@@ -8,4 +8,12 @@ public class Utility {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(),"");
     }
+    public static Long  getTotalPage(Long totalArticle){
+        if(totalArticle % 10 == 0){
+            return totalArticle / 10;
+        }else{
+            return totalArticle / 10 + 1;
+        }
+    }
+
 }

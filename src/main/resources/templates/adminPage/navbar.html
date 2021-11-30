@@ -44,9 +44,9 @@
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Type Posts:</h6>
-                    <a class="collapse-item" th:href="@{/admin/post/allPosts}">All</a>
-                    <a class="collapse-item" th:href="@{/admin/post/published}">Published</a>
-                    <a class="collapse-item" th:href="@{/admin/post/unapproved}">Unlisted</a>
+                    <a class="collapse-item" th:href="@{/admin/post/allPosts?page=1}">All</a>
+                    <a class="collapse-item" th:href="@{/admin/post/published?page=1}">Published</a>
+                    <a class="collapse-item" th:href="@{/admin/post/unapproved?page=1}">Unlisted</a>
                 </div>
             </div>
         </li>
@@ -58,41 +58,19 @@
                 <span>Category</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/report}">
+            <a class="nav-link" th:href="@{/admin/report?page=1}">
                 <i class="fas fa-flag"></i>
                 <span>Report</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/comment}">
+            <a class="nav-link" th:href="@{/admin/comment?page=1}">
                 <i class="fas fa-comments"></i>
                 <span>Comment</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" th:href="@{/admin/account}">
+            <a class="nav-link" th:href="@{/admin/account?page=1}">
                 <i class="fas fa-users"></i>
                 <span>Account</span></a>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
-
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            USER
-        </div>
-
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Profile</span></a>
-        </li>
-
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Change Password</span></a>
         </li>
 
         <!-- Divider -->

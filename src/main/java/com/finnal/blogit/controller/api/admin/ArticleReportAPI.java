@@ -1,11 +1,8 @@
 package com.finnal.blogit.controller.api.admin;
 
 
-import com.finnal.blogit.dto.response.ArticleCustomDTO;
-import com.finnal.blogit.dto.response.GetListArticleReport;
-import com.finnal.blogit.dto.response.GetListReport;
+import com.finnal.blogit.dto.response.*;
 
-import com.finnal.blogit.dto.response.MessageDTO;
 import com.finnal.blogit.entity.ArticleReportEntity;
 
 import com.finnal.blogit.exception.api.APIException;
@@ -16,7 +13,12 @@ import com.finnal.blogit.exception.web.WebException;
 import com.finnal.blogit.service.inter.IArticleReportService;
 
 import com.finnal.blogit.service.inter.IArticleService;
+import com.finnal.blogit.untils.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,9 +45,16 @@ public class ArticleReportAPI {
 
 
     @GetMapping
-    public ResponseEntity<List<GetListReport>> getAll(){
-        List<GetListReport> list = articleReportService.findAll();
-        return new ResponseEntity<>(list, HttpStatus.OK);
+    public ResponseEntity<PaginationReport> getAll(@RequestParam("page") Integer page) throws ItemCannotEmptyException {
+        if(page - 1 < 0){
+            throw new ItemCannotEmptyException("");
+        }
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        Page<Long> ids = aService.getListIdForReport(pageable);
+        PaginationReport pagination = new PaginationReport();
+        pagination.setReports(articleReportService.findAll(ids.getContent()));
+        pagination.setTotalPage(Utility.getTotalPage(aService.countAllForReport()));
+        return new ResponseEntity<>(pagination, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
@@ -55,14 +64,18 @@ public class ArticleReportAPI {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<GetListArticleReport> getAllByArticle(@RequestParam("postId") Long id) throws APIException{
-        if(id == null){
-            throw new ItemCannotEmptyException("Post Id cannot empty");
-        }
+    public ResponseEntity<GetListArticleReport> getAllByArticle(@RequestParam("postId") Long id, @RequestParam("page") Integer page) throws APIException{
         ArticleCustomDTO article = aService.getById(id).orElseThrow(() -> new ItemNotFoundException("Post is not found"));
+        if(page - 1 < 0){
+            throw new ItemCannotEmptyException("");
+        }
+        Sort sort = Sort.by("createdDate").descending();
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+        Page<Long> ids = articleReportService.getListIdForPagi(pageable, id);
         GetListArticleReport listArticleReport = new GetListArticleReport();
         listArticleReport.setArticle(article);
-        listArticleReport.setReports(articleReportService.findAllReportByArticleId(article.getId()));
+        listArticleReport.setReports(articleReportService.findAllReportByListId(ids.getContent()));
+        listArticleReport.setTotalPage(Utility.getTotalPage(articleReportService.countAllByArticleId(id)));
         return new ResponseEntity<>(listArticleReport, HttpStatus.OK);
     }
 }

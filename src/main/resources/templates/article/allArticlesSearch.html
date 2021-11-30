@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${title}]]</title>
+    <div th:replace="common/link-css :: header-css"/>
+    <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+    <link rel="stylesheet" th:href="@{/css/web/originalCate.css}">
+    <style>
+        .btn-drop-menu{
+            border: none;
+            background: none;
+            outline: none;
+
+        }
+        .btn-drop-menu i{
+            display: block;
+            color: gray;
+        }
+        .dropMenuBox{
+            display: inline-block;
+            margin-left: 1rem;
+        }
+        .drop-menu a:hover{
+            color: #FFFFFF !important;
+        }
+        .drop-menu a{
+            padding: .5rem 1rem !important;
+        }
+        .activePagi{
+            color: white;
+            background: blue;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="common/navbar :: header"/>
+<main class="main-content">
+    <div class="container">
+        <section>
+            <div class="row">
+                <div class=" col-lg-9 col-md-12 col-sm-12">
+                    <p th:if="${paginationArticle.articles.size() <=0 }" class="pt-4" style="color: grey; font-weight: bold; text-align: center">There is nothing here!</p>
+                    <div th:if="${paginationArticle.articles.size()>0}" class="card-box-item">
+                        <div class="card card-content" th:each="article:${paginationArticle.articles}">
+                            <div class="row no-gutters">
+                                <div class="col-md-5">
+                                    <a th:href="@{'/posts/'+${article.id}}"><img th:src="${article.imagePath}"
+                                                                                 alt="..."></a>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="card-body card-original">
+                                        <p class="card-original-cate"><a
+                                                th:href="@{'/posts/topic/'+${article.topic.id}+'?page=1'}">[[${article.topic.name}]]</a>
+                                        </p>
+                                        <h5 class="card-title card-original-title"><a
+                                                th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a></h5>
+                                        <div class="card-original-author">
+                                            <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
+                                            <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}"><span class=""><i class="fas fa-user"></i></span>
+                                                [[${article.userAccount.userDetail.firstName}]]
+                                                [[${article.userAccount.userDetail.lastName}]]
+                                            </a>
+
+                                        </div>
+                                        <p class="card-original-short">[[${article.shortDescription}]]
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="d-flex justify-content-center mb-4">
+                        <div th:if="${paginationArticle.totalPage > 10}">
+                            <ul class="pagination" id="pagination"></ul>
+                        </div>
+
+                        <form th:action='@{${#httpServletRequest.servletPath}}' id="formSubmit">
+                            <input type="hidden" value="" id="page" name="page"/>
+                            <input type="hidden" id="title" name="title">
+                        </form>
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12 col-sm-12 position-relative mb-4">
+                    <div class="" id="cateBox">
+                        <div class="title-box mb-4" style="">
+                            <h3 style="">CATEGORY</h3>
+                        </div>
+                        <div class="blog-category-filter">
+                            <ul class="list-category">
+                                <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id} +'?page=1'}"><span><i
+                                        class="fas fa-angle-right"></i></span> [[${topic.name}]]</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</main>
+<div th:replace="common/footer :: footer"/>
+<script th:src="@{/js/web/cate.js}"></script>
+<script th:src="@{/js/web/readLaterAjax.js}"></script>
+<script>
+    $(document).ready(function (){
+
+    })
+    var url_string = window.location.href; //window.location.href
+    var url = new URL(url_string);
+    var c = url.searchParams.get("page");
+    var title = url.searchParams.get("title");
+    var totalPages = [[${paginationArticle.totalPage}]];
+    var currentPage = c;
+
+    $('#pagination').twbsPagination({
+        totalPages: parseInt(totalPages),
+        visiblePages: 5,
+        startPage: parseInt(currentPage),
+        onPageClick: function (event, page) {
+            if (parseInt(currentPage) != page) {
+                $('#page').val(page);
+                $("#title").val($("#title").val())
+                $('#formSubmit').submit();
+            }
+        }
+    });
+
+
+</script>
+</body>
+</html>

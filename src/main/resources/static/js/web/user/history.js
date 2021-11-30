@@ -48,25 +48,10 @@ $(document).ready(function () {
 
     })
 
-    function saveReadLater(data) {
-        $("#processing").addClass("active");
-        $.ajax({
-            url: "/api/user/readLater/create",
-            method: "post",
-            contentType: "application/json",
-            data: JSON.stringify(data),
-            dataType: 'json'
-        }).done(function (res) {
-            $("#processing").removeClass("active");
-            success(" Saved to Read Later successfully");
-        }).fail(function (res) {
-            $("#processing").removeClass("active");
-            errorMessage(" " + res.responseJSON.message);
-        })
-    }
+
 
     function deleteFunc(id) {
-        $("#processing").addClass("active");
+        // $("#processing").addClass("active");
         $.ajax({
             url: "/api/user/history/delete/" + id,
             method: "delete",
@@ -76,7 +61,7 @@ $(document).ready(function () {
             $("#processing").removeClass("active");
             success(" Delete successfully");
         }).fail(function (res) {
-            $("#processing").removeClass("active");
+            // $("#processing").removeClass("active");
             getData();
             errorMessage(" " + res.responseJSON.message);
         })
@@ -141,7 +126,7 @@ $(document).ready(function () {
             "                                                 href='/posts/"+ el.article.id +"'>" + el.article.title + "</a></h5>\n" +
             "                                        <div class='card-original-author'>\n" +
             "                                            <span><i class='fas fa-calendar-day'></i> " + publicDate + "</span>\n" +
-            "                                            <a href='/author/"+el.article.userAccount.userDetail.id +"'><span class=''><i class='fas fa-user'></i></span>\n" +
+            "                                            <a href='/author/"+el.article.userAccount.userDetail.id +"?page=1'><span class=''><i class='fas fa-user'></i></span>\n" +
             "                                                " + el.article.userAccount.userDetail.firstName + "\n" +
             "                                                " + el.article.userAccount.userDetail.lastName + "\n" +
             "                                            </a>\n" +
@@ -153,10 +138,6 @@ $(document).ready(function () {
             "                                                </button>\n" +
             "                                                <div class='dropdown-menu drop-menu' style='padding: 0;'\n" +
             "                                                     aria-labelledby='dropdownMenu'>\n" +
-            "                                                    <a class='dropdown-item btn-add-read-later'\n" +
-            "                                                       style='font-size: .8rem;'\n" +
-            "                                                       id='readLate_" + el.article.id + "' type='button'>Add to\n" +
-            "                                                        Read later</a>\n" +
             "                                                    <hr style='margin: 0;'>\n" +
             "                                                    <a class='dropdown-item btn-delete-his' style='font-size: .8rem;'\n" +
             "                                                       id='delete_" + el.id + "' type='button'>Delete</a>\n" +
@@ -198,7 +179,7 @@ $(document).ready(function () {
     }
 
     function deleteAll(){
-        $("#processing").addClass("active");
+        // $("#processing").addClass("active");
         $.ajax({
             url:"/api/user/history/deleteAll",
             method:"delete"
@@ -207,7 +188,7 @@ $(document).ready(function () {
             getData();
             success(" Delete successfully");
         }).fail(function (){
-            $("#processing").removeClass("active");
+            // $("#processing").removeClass("active");
         })
     }
 

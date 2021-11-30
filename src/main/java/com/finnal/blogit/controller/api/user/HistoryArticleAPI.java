@@ -1,8 +1,10 @@
 package com.finnal.blogit.controller.api.user;
 
+import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.dto.response.GetHistoryFlowDate;
 import com.finnal.blogit.dto.response.HistoryArticleDTO;
 import com.finnal.blogit.dto.response.MessageDTO;
+import com.finnal.blogit.dto.response.UserInforAccountDTO;
 import com.finnal.blogit.entity.HistoryArticleEntity;
 import com.finnal.blogit.exception.api.APIException;
 import com.finnal.blogit.exception.api.ItemCanNotModifyException;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -25,13 +28,10 @@ public class HistoryArticleAPI {
     private IHistoryArticleService historyArticleService;
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<MessageDTO> deleteById(@PathVariable Long id) throws APIException{
+    public ResponseEntity<MessageDTO> deleteById(@PathVariable Long id, HttpSession session) throws APIException{
         HistoryArticleEntity historyArticleEntity = historyArticleService.findById(id).orElseThrow(()->new ItemNotFoundException("Not found history"));
-        CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if(userDetail == null){
-            throw new ItemNotFoundException("Not found user");
-        }
-        if(!historyArticleEntity.getAccount().getId().equals(userDetail.getId())){
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
+        if(!historyArticleEntity.getAccount().getId().equals(userId)){
             throw new ItemCanNotModifyException("Can not delete");
         }
         historyArticleService.delete(id);
@@ -39,8 +39,9 @@ public class HistoryArticleAPI {
     }
 
     @DeleteMapping("/deleteAll")
-    public ResponseEntity<MessageDTO> deleteAll() throws APIException {
-        if(historyArticleService.countAllByAccountId(UserInfor.getPrincipal().getId()) <= 0){
+    public ResponseEntity<MessageDTO> deleteAll(HttpSession session) throws APIException {
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
+        if(historyArticleService.countAllByAccountId(userId) <= 0){
             throw new ItemNotFoundException("Not found any article in history to delete");
         }
         historyArticleService.deleteAll();
@@ -58,16 +59,12 @@ public class HistoryArticleAPI {
 //    }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<GetHistoryFlowDate>> getAllByFlowDate(@RequestParam(value = "title", required = false) String title) throws APIException{
-        CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if(userDetail == null){
-            throw new ItemNotFoundException("Not found user");
-        }
+    public ResponseEntity<List<GetHistoryFlowDate>> getAllByFlowDate(@RequestParam(value = "title", required = false) String title, HttpSession session) throws APIException{
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
         if(title != null && !title.equals("")){
-
-            return new ResponseEntity<>(historyArticleService.getAllForSearch(userDetail.getId(), title), HttpStatus.OK);
+            return new ResponseEntity<>(historyArticleService.getAllForSearch(userId, title), HttpStatus.OK);
         }
-        return new ResponseEntity<>(historyArticleService.getHistoryArticleFlowDate(userDetail.getId()), HttpStatus.OK);
+        return new ResponseEntity<>(historyArticleService.getHistoryArticleFlowDate(userId), HttpStatus.OK);
     }
 
 

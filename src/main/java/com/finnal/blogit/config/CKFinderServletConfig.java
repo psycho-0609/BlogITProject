@@ -17,18 +17,18 @@ public class CKFinderServletConfig {
 
 
 
-//    @Bean
-//    public ServletRegistrationBean connectCKFinder(){
-//
-//        baseDir = "./imageArticle";
-//        ServletRegistrationBean registrationBean=new ServletRegistrationBean(new ConnectorServlet(),"/ckfinder/core/connector/java/connector.java");
-//        registrationBean.addInitParameter("XMLConfig","classpath:/static/ckfinder.xml");
-//        registrationBean.addInitParameter("debug","false");
-//        registrationBean.addInitParameter("configuration","com.finnal.blogit.config.CKFinderConfig");
-//        //ckfinder.xml
-//        registrationBean.addInitParameter("baseDir",baseDir);
-//        registrationBean.addInitParameter("baseURL",baseURL);
-//        return registrationBean;
-//    }
+        @Bean
+        public ServletRegistrationBean connectCKFinder(){
+
+            baseDir = "./imageArticle";
+            ServletRegistrationBean registrationBean=new ServletRegistrationBean(new ConnectorServlet(),"/ckfinder/core/connector/java/connector.java");
+            registrationBean.addInitParameter("XMLConfig","classpath:/static/ckfinder.xml");
+            registrationBean.addInitParameter("debug","false");
+            registrationBean.addInitParameter("configuration","com.finnal.blogit.config.CKFinderConfig");
+            //ckfinder.xml
+            registrationBean.addInitParameter("baseDir",baseDir);
+            registrationBean.addInitParameter("baseURL",baseURL);
+            return registrationBean;
+        }
 
 }

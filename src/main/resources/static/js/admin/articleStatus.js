@@ -3,7 +3,7 @@ $(document).ready(function () {
     let fail = "<i class=\"fas fa-times\"></i> ";
     let messSuccess = "<i class=\"fas fa-check\"></i>";
     let type = parseInt($("#type").val());
-    let keySearch = $("#keySearch");
+    const keySearch = window.location.search;
     var errorTimeout;
     var successTimeOut;
 
@@ -111,7 +111,7 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             dataType: 'json'
         }).done(function (res) {
-            getData(getUrl(keySearch.val()));
+            getData(getUrl(keySearch));
             $("#modalArticleStatus").modal("hide");
             $("#processing").removeClass("active");
             success(" " + res.message);
@@ -138,15 +138,15 @@ $(document).ready(function () {
     function fetch(data) {
         let res = "";
         let col;
-        if (data.length > 0) {
+        if (data.articles.length > 0) {
             if (type === 1) {
-                data.forEach(el => res += writePublic(el));
+                data.articles.forEach(el => res += writePublic(el));
             } else if (type === 2) {
-                data.forEach(el => res += writeUnlisted(el));
+                data.articles.forEach(el => res += writeUnlisted(el));
             } else if (type === 3) {
-                data.forEach(el => res += writeAll(el));
+                data.articles.forEach(el => res += writeAll(el));
             }
-
+            pagination(data.totalPage);
         } else {
             if (type === 1) {
                 col = 6;
@@ -181,7 +181,7 @@ $(document).ready(function () {
         let item = "<tr>\n" +
             "                                    <td style=\"width: 30rem\"><a href='/admin/post/" + el.id + "'>" + el.title + "</a>\n" +
             "                                    </td>\n" +
-            "                                    <td><a href='/author/" + el.userAccount.id + "'>\n" + el.userAccount.userDetail.firstName +" " + el.userAccount.userDetail.lastName +
+            "                                    <td><a href='/author/" + el.userAccount.id + "?page=1'>\n" + el.userAccount.userDetail.firstName +" " + el.userAccount.userDetail.lastName +
             "                                    </a></td>\n" + lastEditDate +
             "                                    <td>" + formatDate(el.publishedDate) + "</td>\n" +
             "                                    <td>" + prioritize + "</td>\n" +
@@ -209,7 +209,7 @@ $(document).ready(function () {
             "              <td style=\"width: 30rem\"><a href='/admin/post/" + el.id + "'>" + el.title + "</a>\n" +
             "                                    </td>\n" +
             "                                   <td>" + el.topic.name + "</td>" +
-            "                                    <td><a href='/author/" + el.userAccount.id + "'>\n" + el.userAccount.userDetail.firstName + el.userAccount.userDetail.lastName +
+            "                                    <td><a href='/author/" + el.userAccount.id + "?page=1'>\n" + el.userAccount.userDetail.firstName + el.userAccount.userDetail.lastName +
             "                                    </a></td>\n" + lastEditDate +
             "                                    <td class='text-center' style=\"width: 10rem\">\n" +
             "                                       <button type=\"button\" id='edit_" + el.id + "' class=\"btn btn-warning btn-edit mb-2\">Edit</button>\n" +
@@ -242,7 +242,7 @@ $(document).ready(function () {
             "              <td style=\"width: 30rem\"><a href='/admin/post/" + el.id + "'>" + el.title + "</a>\n" +
             "                                    </td>\n" +
             "                                    <td>" + el.topic.name + "</td>\n" +
-            "                                    <td><a href='/author/" + el.userAccount.id + "'>\n" + el.userAccount.userDetail.firstName + " " + el.userAccount.userDetail.lastName +
+            "                                    <td><a href='/author/" + el.userAccount.id + "?page=1'>\n" + el.userAccount.userDetail.firstName + " " + el.userAccount.userDetail.lastName +
             "                                    </a></td>\n" + lastEditDate +
             "                                    <td>" + published + "</td>\n" +
             "                                    <td class=\"text-center\" style=\"width: 10rem\">\n" +
@@ -278,13 +278,13 @@ $(document).ready(function () {
 
 /// search
     var myTimeOut;
-    $("#keySearch").keyup(function () {
-        clearTimeout(myTimeOut);
-        myTimeOut = setTimeout(function () {
-            getData(getUrl(keySearch.val()));
-        }, 700)
-
-    })
+    // $("#keySearch").keyup(function () {
+    //     clearTimeout(myTimeOut);
+    //     myTimeOut = setTimeout(function () {
+    //         getData(getUrl(keySearch.val()));
+    //     }, 700)
+    //
+    // })
 
 /// delete
     $(document).on("click", ".btn-delete", function () {
@@ -301,12 +301,12 @@ $(document).ready(function () {
             method: "delete",
             dataType: 'json'
         }).done(function (res) {
-            getData(getUrl(keySearch.val()));
+            getData(getUrl(keySearch));
             $("#modalConfirmDelete").modal("hide");
             $("#processing").removeClass("active");
             success(" " + res.message);
         }).fail(function (res) {
-            getData(getUrl(keySearch.val()));
+            getData(getUrl(keySearch));
             $("#processing").removeClass("active");
             $("#modalConfirmDelete").modal("hide");
             error(" " + res.responseJSON.message);
@@ -330,14 +330,40 @@ $(document).ready(function () {
     function getUrl(keySearch) {
         let url = "";
         if (type === 1) {
-            url = "/api/admin/post/published?title=" + keySearch;
+            url = "/api/admin/post/published" + keySearch;
         } else if (type === 2) {
-            url = "/api/admin/post/unlisted?title=" + keySearch;
+            url = "/api/admin/post/unlisted" + keySearch;
         } else if (type === 3) {
-            url = "/api/admin/post/all?title=" + keySearch;
+            url = "/api/admin/post/all" + keySearch;
         }
         return url;
     }
+
+
+    function pagination(totalPages){
+        // if(isNaN(totalPages)){
+        //     return;
+        // }
+        console.log(totalPages);
+        var url_string = window.location.href; //window.location.href
+        var url = new URL(url_string);
+        var currentPage = url.searchParams.get("page");
+        var title = url.searchParams.get("title");
+        // $("#pagination").html('')
+        $('#pagination').twbsPagination({
+            totalPages: parseInt(totalPages),
+            visiblePages: 5,
+            startPage: parseInt(currentPage),
+            onPageClick: function (event, page) {
+                if (parseInt(currentPage) != page) {
+                    $('#page').val(page);
+                    $("#title").val(title)
+                    $('#formSubmit').submit();
+                }
+            }
+        });
+    }
+    pagination($("#totalPage").val())
 
 
 })

@@ -24,7 +24,9 @@ public class CustomAuthenSuccess implements AuthenticationSuccessHandler {
     private UserAccountRepository repository;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
+                                        HttpServletResponse httpServletResponse,
+                                        Authentication authentication) throws IOException, ServletException {
 
         UserInforAccountDTO inforDTO = new UserInforAccountDTO();
         Optional<UserAccountEntity> accountEntity = repository.findByEmail(authentication.getName());
@@ -33,7 +35,8 @@ public class CustomAuthenSuccess implements AuthenticationSuccessHandler {
             UserDetailEntity detailEntity = entity.getUserDetailEntity();
             inforDTO.setId(entity.getId());
             inforDTO.setEmail(entity.getEmail());
-            inforDTO.setUserDetail(new CustomerUserDetailDTO(detailEntity.getId(), detailEntity.getFirstName(), detailEntity.getLastName(), detailEntity.getThumbnail()));
+            inforDTO.setUserDetail(new CustomerUserDetailDTO(detailEntity.getId(), detailEntity.getFirstName(),
+                    detailEntity.getLastName(), detailEntity.getThumbnail()));
         }
 
         HttpSession session = httpServletRequest.getSession();

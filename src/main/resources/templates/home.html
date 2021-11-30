@@ -7,9 +7,11 @@
     <div th:replace="common/link-css :: header-css"/>
     <link rel="stylesheet" th:href="@{/css/web/home.css}">
     <link rel="stylesheet" th:href="@{/css/web/originalCard.css}">
+
 </head>
 <body>
 <div th:replace="common/navbar :: header"/>
+
 <main class="container">
     <hr>
     <section th:if="${articlePrioritize.size() == 4}">
@@ -21,13 +23,13 @@
                                 th:src="${articlePrioritize.get(0).imagePath}" class="card-img-top" alt="..."></a>
                         <div class="card-body card-news">
                             <p class="card-large-category"><a
-                                    th:href="@{'/posts/topic/'+${articlePrioritize.get(0).topic.id}}"
+                                    th:href="@{'/posts/topic/'+${articlePrioritize.get(0).topic.id} +'?page=1'}"
                                     style="color: red;">[[${articlePrioritize.get(0).topic.name}]]</a></p>
                             <h5 class="card-large-title"><a th:href="@{'/posts/'+${articlePrioritize.get(0).id}}">[[${articlePrioritize.get(0).title}]]</a>
                             </h5>
                             <div class="infor-news">
                                 <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(articlePrioritize.get(0).publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                <a th:href="@{'/author/'+${articlePrioritize.get(0).userAccount.id}}"><span
+                                <a th:href="@{'/author/'+${articlePrioritize.get(0).userAccount.id}+'?page=1'}"><span
                                         class="span-user"><i class="fas fa-user"></i></span>
                                     [[${articlePrioritize.get(0).userAccount.userDetailEntity.firstName}]]
                                     [[${articlePrioritize.get(0).userAccount.userDetailEntity.lastName}]]
@@ -38,8 +40,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
             <div class="col-md-6">
                 <div class="card card-content">
@@ -51,14 +51,14 @@
                         <div class="col-md-6">
                             <div class="card-body card-sm-header">
                                 <p class="card-sm-cate"><a
-                                        th:href="@{'/posts/topic/'+${articlePrioritize.get(1).topic.id}}">[[${articlePrioritize.get(1).topic.name}]]</a>
+                                        th:href="@{'/posts/topic/'+${articlePrioritize.get(1).topic.id} +'?page=1'}">[[${articlePrioritize.get(1).topic.name}]]</a>
                                 </p>
                                 <h5 class=" card-title card-sm-title"><a
                                         th:href="@{'/posts/'+${articlePrioritize.get(1).id}}">[[${articlePrioritize.get(1).title}]]</a>
                                 </h5>
                                 <div class="card-sm-author">
                                     <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(articlePrioritize.get(1).publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                    <a th:href="@{'/author/'+${articlePrioritize.get(1).userAccount.id}}"><span
+                                    <a th:href="@{'/author/'+${articlePrioritize.get(1).userAccount.id}+'?page=1'}"><span
                                             class="span-user"><i class="fas fa-user"></i></span>
                                         [[${articlePrioritize.get(1).userAccount.userDetailEntity.firstName}]]
                                         [[${articlePrioritize.get(1).userAccount.userDetailEntity.lastName}]]
@@ -81,14 +81,14 @@
                         <div class="col-md-6">
                             <div class="card-body card-sm-header">
                                 <p class="card-sm-cate"><a
-                                        th:href="@{'/posts/topic/'+${articlePrioritize.get(2).topic.id}}">[[${articlePrioritize.get(2).topic.name}]]</a>
+                                        th:href="@{'/posts/topic/'+${articlePrioritize.get(2).topic.id} +'?page=1'}">[[${articlePrioritize.get(2).topic.name}]]</a>
                                 </p>
                                 <h5 class=" card-title card-sm-title"><a
                                         th:href="@{'/posts/'+${articlePrioritize.get(2).id}}">[[${articlePrioritize.get(2).title}]]</a>
                                 </h5>
                                 <div class="card-sm-author">
                                     <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(articlePrioritize.get(2).publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                    <a th:href="@{'/author/'+${articlePrioritize.get(2).userAccount.id}}"><span
+                                    <a th:href="@{'/author/'+${articlePrioritize.get(2).userAccount.id} +'?page=1'}"><span
                                             class="span-user"><i class="fas fa-user"></i></span>
                                         [[${articlePrioritize.get(2).userAccount.userDetailEntity.firstName}]]
                                         [[${articlePrioritize.get(2).userAccount.userDetailEntity.lastName}]]
@@ -111,14 +111,14 @@
                         <div class="col-md-6">
                             <div class="card-body card-sm-header">
                                 <p class="card-sm-cate"><a
-                                        th:href="@{'/posts/topic/'+${articlePrioritize.get(3).topic.id}}">[[${articlePrioritize.get(3).topic.name}]]</a>
+                                        th:href="@{'/posts/topic/'+${articlePrioritize.get(3).topic.id} +'?page=1'}">[[${articlePrioritize.get(3).topic.name}]]</a>
                                 </p>
                                 <h5 class=" card-title card-sm-title"><a
                                         th:href="@{'/posts/'+${articlePrioritize.get(3).id}}">[[${articlePrioritize.get(3).title}]]</a>
                                 </h5>
                                 <div class="card-sm-author">
                                     <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(articlePrioritize.get(3).publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                    <a th:href="@{'/author/'+${articlePrioritize.get(3).userAccount.id}}"><span
+                                    <a th:href="@{'/author/'+${articlePrioritize.get(3).userAccount.id}+'?page=1'}"><span
                                             class="span-user"><i class="fas fa-user"></i></span>
                                         [[${articlePrioritize.get(3).userAccount.userDetailEntity.firstName}]]
                                         [[${articlePrioritize.get(3).userAccount.userDetailEntity.lastName}]]
@@ -155,13 +155,13 @@
                                 <div class="col-md-7">
                                     <div class="card-body card-original">
                                         <p class="card-original-cate"><a
-                                                th:href="@{'/posts/topic/'+${article.topic.id}}">[[${article.topic.name}]]</a>
+                                                th:href="@{'/posts/topic/'+${article.topic.id} +'?page=1'}">[[${article.topic.name}]]</a>
                                         </p>
                                         <h5 class="card-title card-original-title"><a
                                                 th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a></h5>
                                         <div class="card-original-author">
                                             <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                            <a th:href="@{'/author/'+${article.userAccount.id}}"><span class=""><i
+                                            <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}"><span class=""><i
                                                     class="fas fa-user"></i></span>
                                                 [[${article.userAccount.userDetailEntity.firstName}]]
                                                 [[${article.userAccount.userDetailEntity.lastName}]]
@@ -195,32 +195,18 @@
                                 <div class="col-md-7">
                                     <div class="card-body card-original">
                                         <p class="card-original-cate"><a
-                                                th:href="@{'/posts/topic/'+${article.topic.id}}">[[${article.topic.name}]]</a>
+                                                th:href="@{'/posts/topic/'+${article.topic.id} +'?page=1'}">[[${article.topic.name}]]</a>
                                         </p>
                                         <h5 class="card-title card-original-title"><a
                                                 th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a></h5>
                                         <div class="card-original-author">
                                             <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                            <a th:href="@{'/author/'+${article.userAccount.id}}"><span class=""><i
+                                            <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}"><span class=""><i
                                                     class="fas fa-user"></i></span>
                                                 [[${article.userAccount.userDetailEntity.firstName}]]
                                                 [[${article.userAccount.userDetailEntity.lastName}]]
                                             </a>
-                                            <div sec:authorize="isAuthenticated()" class='dropdow dropMenuBox'>
-                                                <button style='outline: none;' class='btn-drop-menu' type='button'
-                                                        id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true'
-                                                        aria-expanded='false'>
-                                                    <i class='fas fa-ellipsis-h'></i>
-                                                </button>
-                                                <div class='dropdown-menu drop-menu' style='padding: 0;'
-                                                     aria-labelledby='dropdownMenu'>
-                                                    <a class='dropdown-item btn-add-read-later'
-                                                       style='font-size: .8rem;'
-                                                       th:id="${'readLate_'+ article.id}"
-                                                       type="button">Add to
-                                                        Read later</a>
-                                                </div>
-                                            </div>
+
                                         </div>
                                         <p class="card-original-short">
                                             [[${article.shortDescription}]]
@@ -238,7 +224,7 @@
 
             <div class="col-lg-3 col-md-12 col-sm-12">
                 <div class="title-box title-right mb-4">
-                    <h1>FAVORITE</h1>
+                    <h1>HIGH RATE</h1>
                 </div>
                 <div th:each="article:${articleFav}" class=" row card-fav mb-4">
                     <div class="col-lg-12 col-md-5 col-sm-12 fav-img">
@@ -246,13 +232,13 @@
                     </div>
                     <div class="col-lg-12 col-md-7 col-sm-12 fav-body">
                         <div class="card-body card-fav-body">
-                            <p class="card-fav-topic"><a th:href="@{'/topic/'+${article.topic.id}}">[[${article.topic.name}]]</a>
+                            <p class="card-fav-topic"><a th:href="@{'/posts/topic/'+${article.topic.id} +'?page=1'}">[[${article.topic.name}]]</a>
                             </p>
-                            <h5 class="card-title card-fav-title"><a th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a>
+                            <h5 class="card-title card-fav-title"><a th:href="@{'/posts/'+${article.id}+'?page=1'}">[[${article.title}]]</a>
                             </h5>
                             <div class="card-original-author">
                                 <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                <a th:href="@{'/author/'+${article.userAccount.id}}"><span class=""><i
+                                <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}"><span class=""><i
                                         class="fas fa-user"></i></span>
                                     [[${article.userAccount.userDetailEntity.firstName}]]
                                     [[${article.userAccount.userDetailEntity.lastName}]]
@@ -283,7 +269,7 @@
                 </div>
                 <div class="blog-category-filter">
                     <ul class="list-category">
-                        <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id}}"><span><i
+                        <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id}+'?page=1'}"><span><i
                                 class="fas fa-angle-right"></i></span> [[${topic.name}]]</a></li>
                     </ul>
                 </div>

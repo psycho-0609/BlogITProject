@@ -2,6 +2,7 @@ $(document).ready(function (){
     const articleId = $("#articleOfArticle").val();
     let fail = "<i class=\"fas fa-times\"></i> ";
     let messSuccess = "<i class=\"fas fa-check\"></i>";
+    let userId = $("#idOfUser").val();
 
     let errorTimeout;
     let successTimeOut;
@@ -29,10 +30,17 @@ $(document).ready(function (){
     }
 
     $("#btnSaveReadLater").click(function (e){
-        let data={
-            articleId:articleId
+        console.log(userId)
+        if(userId !== '' && userId !== undefined){
+            let data={
+                articleId:articleId
+            }
+            saveBookMark(data);
+
+        }else{
+            error("Please login to bookmark this post")
         }
-        saveBookMark(data);
+
     })
 
     function saveBookMark(data){
@@ -89,15 +97,20 @@ $(document).ready(function (){
     })
 
     $(".book-mark").click(function (){
-        let data={
-            articleId:articleId
+        if(userId !== undefined && userId !== ''){
+            let data={
+                articleId:articleId
+            }
+            let id = parseInt($(this).attr("id"));
+            if(id !== 0){
+                deleteBookMark(id);
+            }else if(id === 0){
+                saveBookMark(data);
+            }
+        }else{
+            error(" Please login to bookmark this post!");
         }
-        let id = parseInt($(this).attr("id"));
-        if(id !== 0){
-            deleteBookMark(id);
-        }else if(id === 0){
-            saveBookMark(data);
-        }
+
     })
     function crateFav(data){
         // $("#processing").addClass("active");
@@ -154,7 +167,7 @@ $(document).ready(function (){
     function report(data){
         $("#processing").addClass("active");
         $.ajax({
-            url:'/api/web/report/create',
+            url:'/api/user/report/create',
             method:'post',
             contentType: "application/json",
             data: JSON.stringify(data),

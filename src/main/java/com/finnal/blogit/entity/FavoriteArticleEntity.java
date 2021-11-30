@@ -22,10 +22,6 @@ public class FavoriteArticleEntity {
     private ArticleEntity articleEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "favorite_id")
-    private FavoriteEntity favoriteEntity;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private UserAccountEntity account;
 

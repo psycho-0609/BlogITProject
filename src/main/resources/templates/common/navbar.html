@@ -61,9 +61,9 @@
                             </a>
                         </div>
                         <div id="dropdownMenuPosts" class="dropdown-menu-product">
-                            <a href="/posts/newest">Newest</a>
-                            <a href="/posts/popular">Popular</a>
-                            <a href="/posts/favorite">Favorite</a>
+                            <a href="/posts/newest?page=1">Newest</a>
+                            <a href="/posts/popular?page=1">Popular</a>
+                            <a href="/posts/rating?page=1">Rating</a>
                         </div>
                     </div>
                     <!--                    <div class="navbar-left-item">-->
@@ -80,7 +80,7 @@
                             </a>
                         </div>
                         <div id="dropdownMenuProduct" class="dropdown-menu-product">
-                            <a th:each="topic:${topics}" th:href="@{'/posts/topic/'+${topic.id}}">[[${topic.name}]]</a>
+                            <a th:each="topic:${topics}" th:href="@{'/posts/topic/'+${topic.id} +'?page=1'}">[[${topic.name}]]</a>
                         </div>
                     </div>
 
@@ -139,6 +139,7 @@
                     <div class="nav-icon-search"><span><i class="fa fa-search" aria-hidden="true"></i></span></div>
                     <form th:action="@{/search}" method="get">
                         <input type="text" name="title" class="w-100 form-control" placeholder="Search">
+                        <input type="hidden" value="1" name="page">
                     </form>
                 </div>
                 <div class=" topbar collapse navbar-collapse main-menu" id="navbarNav">
@@ -150,9 +151,9 @@
                                 Posts
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuPost">
-                                <a class="dropdown-item" href="/posts/newest">Newest</a>
-                                <a class="dropdown-item" href="/posts/popular">Popular</a>
-                                <a class="dropdown-item" href="/posts/favorite">Favoriate</a>
+                                <a class="dropdown-item" href="/posts/newest?page=1">Newest</a>
+                                <a class="dropdown-item" href="/posts/popular?page=1">Popular</a>
+                                <a class="dropdown-item" href="/posts/rating?page=1">Rating</a>
                             </div>
                         </div>
                         <div class="nav-item dropdown ">
@@ -162,7 +163,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a th:each="topic:${topics}" class="dropdown-item"
-                                   th:href="@{'/posts/topic/'+${topic.id}}">[[${topic.name}]]</a>
+                                   th:href="@{'/posts/topic/'+${topic.id}+'?page=1'}">[[${topic.name}]]</a>
 
                             </div>
                         </div>
@@ -171,6 +172,7 @@
                         <div class="nav-item">
                             <form th:action="@{/search}" method="get">
                                 <input type="text" name="title" class="form-control search-input" placeholder="Search">
+                                <input type="hidden" value="1" name="page">
                             </form>
                         </div>
                     </div>
@@ -214,7 +216,7 @@
                                     <div class="dropdown-menu user-menu" aria-labelledby="dropdownMenuLink">
                                         <a class="dropdown-item nav-link-user" th:href="@{/user/profile}"><span
                                                 class="icon-nav-left"><i class="fas fa-id-card"></i></span>Profile</a>
-                                        <a class="dropdown-item nav-link-user" th:href="@{/user/posts/public}"><span
+                                        <a class="dropdown-item nav-link-user" th:href="@{/user/posts/public?page=1}"><span
                                                 class="icon-nav-left"><i class="fas fa-file-alt"></i></span>My
                                             Content</a>
                                         <a sec:authorize="hasAuthority('ADMIN')" class="dropdown-item nav-link-user"
@@ -235,6 +237,7 @@
 
                         </th:block>
                         <th:block sec:authorize="!isAuthenticated()">
+                            <input type="hidden" id="idOfUser" value="">
                             <li class="nav-item">
                                 <a class="nav-link" type="button" th:href="@{/login}"><span><i
                                         class="fas fa-sign-in-alt"></i> Sign In/Sign

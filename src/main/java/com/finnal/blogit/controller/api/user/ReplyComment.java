@@ -104,7 +104,8 @@ public class ReplyComment {
             entity.setComment(new CommentEntity(request.getCommentId()));
             entity.setCreatedDate(LocalDateTime.now());
         }
-        if(request.getRepAccountId() != null){
+
+        if(request.getRepAccountId() != null && !request.getRepAccountId().equals(accountId)){
             entity.setRepAccount(new UserAccountEntity(request.getRepAccountId()));
         }else{
             entity.setRepAccount(null);

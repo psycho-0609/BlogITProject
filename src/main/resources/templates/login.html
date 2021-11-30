@@ -62,12 +62,14 @@
 
 <div class="login-box" id="loginForm">
     <div class="logo">
-        <img th:src="@{/img/logo.jpg}" alt="">
+        <a href="/home">
+            <img th:src="@{/img/logo.jpg}" alt="">
+        </a>
     </div>
     <h5 class="title">Login to Daily Blog</h5>
     <th:block th:if="${param.error}">
-        <div class="alert alert-danger d-none">
-            <p id="errorLogin">Username or Password incorrect</p>
+        <div class="alert alert-danger">
+            <p class="text-center m-0">Username or Password incorrect</p>
         </div>
     </th:block>
     <div class="form-login">
@@ -85,10 +87,17 @@
         <a href="#" type="button" data-toggle="modal" data-target="#forgotPassword">Forgot password?</a>
         <a href="#" type="button" id="btnRigister">Create account</a>
     </div>
+    <div class="login-now-box">
+        <hr>
+        <a href="/home" id="">Home Page</a>
+        <hr>
+    </div>
 </div>
 <div class="login-box" id="register" style="display: none;">
     <div class="logo">
-        <img th:src="@{/img/logo.jpg}" alt="">
+        <a href="/home">
+            <img th:src="@{/img/logo.jpg}" alt="">
+        </a>
     </div>
     <h5 class="title">Register account for Daily Blog</h5>
     <div class="box-alert-success" id="alertRegisSuccess">

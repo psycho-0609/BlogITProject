@@ -1,9 +1,10 @@
 package com.finnal.blogit.controller.api.user;
 
+import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.dto.request.CommentRequest;
-import com.finnal.blogit.dto.request.ReplyCommentRequest;
 import com.finnal.blogit.dto.response.CommentDTO;
 import com.finnal.blogit.dto.response.MessageDTO;
+import com.finnal.blogit.dto.response.UserInforAccountDTO;
 import com.finnal.blogit.entity.ArticleEntity;
 import com.finnal.blogit.entity.CommentEntity;
 import com.finnal.blogit.entity.ReplyCommentEntity;
@@ -23,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,35 +39,36 @@ public class CommentAPI {
     private ICommentService commentService;
 
 
-
     @GetMapping("/getAll")
-    public ResponseEntity<List<CommentDTO>> getAllByArticleId(@RequestParam("postId") Long id){
+    public ResponseEntity<List<CommentDTO>> getAllByArticleId(@RequestParam("postId") Long id) {
         return new ResponseEntity<>(commentService.getAllByArticleId(id), HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<MessageDTO> createComment(@RequestBody CommentRequest request) throws APIException {
-        CustomUserDetail userDetail = UserInfor.getPrincipal();
+    public ResponseEntity<MessageDTO> createComment(@RequestBody CommentRequest request,
+                                                    HttpSession session) throws APIException {
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
         CommentEntity entity;
         validate(request);
         if (request.getId() != null) {
-            entity = commentService.findById(request.getId()).orElseThrow(() -> new ItemNotFoundException("Comment is not found"));
-            setParam(entity, request, userDetail.getId());
+            entity = commentService.findById(request.getId()).orElseThrow(() ->
+                    new ItemNotFoundException("Comment is not found"));
+            setParam(entity, request, userId);
             commentService.save(entity);
             return new ResponseEntity<>(new MessageDTO("Update success"), HttpStatus.OK);
         } else {
             entity = new CommentEntity();
-            setParam(entity,request, userDetail.getId());
+            setParam(entity, request, userId);
             commentService.save(entity);
             return new ResponseEntity<>(new MessageDTO("Comment success"), HttpStatus.OK);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<MessageDTO> deleteComment(@PathVariable("id") Long id) throws APIException{
-        CustomUserDetail userDetails = UserInfor.getPrincipal();
-        CommentEntity entity = commentService.findById(id).orElseThrow(()-> new ItemNotFoundException("Comment id not found"));
-        if(entity.getAccount().getId() != userDetails.getId()){
+    public ResponseEntity<MessageDTO> deleteComment(@PathVariable("id") Long id, HttpSession session) throws APIException {
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
+        CommentEntity entity = commentService.findById(id).orElseThrow(() -> new ItemNotFoundException("Comment id not found"));
+        if (!entity.getAccount().getId().equals(userId)) {
             throw new ItemCanNotModifyException("Cannot delete this comment");
         }
         commentService.deleteById(id);

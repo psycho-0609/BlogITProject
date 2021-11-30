@@ -3,15 +3,21 @@ package com.finnal.blogit.controller.api.admin;
 import com.finnal.blogit.dto.request.ChangeStatusAccountRequest;
 import com.finnal.blogit.dto.response.CustomUserAccount;
 import com.finnal.blogit.dto.response.MessageDTO;
+import com.finnal.blogit.dto.response.PaginationAccount;
 import com.finnal.blogit.dto.response.UserInforDto;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
 import com.finnal.blogit.exception.api.APIException;
 import com.finnal.blogit.exception.api.ItemCannotEmptyException;
 import com.finnal.blogit.exception.api.ItemNotFoundException;
+import com.finnal.blogit.exception.web.WebException;
 import com.finnal.blogit.service.imp.UserAccountService;
+import com.finnal.blogit.untils.Utility;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +34,22 @@ public class AccountAPI {
     private UserAccountService service;
 
     @GetMapping("/getAll")
-    private ResponseEntity<List<CustomUserAccount>> getAll(@RequestParam("email") String email){
-        List<CustomUserAccount> list = service.getAllAccountUser();
-        if(email != null && !Strings.isEmpty(email)){
-            list = list.stream().filter(el -> el.getEmail().toLowerCase(Locale.ROOT).contains(email.toLowerCase(Locale.ROOT))).collect(Collectors.toList());
+    private ResponseEntity<PaginationAccount> getAll(@RequestParam(value = "email", required = false) String email, @RequestParam("page") Integer page) throws ItemCannotEmptyException {
+        if(page - 1 < 0){
+            throw new ItemCannotEmptyException("");
         }
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        Page<Long> ids;
+        PaginationAccount pagination = new PaginationAccount();
+        if(email != null){
+            ids= service.getListIdForPagi(pageable, email);
+            pagination.setTotalPage(Utility.getTotalPage(service.countAllAccount(email)));
+        }else{
+            ids= service.getListIdForPagi(pageable, "");
+            pagination.setTotalPage(Utility.getTotalPage(service.countAllAccount("")));
+        }
+        pagination.setAccounts(service.getAllByListId(ids.getContent()));
+        return new ResponseEntity<>(pagination, HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<CustomUserAccount> getOne(@PathVariable("id") Long id) throws APIException {

@@ -8,4 +8,5 @@ import java.util.List;
 public class GetListArticleReport {
     private ArticleCustomDTO article;
     private List<ListReportArticleDTO> reports;
+    private Long totalPage;
 }

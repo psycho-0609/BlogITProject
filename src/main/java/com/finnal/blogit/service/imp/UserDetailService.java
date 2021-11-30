@@ -26,21 +26,20 @@ public class UserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<UserAccountEntity> entityOp = accountRepository.findByEmailAndStatus(email, AccountStatus.ENABLE);
-        if(!entityOp.isPresent()){
-            throw  new UsernameNotFoundException(email);
+        if (!entityOp.isPresent()) {
+            throw new UsernameNotFoundException(email);
         }
         UserAccountEntity entity = entityOp.get();
         GrantedAuthority authorities = new SimpleGrantedAuthority(entity.getRole().getName());
 
-        CustomUserDetail customUserDetail = new CustomUserDetail(entity.getEmail(),entity.getPassword(),true,true,true,true, Collections.singleton((SimpleGrantedAuthority) authorities));
-//        customUserDetail.setHistoryId(entity.getHistory().getId());
-//        customUserDetail.setFavoriteId(entity.getFavoriteArticle().getId());
-//        customUserDetail.setReadLaterId(entity.getReadLater().getId());
+        CustomUserDetail customUserDetail = new CustomUserDetail(entity.getEmail(), entity.getPassword(),
+                true, true, true, true,
+                Collections.singleton((SimpleGrantedAuthority) authorities));
         customUserDetail.setUserDetail(entity.getUserDetailEntity().getId());
         customUserDetail.setId(entity.getId());
-        if(entity.getRole().getName().equals("ADMIN")){
+        if (entity.getRole().getName().equals("ADMIN")) {
             customUserDetail.setRoleType(Constant.ADMIN_TYPE);
-        }else if(entity.getRole().getName().equals("USER")){
+        } else if (entity.getRole().getName().equals("USER")) {
             customUserDetail.setRoleType(Constant.USER_TYPE);
         }
         return customUserDetail;

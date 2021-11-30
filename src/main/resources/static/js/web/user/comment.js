@@ -70,11 +70,11 @@ $(document).ready(function () {
         let res = " <div class=\"comment\" id=\"commentBox\">" +
             "<div class='comment-reader'>\n" +
             "                            <div class='infor-reader'>\n" +
-            "                                <a href='/author/" + el.account.id + "' class=\"article-img-author\">\n" +
+            "                                <a href='/author/" + el.account.id + "?page=1' class=\"article-img-author\">\n" +
             "                                    <img src='" + el.account.userDetail.thumbnail + "' alt=''>\n" +
             "                                </a>\n" +
             "                                <div class='detail-reader'>\n" +
-            "                                    <a href='/author/" + el.account.id + "'>" + el.account.userDetail.firstName + " " + el.account.userDetail.lastName + "</a>\n" +
+            "                                    <a href='/author/" + el.account.id + "?page=1'>" + el.account.userDetail.firstName + " " + el.account.userDetail.lastName + "</a>\n" +
             "                                    <span style='font-size: .8rem'>" + formatDate(el.createdDate) + "</span>\n" +
             "                                </div>\n" +
             "                            </div>\n" +
@@ -122,11 +122,11 @@ $(document).ready(function () {
         let res ="<div style='padding-left: 3.5rem'>"+
             "<div class=\"main-content-reply-comment\" style='margin-bottom: 1rem'>"+
             "<div class='infor-reader'>\n" +
-            "           <a href='/author/" + el.account.id + "' class=\"article-img-author\">\n" +
+            "           <a href='/author/" + el.account.id + "?page=1' class=\"article-img-author\">\n" +
             "            <img src='" + el.account.userDetail.thumbnail + "' alt=''>\n" +
             "             </a>\n" +
             "              <div class='detail-reader'>\n" +
-            "                    <a href='/author/" + el.account.id + "'>" + el.account.userDetail.firstName + " " + el.account.userDetail.lastName + "</a>\n" +
+            "                    <a href='/author/" + el.account.id + "?page=1'>" + el.account.userDetail.firstName + " " + el.account.userDetail.lastName + "</a>\n" +
             "                        <span style='font-size: .8rem'>" + formatDate(el.createdDate) + "</span>\n" +
             "               </div>\n" +
             "              </div>\n" +
@@ -461,10 +461,9 @@ $(document).ready(function () {
         $("#repToAccount").val(repToAccountId);
         getOneUser(repToAccountId, subComment);
         submitFormReply();
-        console.log(subComment);
         scrollToReplyForm(subComment)
         SubComment();
-        scrollAfterComment();
+        // scrollAfterComment();
     })
 
     function getOneUser(id,elementDiv){
@@ -478,10 +477,13 @@ $(document).ready(function () {
     }
 
     function writeRepToUser(data){
-        $("#formReply").prepend(repToEl);
-        $("#nameUser").text(data.firstName + " " + data.lastName);
-        $("#nameUser").attr("href","/author/"+data.id);
-        cancelRepToUser();
+        if(data.id != parseInt(userId)){
+            $("#formReply").prepend(repToEl);
+            $("#nameUser").text(data.firstName + " " + data.lastName);
+            $("#nameUser").attr("href","/author/"+data.id);
+            cancelRepToUser();
+        }
+
     }
 
     function cancelRepToUser(){

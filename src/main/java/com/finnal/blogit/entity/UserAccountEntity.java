@@ -3,9 +3,7 @@ package com.finnal.blogit.entity;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
 import com.finnal.blogit.entity.enumtype.converter.AccountStatusConverter;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -42,15 +40,6 @@ public class UserAccountEntity {
 
     @OneToMany(mappedBy = "userAccount",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ArticleEntity> articles;
-
-    @OneToOne(mappedBy = "userAccount",cascade = CascadeType.ALL)
-    private HistoryEntity history;
-
-    @OneToOne(mappedBy = "userAccount",cascade = CascadeType.ALL)
-    private FavoriteEntity favoriteArticle;
-
-    @OneToOne(mappedBy = "userAccount",cascade = CascadeType.ALL)
-    private ReadLaterEntity readLater;
 
     public UserAccountEntity(Long id) {
         this.id = id;

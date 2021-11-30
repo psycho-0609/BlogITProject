@@ -38,6 +38,7 @@ public class NotificationService implements INotificationService {
     }
 
     @Override
+    @Transactional
     public void deleteAllBUserId(Long id) {
         repository.deleteAllByAccountId(id);
     }

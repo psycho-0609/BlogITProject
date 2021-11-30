@@ -99,17 +99,6 @@
                         <div sec:authorize="isAuthenticated()"
                              th:if="${article.status.value == 1 && article.published.value == 1}" class="btn-group-box">
                             <div class="btn-group-left">
-                                <th:block th:if="${favStatus == null}">
-                                    <button data-toggle="tooltip" data-placement="right" title="Add to favorite"
-                                            class="btn-favorite" style="outline: none; color: grey" id="0"><i
-                                            class="fas fa-heart"></i></button>
-                                </th:block>
-                                <th:block th:if="${favStatus != null}">
-                                    <button data-toggle="tooltip" data-placement="right" title="Add to favorite"
-                                            class="btn-favorite" th:id="${favStatus.id}"
-                                            style="color: #ffffff; background: deeppink; outline: none"><i
-                                            class="fas fa-heart"></i></button>
-                                </th:block>
                                 <th:block th:if="${bookMark == null}">
                                     <button class="book-mark" data-toggle="tooltip" data-placement="right"
                                             title="Bookmark this post"
@@ -133,15 +122,30 @@
                                 </div>
                             </div>
                         </div>
+                        <div sec:authorize="!isAuthenticated()"
+                             class="btn-group-box">
+                            <div class="btn-group-left">
+                                <button class="book-mark" data-toggle="tooltip" data-placement="right"
+                                        title="Bookmark this post"
+                                        style="outline: none; background: none; color: grey" id="0">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                                <div th:if="${article.status.value == 1 && article.published.value == 1}">
+                                    <div class="fb-share-button" th:data-href="${#httpServletRequest.getRequestURL()}"
+                                         data-layout="button_count">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="w-100">
                             <div class="article-infor">
 
                                 <div class="article-author">
-                                    <a th:href="@{'/author/'+${article.userAccount.id}}" class="article-img-author">
+                                    <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}" class="article-img-author">
                                         <img th:src="${article.userAccount.userDetailEntity.getImagePath()}" alt="">
                                     </a>
                                     <div class="article-name-author">
-                                        <a th:href="@{'/author/'+${article.userAccount.id}}">[[${article.userAccount.userDetailEntity.firstName}]]
+                                        <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}">[[${article.userAccount.userDetailEntity.firstName}]]
                                             [[${article.userAccount.userDetailEntity.lastName}]]</a>
                                         <p class="article-published">
                                             [[${#temporals.format(article.publishedDate,'yyyy-MM-dd
@@ -152,9 +156,8 @@
                                     <span><i class="fas fa-eye"></i>[[${article.countView}]]</span>
                                     <!--                            <span><i class="far fa-comment-dots"></i>32</span>-->
 
-                                    <span id="favCount"><i
-                                            class="fas fa-heart"></i>[[${article.favoriteArticle.size()}]]</span>
                                     <span id="bookMarkCount" style="color: grey"><i class="fas fa-bookmark"></i>[[${article.readLaterArticle.size()}]]</span>
+                                    <span id="favCount"><i class="fas fa-star"></i>[[${article.avgRate > 0 ? article.avgRate : 0}]] ([[${article.rate.size()}]] rate)</span>
 
                                     <div id="fb-root"></div>
 
@@ -176,10 +179,10 @@
                                                 <a th:if="${article.userAccount.id == session.user.id}"
                                                    class="dropdown-item"
                                                    th:href="@{'/user/posts/edit/'+ ${article.id}}">Edit</a>
-                                                <a th:if="${article.userAccount.id == session.user.id}"
-                                                   id="deleteArticle"
-                                                   class="dropdown-item" href="#"
-                                                   type="button">Delete</a>
+<!--                                                <a th:if="${article.userAccount.id == session.user.id}"-->
+<!--                                                   id="deleteArticle"-->
+<!--                                                   class="dropdown-item" href="#"-->
+<!--                                                   type="button">Delete</a>-->
                                             </div>
                                         </div>
                                     </th:block>
@@ -187,19 +190,20 @@
                                 </div>
                             </div>
                             <div class="content-article">
+
+                                <h6 style="color: red;">[[${article.topic.name}]]</h6>
+                                <h1 class="title-article">[[${article.title}]]</h1>
                                 <th:block th:if="${article.image != null && !article.image.equals('')}">
                                     <div class="text-center mb-4">
                                         <img th:src="${article.imagePath}" alt=""/>
                                     </div>
                                 </th:block>
-                                <h6 style="color: red;">[[${article.topic.name}]]</h6>
-                                <h1 class="title-article">[[${article.title}]]</h1>
+                                <div>[[${article.shortDescription}]]</div>
                                 <th:block th:if="${article.videoPath != null}">
                                     <div class="text-center mb-4">
                                         <video th:src="${article.videoPath}" controls width="100%"></video>
                                     </div>
                                 </th:block>
-                                <div>[[${article.shortDescription}]]</div>
                                 <div class="article-main-content" id="content">
                                     [[${article.content}]]
                                 </div>
@@ -208,6 +212,15 @@
 
                     </div>
                     <hr>
+                    <div class="d-flex" sec:authorize="isAuthenticated()">
+                        <h5 style="margin-right: 1rem">Rating:</h5>
+                        <div id="rateBox"></div>
+
+                    </div>
+                    <div sec:authorize="!isAuthenticated()">
+                        <p class="text-center" style="color: red">Login to comment and rate this post!</p>
+                    </div>
+
                     <h5 class="mb-4">Comment</h5>
                     <th:block sec:authorize="isAuthenticated()">
                         <div class="article-comment">
@@ -225,20 +238,18 @@
                             </form>
                         </div>
                     </th:block>
-                    <th:block sec:authorize="!isAuthenticated()">
-                        <p class="text-center">Login to comment this article</p>
-                    </th:block>
+
                     <hr>
                     <div id="commentBox">
                         <div class="comment" id="" th:each="comment:${comments}">
 
                             <div class='comment-reader'>
                                 <div class='infor-reader'>
-                                    <a th:href="@{'/author/'+${comment.account.id}}" class="article-img-author">
+                                    <a th:href="@{'/author/'+${comment.account.id}+'?page=1'}" class="article-img-author">
                                         <img th:src='${comment.account.userDetail.thumbnail}' alt=''>
                                     </a>
                                     <div class='detail-reader'>
-                                        <a th:href="@{'/author/'+${comment.account.id}}">[[${comment.account.userDetail.firstName}]]
+                                        <a th:href="@{'/author/'+${comment.account.id}+'?page=1'}">[[${comment.account.userDetail.firstName}]]
                                             [[${comment.account.userDetail.lastName}]]</a>
                                         <span style="font-size: .8rem">[[${#temporals.format(comment.createdDate,'yyyy-MM-dd HH:mm')}]]</span>
                                     </div>
@@ -272,18 +283,18 @@
                                  th:each="reply:${comment.replyComment}">
                                 <div class="main-content-reply-comment" style="margin-bottom: 1rem">
                                     <div class='infor-reader'>
-                                        <a th:href="@{'/author/'+${reply.account.id}}" class="article-img-author">
+                                        <a th:href="@{'/author/'+${reply.account.id}+'?page=1'}" class="article-img-author">
                                             <img th:src='${reply.account.userDetail.thumbnail}' alt=''>
                                         </a>
                                         <div class='detail-reader'>
-                                            <a th:href="@{'/author/'+${reply.account.id}}">[[${reply.account.userDetail.firstName}]]
+                                            <a th:href="@{'/author/'+${reply.account.id}+'?page=1'}">[[${reply.account.userDetail.firstName}]]
                                                 [[${reply.account.userDetail.lastName}]]</a>
                                             <span style="font-size: .8rem">[[${#temporals.format(reply.createdDate,'yyyy-MM-dd HH:mm')}]]</span>
                                         </div>
                                     </div>
                                     <div style="padding-left: 3.5rem">
                                         <p class='mb-1 reply-content' th:if="${reply.replyAccount != null}"><a
-                                                th:href="@{'/author/'+${reply.replyAccount.id}}">[[${reply.replyAccount.firstName}]]
+                                                th:href="@{'/author/'+${reply.replyAccount.id}+'?page=1'}">[[${reply.replyAccount.firstName}]]
                                             [[${reply.replyAccount.lastName}]]</a> [[${reply.content}]]</p>
                                         <p class='mb-1 reply-content' th:if="${reply.replyAccount == null}">
                                             [[${reply.content}]]</p>
@@ -337,7 +348,7 @@
                                                     th:href="@{'/posts/'+${article.id}}">[[${article.title}]]</a></h5>
                                             <div class="card-original-author">
                                                 <span><i class="fas fa-calendar-day"></i> [[${#temporals.format(article.publishedDate,'yyyy-MM-dd HH:mm')}]]</span>
-                                                <a th:href="@{'/author/'+${article.userAccount.id}}"><span class=""><i
+                                                <a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}"><span class=""><i
                                                         class="fas fa-user"></i></span>
                                                     [[${article.userAccount.userDetailEntity.firstName}]]
                                                     [[${article.userAccount.userDetailEntity.lastName}]]
@@ -361,7 +372,8 @@
                         </div>
                         <div class="blog-category-filter">
                             <ul class="list-category">
-                                <li th:each="topic:${topics}"><a th:href="@{'/posts/topic/'+${topic.id}}"><span><i
+                                <li th:each="topic:${topics}"><a
+                                        th:href="@{'/posts/topic/'+${topic.id} +'?page=1'}"><span><i
                                         class="fas fa-angle-right"></i></span> [[${topic.name}]]</a></li>
                             </ul>
                         </div>
@@ -376,12 +388,12 @@
 <script th:src="@{/js/web/cate.js}"></script>
 <script th:src="@{/js/web/detailArticle.js}"></script>
 <script th:src="@{/js/web/user/comment.js}"></script>
+<script th:src="@{/js/rating/ratePlugin.js}"></script>
+<script th:src="@{/js/web/user/rateArticle.js}"></script>
 <script>
     $("#content").html($("#content").text());
     let x = [[${article.id}]]
     console.log(x);
-
-
 </script>
 <script>(function (d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];

@@ -62,7 +62,7 @@ $(document).ready(function (){
             method:'get',
             dataType: 'json'
         }).done(function (res){
-            if(res.length <= 0){
+            if(res.bookmark.length <= 0){
                 $("#btnDeleteAll").addClass("d-none")
             }
             fetchData(res);
@@ -74,13 +74,13 @@ $(document).ready(function (){
 
     function fetchData(data){
         let res = "";
-        if (data.length <= 0) {
+        if (data.bookmark.length <= 0) {
             res = "<div class=\"mt-4\">\n" +
                 "       <p style=\"color: grey; font-weight: bold; text-align: center\">There is nothing here!</p>\n" +
                 "  </div>"
         } else {
 
-            data.forEach(el => {
+            data.bookmark.forEach(el => {
                 res += write(el);
             })
         }
@@ -102,7 +102,7 @@ $(document).ready(function (){
             "                                                href='/posts/" + el.article.id +"'>" + el.article.title + "</a></h5>\n" +
             "                                        <div class='card-original-author'>\n" +
             "                                            <span><i class='fas fa-calendar-day'></i>"+ publicDate +"</span>\n" +
-            "                                            <a href='/author/" +el.article.userAccount.id + "'><span class=''><i class='fas fa-user'></i></span>\n" +
+            "                                            <a href='/author/" +el.article.userAccount.id + "?page=1'><span class=''><i class='fas fa-user'></i></span>\n" +
             "                                                " + el.article.userAccount.userDetail.firstName +
             "                                                " + el.article.userAccount.userDetail.lastName +
             "                                            </a>\n" +
@@ -114,10 +114,6 @@ $(document).ready(function (){
             "                                                </button>\n" +
             "                                                <div class='dropdown-menu drop-menu' style='padding: 0;'\n" +
             "                                                     aria-labelledby='dropdownMenu'>\n" +
-            "                                                    <a class='dropdown-item btn-add-read-later'\n" +
-            "                                                       style='font-size: .8rem;'\n" +
-            "                                                       id='readLate_" + el.article.id + "' type=\"button\">Add to\n" +
-            "                                                        Read later</a>\n" +
             "                                                    <hr style='margin: 0;'>\n" +
             "                                                    <a class='dropdown-item btn-delete-fav' style='font-size: .8rem;'\n" +
             "                                                       id='delete_" + el.id +"' type=\"button\">Delete</a>\n" +

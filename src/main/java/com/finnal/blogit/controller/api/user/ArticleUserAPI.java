@@ -4,6 +4,8 @@ import com.finnal.blogit.constant.Constant;
 import com.finnal.blogit.constant.MessageConstant;
 import com.finnal.blogit.dto.response.ArticleResponse;
 import com.finnal.blogit.dto.response.CustomArticleDTO;
+import com.finnal.blogit.dto.response.PaginationArticleDTO;
+import com.finnal.blogit.dto.response.UserInforAccountDTO;
 import com.finnal.blogit.entity.NotificationEntity;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.entity.enumtype.ArticlePublished;
@@ -15,10 +17,16 @@ import com.finnal.blogit.exception.api.ItemCannotEmptyException;
 import com.finnal.blogit.exception.api.ItemNotFoundException;
 import com.finnal.blogit.dto.request.ArticleRequest;
 import com.finnal.blogit.entity.ArticleEntity;
+import com.finnal.blogit.exception.web.WebException;
 import com.finnal.blogit.service.inter.*;
+import com.finnal.blogit.untils.Utility;
 import com.finnal.blogit.user.CustomUserDetail;
 import com.finnal.blogit.user.UserInfor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -27,7 +35,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,57 +65,86 @@ public class ArticleUserAPI {
     @Autowired
     private IEmailService emailService;
 
-    @GetMapping("/allArticle")
-    public ResponseEntity<List<CustomArticleDTO>> findAll() {
-        return new ResponseEntity<>(articleService.findAllApi(), HttpStatus.OK);
-    }
-
     @GetMapping("/unapproved")
-    public ResponseEntity<List<CustomArticleDTO>> findAllUnapprovedPosts(@RequestParam(value = "title", required = false) String title) {
-        CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if (title != null && !title.equals("")) {
-            return new ResponseEntity<>(articleService.findAllForSearch(ArticlePublished.DISABLE, userDetail.getId(), ArticleStatus.PUBLIC, title), HttpStatus.OK);
+    public ResponseEntity<PaginationArticleDTO> findAllUnapprovedPosts(@RequestParam(value = "title", required = false) String title, @RequestParam("page") Integer page, HttpSession session) throws APIException {
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
+        if (page - 1 < 0) {
+            throw new ItemCannotEmptyException("page must large than 0");
         }
-        return new ResponseEntity<>(articleService.findAllByPublishedStatusAndAccount(ArticlePublished.DISABLE, userDetail.getId(), ArticleStatus.PUBLIC), HttpStatus.OK);
+        Sort sort = Sort.by("createdDate").descending();
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+        Page<Long> listId;
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        if (title != null) {
+            listId = articleService.findListIdByPublishedAndStatusOfUser(pageable, title, ArticleStatus.PUBLIC, ArticlePublished.DISABLE, userId);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countByStatusAndPublishedAndUserId(ArticleStatus.PUBLIC, ArticlePublished.DISABLE, userId, title)));
+        } else {
+            listId = articleService.findListIdByPublishedAndStatusOfUser(pageable, "", ArticleStatus.PUBLIC, ArticlePublished.DISABLE, userId);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countByStatusAndPublishedAndUserId(ArticleStatus.PUBLIC, ArticlePublished.DISABLE, userId, "")));
+        }
+        pagination.setArticles(articleService.getListArticleByListId(listId.getContent()));
+        return new ResponseEntity<>(pagination, HttpStatus.OK);
     }
 
     @GetMapping("/private")
-    public ResponseEntity<List<CustomArticleDTO>> findAllPrivatePosts(@RequestParam(value = "title", required = false) String title) throws APIException {
-        CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if (userDetail == null) {
-            throw new ItemCannotEmptyException("Not found user");
+    public ResponseEntity<PaginationArticleDTO> findAllPrivatePosts(@RequestParam(value = "title", required = false) String title, @RequestParam("page") Integer page, HttpSession session) throws APIException {
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
+        if (page - 1 < 0) {
+            throw new ItemCannotEmptyException("Page must be large than 0");
         }
-        List<CustomArticleDTO> lists = articleService.findAllByAccountId(userDetail.getId());
-        lists = lists.stream().filter(el -> el.getStatus().equals(ArticleStatus.PRIVATE.getValue())).collect(Collectors.toList());
-        if (title != null && !title.equals("")) {
-            lists = lists.stream().filter(el -> el.getTitle().contains(title)).collect(Collectors.toList());
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        Sort sort = Sort.by("createdDate").descending();
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+        Page<Long> listId;
+        if (title != null) {
+            listId = articleService.getListIdPrivate(pageable, title, userId);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countByStatusAndUserId(ArticleStatus.PRIVATE, userId, title)));
+        } else {
+            listId = articleService.getListIdPrivate(pageable, "", userId);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countByStatusAndUserId(ArticleStatus.PRIVATE, userId, "")));
         }
-        return new ResponseEntity<>(lists, HttpStatus.OK);
+        pagination.setArticles(articleService.getListArticleByListId(listId.getContent()));
+
+        return new ResponseEntity<>(pagination, HttpStatus.OK);
     }
 
     @GetMapping("/published")
-    public ResponseEntity<List<CustomArticleDTO>> findAllPublishedPosts(@RequestParam(value = "title", required = false) String title) throws APIException {
-        CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if (userDetail == null) {
-            throw new ItemCannotEmptyException("Not found user");
+    public ResponseEntity<PaginationArticleDTO> findAllPublishedPosts(@RequestParam(value = "title", required = false) String title, @RequestParam("page") Integer page, HttpSession session) throws APIException {
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
+        if (page - 1 < 0) {
+            throw new ItemCannotEmptyException("Page must be large than 0");
         }
-        if (title != null && !title.equals("")) {
-            return new ResponseEntity<>(articleService.findAllForSearch(ArticlePublished.ENABLE, userDetail.getId(), ArticleStatus.PUBLIC, title), HttpStatus.OK);
+        Sort sort = Sort.by("createdDate").descending();
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+        Page<Long> listId;
+        PaginationArticleDTO pagination = new PaginationArticleDTO();
+        if (title != null) {
+            listId = articleService.findListIdByPublishedAndStatusOfUser(pageable, title, ArticleStatus.PUBLIC, ArticlePublished.ENABLE, userId);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countByStatusAndPublishedAndUserId(ArticleStatus.PUBLIC, ArticlePublished.ENABLE, userId, title)));
+        } else {
+            listId = articleService.findListIdByPublishedAndStatusOfUser(pageable, "", ArticleStatus.PUBLIC, ArticlePublished.ENABLE, userId);
+            pagination.setTotalPage(Utility.getTotalPage(articleService.countByStatusAndPublishedAndUserId(ArticleStatus.PUBLIC, ArticlePublished.ENABLE, userId, "")));
         }
-        return new ResponseEntity<>(articleService.findAllByPublishedStatusAndAccount(ArticlePublished.ENABLE, userDetail.getId(), ArticleStatus.PUBLIC), HttpStatus.OK);
+        pagination.setArticles(articleService.getListArticleByListId(listId.getContent()));
+        return new ResponseEntity<>(pagination, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<ArticleResponse> insertArticle(@ModelAttribute ArticleRequest request, HttpServletRequest servletRequest) throws APIException, IOException, MessagingException {
+    public ResponseEntity<ArticleResponse> insertArticle(@ModelAttribute ArticleRequest request,
+                                                         HttpServletRequest servletRequest,
+                                                         HttpSession session)
+            throws APIException, IOException, MessagingException, ParseException {
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
+        System.out.println(userId);
         validateEmptyRequest(request);
-        ArticleEntity entity = articleService.insertArticle(request);
+        ArticleEntity entity = articleService.insertArticle(request, userId);
         List<UserAccountEntity> list = accountService.findAccountAdmin();
-        if (list.size() > 0) {
+        if (list.size() > 0 && entity.getStatus().equals(ArticleStatus.PUBLIC)) {
             UserAccountEntity accountEntity = list.get(0);
             NotificationEntity notificationEntity = new NotificationEntity();
             notificationEntity.setAccount(accountEntity);
             notificationEntity.setType(NotificationTypeType.NEW_POST_SUBMITTED);
-            notificationEntity.setContent("<b>"+entity.getUserAccount().getUserDetailEntity().getFirstName() + " " + entity.getUserAccount().getUserDetailEntity().getLastName() + "</b>" + MessageConstant.MESS_NEW_POST);
+            notificationEntity.setContent("<b>" + entity.getUserAccount().getUserDetailEntity().getFirstName() + " " + entity.getUserAccount().getUserDetailEntity().getLastName() + "</b>" + MessageConstant.MESS_NEW_POST);
             notificationEntity.setUrl(MessageConstant.URL_DETAIL_POST_ADMIN + entity.getId());
             simpMessagingTemplate.convertAndSend(Constant.NOTIFICATION_URL_ADMIN, nService.save(notificationEntity));
             List<String> emails = list.stream().map(UserAccountEntity::getEmail).collect(Collectors.toList());
@@ -116,12 +155,13 @@ public class ArticleUserAPI {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ArticleResponse> updateArticle(@ModelAttribute ArticleRequest articleRequest) throws APIException {
+    public ResponseEntity<ArticleResponse> updateArticle(@ModelAttribute ArticleRequest articleRequest, HttpSession session) throws APIException {
         Optional<ArticleEntity> articleEntity = articleService.findById(articleRequest.getId());
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
         if (!articleEntity.isPresent()) {
             throw new ItemNotFoundException("Article not found");
         }
-        if (!articleEntity.get().getUserAccount().getId().equals(UserInfor.getPrincipal().getId())) {
+        if (!articleEntity.get().getUserAccount().getId().equals(userId)) {
             throw new ItemCanNotModifyException("You cannot modify this article");
         }
         validateEmptyRequest(articleRequest);
@@ -129,13 +169,10 @@ public class ArticleUserAPI {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<CustomArticleDTO> delete(@PathVariable("id") Long id) throws APIException, IOException {
-        Optional<ArticleEntity> entityOptional = articleService.findById(id);
-        CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if (!entityOptional.isPresent()) {
-            throw new ItemNotFoundException("Article not found");
-        }
-        if (userDetail.getId().longValue() != entityOptional.get().getUserAccount().getId().longValue()) {
+    public ResponseEntity<CustomArticleDTO> delete(@PathVariable("id") Long id, HttpSession session) throws APIException, IOException {
+        ArticleEntity entity = articleService.findById(id).orElseThrow(()-> new ItemNotFoundException("Article not found"));
+        Long userId = ((UserInforAccountDTO) session.getAttribute(Constant.USER)).getId();
+        if (!entity.getUserAccount().getId().equals(userId)) {
             throw new ItemCanNotModifyException("You cannot modify this article");
         }
         articleService.deleteArticle(id);

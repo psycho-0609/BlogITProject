@@ -42,28 +42,32 @@ public class UserAPI {
     @Qualifier("uploadAvatarUser")
     private UploadFileService fileService;
 
+    @Autowired
+    private UploadFileUtils fileUtils;
+
 
     @PutMapping("/image")
     public ResponseEntity<MessageDTO> updateImage(@RequestParam MultipartFile file, HttpSession session) throws Exception {
-        CustomUserDetail userDetail = UserInfor.getPrincipal();
-        if (userDetail == null) {
-            throw new ItemNotFoundException("User not found");
-        }
+        UserInforAccountDTO accountDTO = (UserInforAccountDTO) session.getAttribute(Constant.USER);
         if(file == null || Strings.isEmpty(file.getOriginalFilename())){
             throw new ItemCannotEmptyException("Image cannot empty");
         }
-        UserDetailEntity detailEntity = detailService.findByAccountId(userDetail.getId()).orElseThrow(() -> new ItemNotFoundException("Not found user"));
-        UserInforAccountDTO accountDTO = (UserInforAccountDTO) session.getAttribute(Constant.USER);
+        UserDetailEntity detailEntity = detailService.findByAccountId(accountDTO.getId()).orElseThrow(() -> new ItemNotFoundException("Not found user"));
         String thumbnail = detailEntity.getThumbnail();
         detailEntity.setThumbnail(file.getOriginalFilename());
         detailEntity = detailService.save(detailEntity);
+        //set avatar to save to the session
         accountDTO.getUserDetail().setThumbnail(detailEntity.getThumbnail());
+        //save to the session
         session.setAttribute(Constant.USER, accountDTO);
         if (thumbnail != null && !Strings.isEmpty(thumbnail)) {
-            fileService.delete(accountDTO.getUserDetail().getId(), thumbnail);
+            String deleteDir = Constant.DIR_USER_IMG + detailEntity.getId() + "/" + thumbnail;
+            fileUtils.deleteFile(deleteDir);
+//            fileService.delete(accountDTO.getUserDetail().getId(), thumbnail);
         }
         try {
-            fileService.save(accountDTO.getUserDetail().getId(), file);
+            fileUtils.writeOrUpdate(detailEntity.getId(), file.getBytes(), file.getOriginalFilename(), Constant.DIR_USER_IMG);
+//            fileService.save(accountDTO.getUserDetail().getId(), file);
         } catch (Exception e) {
             throw new Exception("fail");
         }

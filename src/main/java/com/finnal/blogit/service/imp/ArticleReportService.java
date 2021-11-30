@@ -9,6 +9,8 @@ import com.finnal.blogit.repository.ArticleReportRepository;
 import com.finnal.blogit.repository.ArticleRepository;
 import com.finnal.blogit.service.inter.IArticleReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +44,9 @@ public class ArticleReportService implements IArticleReportService {
     }
 
     @Override
-    public List<GetListReport> findAll() {
-        List<Long> ids = repository.getListArticleIdNews(ArticleReportNews.ENABLE);
-        List<GetListReport> list = repository.getListReport();
+    public List<GetListReport> findAll(List<Long> listId) {
+        List<Long> ids = repository.getListArticleIdNews(ArticleReportNews.ENABLE, listId);
+        List<GetListReport> list = repository.getListReport(listId);
         List<Long> listArticleId = list.stream().map(GetListReport::getArticleId).collect(Collectors.toList());
         List<CustomArticleDTO>  listArticle = articleRepository.getListArticle(listArticleId);
         Map<Long, List<CustomArticleDTO>> mapArticle = listArticle.stream().collect(Collectors.groupingBy(CustomArticleDTO::getId));
@@ -62,8 +64,8 @@ public class ArticleReportService implements IArticleReportService {
     }
 
     @Override
-    public List<ListReportArticleDTO> findAllReportByArticleId(Long id) {
-        return repository.getListReportByArticleId(id);
+    public List<ListReportArticleDTO> findAllReportByListId(List<Long> ids) {
+        return repository.getListReportListId(ids);
     }
 
     @Override
@@ -80,6 +82,16 @@ public class ArticleReportService implements IArticleReportService {
     @Override
     public void saveAll(List<ArticleReportEntity> list) {
         repository.saveAll(list);
+    }
+
+    @Override
+    public Page<Long> getListIdForPagi(Pageable pageable, Long articleId) {
+        return repository.getListIdForPagi(pageable, articleId);
+    }
+
+    @Override
+    public Long countAllByArticleId(Long id) {
+        return repository.countAllByArticleEntityId(id);
     }
 
 

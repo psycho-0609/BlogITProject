@@ -4,6 +4,8 @@ import com.finnal.blogit.dto.response.CustomUserAccount;
 import com.finnal.blogit.dto.response.UserInforDto;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.entity.enumtype.AccountStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +46,14 @@ public interface UserAccountRepository extends JpaRepository<UserAccountEntity,L
 
     @Query("select new com.finnal.blogit.dto.response.UserInforDto(ua.id, ua.userDetailEntity.firstName, ua.userDetailEntity.lastName, ua.userDetailEntity.thumbnail, ua.userDetailEntity.id) from UserAccountEntity ua where ua.status = 1")
     List<UserInforDto> getInforAdmin();
+
+    @Query("select u.id from UserAccountEntity u where u.role.name='USER' and u.email like %:email%")
+    Page<Long> getListIdForPagi(Pageable pageable,@Param("email") String email);
+
+    @Query("select new com.finnal.blogit.dto.response.CustomUserAccount(u.id, u.email, u.status, u.userDetailEntity.id, " +
+            "u.userDetailEntity.firstName, u.userDetailEntity.lastName, u.userDetailEntity.thumbnail) from UserAccountEntity as u where u.id in (:ids)")
+    List<CustomUserAccount> getAllByListId(List<Long> ids);
+
+    @Query("select count (ua) from UserAccountEntity ua where ua.role.name = 'USER' and ua.email like %:email%")
+    Long countAllAccount(@Param("email") String email);
 }

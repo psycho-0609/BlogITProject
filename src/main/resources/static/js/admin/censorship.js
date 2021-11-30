@@ -156,7 +156,7 @@ $(document).ready(function () {
             method: "delete",
             dataType: 'json'
         }).done(function (res) {
-            location.href = "/admin/post/allPosts";
+            location.href = "/admin/post/allPosts?page=1";
         }).fail(function (res) {
             $("#processing").removeClass("active");
             $("#modalConfirmDelete").modal("hide");

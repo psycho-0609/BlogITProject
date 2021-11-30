@@ -30,8 +30,6 @@ public interface FavouriteArticleRepository extends JpaRepository<FavoriteArticl
             "fa.articleEntity.userAccount.userDetailEntity.thumbnail) from FavoriteArticleEntity as fa where fa.account.id =:id order by fa.createdDate desc")
     List<GetFavArticle>  getListFavByAccountId(@Param("id") Long id);
 
-    void deleteByFavoriteEntityId(Long id);
-
     @Query("select count(fa) from FavoriteArticleEntity as fa where fa.articleEntity.id in :ids")
     Long countTotalFavorite(@Param("ids") List<Long> ids);
 

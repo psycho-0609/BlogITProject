@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/admin/adminArticle.css}">
     <link rel="stylesheet" th:href="@{/css/admin/news.css}">
     <style>
-        .title-table th{
+        .title-table th {
             text-align: center;
         }
 
@@ -17,13 +17,14 @@
 <body>
 
 <section>
-    <div class="modal fade" id="modalArticleStatus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalArticleStatus" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <div class="modal-body">
                     <h6 class="mb-4" style="font-weight: bold; color: #000000" id="title"></h6>
-                    <form id="formPublished" >
+                    <form id="formPublished">
                         <input type="hidden" name="id" id="id">
                         <div class="row align-items-center mb-3">
                             <div class="col-2">Status:</div>
@@ -75,19 +76,7 @@
                     <i class="fa fa-bars"></i>
                 </button>
 
-                <!-- Topbar Search -->
-                <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                    <div class="input-group">
-                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                               aria-label="Search" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+
 
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
@@ -126,7 +115,7 @@
                         </a>
                         <!-- Dropdown - Alerts -->
                         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="alertsDropdown" >
+                             aria-labelledby="alertsDropdown">
                             <div class="notification-header-box">
                                 <h6 class="" id="titleNotification">
                                     Notification Center
@@ -135,79 +124,12 @@
                             </div>
                             <div id="notificationCenter"></div>
 
-                            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            <a class="dropdown-item text-center small text-gray-500" href="/admin/notification">Show All Alerts</a>
                         </div>
                     </li>
 
                     <!-- Nav Item - Messages -->
-                    <li class="nav-item dropdown no-arrow mx-1">
-                        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-envelope fa-fw"></i>
-                            <!-- Counter - Messages -->
-                            <span class="badge badge-danger badge-counter">7</span>
-                        </a>
-                        <!-- Dropdown - Messages -->
-                        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                             aria-labelledby="messagesDropdown">
-                            <h6 class="dropdown-header">
-                                Message Center
-                            </h6>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                         alt="...">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div class="font-weight-bold">
-                                    <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                        problem I've been having.
-                                    </div>
-                                    <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                         alt="...">
-                                    <div class="status-indicator"></div>
-                                </div>
-                                <div>
-                                    <div class="text-truncate">I have the photos that you ordered last month, how
-                                        would you like them sent to you?
-                                    </div>
-                                    <div class="small text-gray-500">Jae Chun · 1d</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                         alt="...">
-                                    <div class="status-indicator bg-warning"></div>
-                                </div>
-                                <div>
-                                    <div class="text-truncate">Last month's report looks great, I am very happy with
-                                        the progress so far, keep up the good work!
-                                    </div>
-                                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="dropdown-list-image mr-3">
-                                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                         alt="...">
-                                    <div class="status-indicator bg-success"></div>
-                                </div>
-                                <div>
-                                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                        told me that people say this to all dogs, even if they aren't good...
-                                    </div>
-                                    <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                </div>
-                            </a>
-                            <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                        </div>
-                    </li>
+
 
                     <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -257,7 +179,12 @@
                         <h6 class="m-0 font-weight-bold text-primary">Posts</h6>
                     </div>
                     <div class="form-group m-auto">
-                        <input placeholder="Search" type="text" id="keySearch" class="form-control input-search" name="title">
+                        <form th:action="@{${#httpServletRequest.requestURI}}" method="get">
+                            <input placeholder="Search" type="text" id="keySearch" class="form-control input-search"
+                                   name="title">
+                            <input type="text" class="form-control d-none"  name="page" th:value="${#httpServletRequest.getParameter('page')}" placeholder="Search">
+                            <button type="submit" class="d-none"></button>
+                        </form>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -273,31 +200,62 @@
                                 </tr>
                                 </thead>
                                 <tbody id="mainDataBox">
-                                <tr th:if="${articles.size() > 0}" th:each="article:${articles}" th:class="${article.news == 1 ? 'news':''}">
+                                <tr th:if="${pagination.articles.size() > 0}" th:each="article:${pagination.articles}"
+                                    th:class="${article.news == 1 ? 'news':''}">
                                     <td style="width: 30rem"><a th:href="@{'/admin/post/'+${article.id}}">[[${article.title}]]</a>
                                     </td>
                                     <td>[[${article.topic.name}]]</td>
-                                    <td><a th:href="@{'/author/'+${article.userAccount.id}}">
+                                    <td><a th:href="@{'/author/'+${article.userAccount.id}+'?page=1'}">
                                         [[${article.userAccount.userDetail.firstName}]]
                                         [[${article.userAccount.userDetail.lastName}]]
                                     </a></td>
-                                    <td th:if="${article.modifiedDate == null}">[[${#temporals.format(article.createdDate,'yyyy-MM-dd HH:mm')}]]</td>
-                                    <td th:if="${article.modifiedDate != null}">[[${#temporals.format(article.modifiedDate,'yyyy-MM-dd HH:mm')}]]</td>
-                                    <td th:if="${article.published == 1}" ><p class="bg-success text-center text-white m-0" style="border-radius: 10px; font-size: .8rem; padding: 0 .5rem">Published</p></td>
-                                    <td th:if="${article.published == 2}" ><p class="bg-secondary text-center text-white m-0" style="border-radius: 10px; font-size: .8rem; padding: 0 .5rem">Unlisted</p></td>
+                                    <td>
+                                        [[${#temporals.format(article.modifiedDate,'yyyy-MM-dd HH:mm')}]]
+                                    </td>
+<!--                                    <td th:if="${article.modifiedDate == null}">-->
+<!--                                        [[${#temporals.format(article.createdDate,'yyyy-MM-dd HH:mm')}]]-->
+<!--                                    </td>-->
+<!--                                    <td th:if="${article.modifiedDate != null}">-->
+<!--                                        [[${#temporals.format(article.modifiedDate,'yyyy-MM-dd HH:mm')}]]-->
+<!--                                    </td>-->
+                                    <td th:if="${article.published == 1}"><p
+                                            class="bg-success text-center text-white m-0"
+                                            style="border-radius: 10px; font-size: .8rem; padding: 0 .5rem">
+                                        Published</p></td>
+                                    <td th:if="${article.published == 2}"><p
+                                            class="bg-secondary text-center text-white m-0"
+                                            style="border-radius: 10px; font-size: .8rem; padding: 0 .5rem">Unlisted</p>
+                                    </td>
                                     <td style="width: 10rem" class="text-center">
-                                        <button type="button" th:id="${'edit_'+article.id}" class="btn btn-warning btn-edit mb-2">Edit</button>
-                                        <button type="button" th:id="${'delete_'+article.id}" class="btn btn-danger btn-delete mb-2">Delete</button>
+                                        <button type="button" th:id="${'edit_'+article.id}"
+                                                class="btn btn-warning btn-edit mb-2">Edit
+                                        </button>
+                                        <button type="button" th:id="${'delete_'+article.id}"
+                                                class="btn btn-danger btn-delete mb-2">Delete
+                                        </button>
                                     </td>
                                 </tr>
-                                <tr th:if="${articles.size() <= 0}">
+                                <tr th:if="${pagination.articles.size() <= 0}">
                                     <td colspan="6">
-                                        <p style='color: grey; font-weight: bold; text-align: center'>There is nothing here!</p>
+                                        <p style='color: grey; font-weight: bold; text-align: center'>There is nothing
+                                            here!</p>
                                     </td>
                                 </tr>
 
                                 </tbody>
                             </table>
+                        </div>
+                        <div  class="d-flex justify-content-center mb-4">
+                            <input type="hidden" id="totalPage" th:value="${pagination.totalPage}">
+                            <div th:if="${pagination.totalPage >= 2}">
+                                <ul class="pagination" id="pagination"></ul>
+                            </div>
+
+                            <form th:action='@{${#httpServletRequest.servletPath}}' id="formSubmit">
+                                <input type="hidden" value="" id="page" name="page"/>
+                                <input type="hidden" id="titleArticle" name="title">
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -325,6 +283,26 @@
 <div th:replace="adminPage/footer :: footerAdmin"/>
 <script th:src="@{/js/admin/articleStatus.js}"></script>
 <script th:src="@{/js/admin/jqueryDataTables.js}"></script>
+<!--<script>-->
+<!--    var url_string = window.location.href; //window.location.href-->
+<!--    var url = new URL(url_string);-->
+<!--    var c = url.searchParams.get("page");-->
+<!--    var totalPages = [[${pagination.totalPage}]];-->
+<!--    var currentPage = c;-->
+<!--    var title = url.searchParams.get("title");-->
 
+<!--    $('#pagination').twbsPagination({-->
+<!--        totalPages: parseInt(totalPages),-->
+<!--        visiblePages: 5,-->
+<!--        startPage: parseInt(currentPage),-->
+<!--        onPageClick: function (event, page) {-->
+<!--            if (parseInt(currentPage) != page) {-->
+<!--                $('#page').val(page);-->
+<!--                $("#titleArticle").val(title)-->
+<!--                $('#formSubmit').submit();-->
+<!--            }-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
 </body>
 </html>

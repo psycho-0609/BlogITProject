@@ -84,6 +84,6 @@ public class CustomArticleDTO {
 
     public String getImagePath() {
         if(imagePath == null|| id == null) return "/img/logo.png";
-        return Constant.FIREBASE_URL + Constant.BUCKET_NAME + "/fileArticle/" + id +"/" + imagePath;
+        return "/imgBackArticle/" + id + "/" + imagePath;
     }
 }

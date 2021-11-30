@@ -6,7 +6,6 @@ import com.finnal.blogit.entity.HistoryArticleEntity;
 import com.finnal.blogit.entity.UserAccountEntity;
 import com.finnal.blogit.repository.ArticleRepository;
 import com.finnal.blogit.repository.HistoryArticleRepository;
-import com.finnal.blogit.repository.HistoryRepository;
 import com.finnal.blogit.service.inter.IHistoryArticleService;
 import com.finnal.blogit.user.CustomUserDetail;
 import com.finnal.blogit.user.UserInfor;
@@ -26,9 +25,6 @@ public class HistoryArticleService implements IHistoryArticleService {
 
     @Autowired
     private HistoryArticleRepository historyArticleRepository;
-
-    @Autowired
-    private HistoryRepository historyRepository;
 
     @Autowired
     private ArticleRepository articleRepository;

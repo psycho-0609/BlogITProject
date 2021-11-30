@@ -7,6 +7,8 @@ import com.finnal.blogit.repository.CommentRepository;
 import com.finnal.blogit.repository.ReplyCommentRepository;
 import com.finnal.blogit.service.inter.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,8 +58,8 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public List<ListArticleComment> listTotalComment() {
-        List<ListArticleComment> list = repository.countComment();
+    public List<ListArticleComment> listTotalComment(List<Long> ids) {
+        List<ListArticleComment> list = repository.countComment(ids);
         getListComment(list);
         return list;
     }
@@ -67,6 +69,16 @@ public class CommentService implements ICommentService {
         List<ListArticleComment> list = repository.getAllByLikeTitle(title);
         getListComment(list);
         return list;
+    }
+
+    @Override
+    public Page<Long> getListArticleId(Pageable pageable, String title) {
+        return repository.getListArticleId(pageable, title);
+    }
+
+    @Override
+    public Long countListArticle(String title) {
+        return repository.countAllArticle(title);
     }
 
     private void getListComment(List<ListArticleComment> list){

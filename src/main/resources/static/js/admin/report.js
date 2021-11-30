@@ -4,6 +4,8 @@ $(document).ready(function () {
     let messSuccess = "<i class=\"fas fa-check\"></i>";
     var errorTimeout;
     var successTimeOut;
+    let totalPage = $("#totalPage").val();
+    const keySearch = window.location.search;
 
     function error(message) {
         clearTime();
@@ -57,7 +59,7 @@ $(document).ready(function () {
 
     function getData() {
         $.ajax({
-            url: "/api/admin/report",
+            url: "/api/admin/report" + keySearch,
             method: "get",
             dataType: 'json'
         }).done(function (res) {
@@ -69,8 +71,8 @@ $(document).ready(function () {
 
     function fetchData(data) {
         let res = "";
-        if (data.length > 0) {
-            data.forEach(el => res += write(el));
+        if (data.reports.length > 0) {
+            data.reports.forEach(el => res += write(el));
         } else {
             res = " <td colspan='5'>\n" +
                 "       <p style='color: grey; font-weight: bold; text-align: center'>There is nothing here!</p>\n" +
@@ -86,13 +88,13 @@ $(document).ready(function () {
             "                                    <td style=\"width: 30rem\"><a href='/admin/post/" + el.article.id + "'>" + el.article.title + "</a>\n" +
             "                                    </td>\n" +
             "                                    <td>" + el.article.topic.name + "</td>\n" +
-            "                                    <td><a th:href=\"@{'/author/'+${report.article.userAccount.id}}\">\n" +
+            "                                    <td><a href='/author/" + el.article.userAccount.id + "?page=1'>\n" +
             "                                        " + el.article.userAccount.userDetail.firstName + "\n" +
             "                                        " + el.article.userAccount.userDetail.lastName + "\n" +
             "                                    </a></td>\n" +
             "                                    <td>" + el.count + "</td>\n" +
             "                                    <td style=\"width: 11rem\" class=\"text-center\">\n" +
-            "                                        <a href='/admin/report/all?postId= " + el.article.id + "' class=\"btn btn-warning mb-2\">Detail</a>\n" +
+            "                                        <a href='/admin/report/all?postId=" + el.article.id + "&page=1' class=\"btn btn-warning mb-2\">Detail</a>\n" +
             "                                        <button type=\"button\" id='delete_" + el.article.id + "' class=\"btn btn-danger btn-delete mb-2\">Delete</button>\n" +
             "                                    </td>\n" +
             "                                </tr>"
@@ -113,7 +115,6 @@ $(document).ready(function () {
                 }
             });
     }
-
 
 
 })

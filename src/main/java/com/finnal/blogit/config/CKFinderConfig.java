@@ -61,6 +61,7 @@ public class CKFinderConfig extends Configuration {
                         this.baseURL = childNode.getTextContent().trim();
                     } else {
                         this.baseURL=servletConf.getInitParameter("baseURL")+"/public/image/";
+//                        this.baseURL=servletConf.getInitParameter("baseURL")+"/public/image/";
 //                        this.baseURL=servletConf.getInitParameter("baseURL")+"/public/image/"+ UserInfor.getPrincipal().getId() +"/";
                     }
                     this.baseURL = PathUtils.escape(this.baseURL);
