@@ -65,7 +65,7 @@ public class EmailService implements IEmailService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String date = entity.getModifiedDate().format(formatter);
         String link = Utility.getSiteURL(servletRequest) + "/admin/post/" + entity.getId();
-        String linkAuthor = Utility.getSiteURL(servletRequest) + "/author/" + entity.getUserAccount().getId();
+        String linkAuthor = Utility.getSiteURL(servletRequest) + "/author/" + entity.getUserAccount().getId() + "?page=1";
         String nameAuthor = entity.getUserAccount().getUserDetailEntity().getFirstName() + " " + entity.getUserAccount().getUserDetailEntity().getLastName();
         StringBuilder message = new StringBuilder();
         String subject = "A new post has been submitted";
